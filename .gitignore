@@ -5,3 +5,4 @@
 /.vs
 /Server/.vs
 /Debug/
+/Server/Linkify.Domain/obj/Debug/net8.0/Linkify.Domain.sourcelink.json
