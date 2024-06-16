@@ -1,0 +1,15 @@
+F:\Documents\Project\Linkify\Server\Linkify.Application\bin\Debug\net8.0\Linkify.Application.deps.json
+F:\Documents\Project\Linkify\Server\Linkify.Application\bin\Debug\net8.0\Linkify.Application.dll
+F:\Documents\Project\Linkify\Server\Linkify.Application\bin\Debug\net8.0\Linkify.Application.pdb
+F:\Documents\Project\Linkify\Server\Linkify.Application\bin\Debug\net8.0\Linkify.Domain.dll
+F:\Documents\Project\Linkify\Server\Linkify.Application\bin\Debug\net8.0\Linkify.Domain.pdb
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\Linkify.Application.csproj.AssemblyReference.cache
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\Linkify.Application.GeneratedMSBuildEditorConfig.editorconfig
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\Linkify.Application.AssemblyInfoInputs.cache
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\Linkify.Application.AssemblyInfo.cs
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\Linkify.Application.csproj.CoreCompileInputs.cache
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\Linkify..50896708.Up2Date
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\Linkify.Application.dll
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\refint\Linkify.Application.dll
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\Linkify.Application.pdb
+F:\Documents\Project\Linkify\Server\Linkify.Application\obj\Debug\net8.0\ref\Linkify.Application.dll
