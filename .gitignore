@@ -4,3 +4,4 @@
 
 /.vs
 /Server/.vs
+/Server/Linkify.Api/obj/Debug/net8.0/Linkify.Api.AssemblyInfo.cs
