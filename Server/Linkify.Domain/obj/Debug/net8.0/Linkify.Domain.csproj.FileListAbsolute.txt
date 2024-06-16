@@ -9,3 +9,4 @@ F:\Documents\Project\Linkify\Server\Linkify.Domain\obj\Debug\net8.0\Linkify.Doma
 F:\Documents\Project\Linkify\Server\Linkify.Domain\obj\Debug\net8.0\refint\Linkify.Domain.dll
 F:\Documents\Project\Linkify\Server\Linkify.Domain\obj\Debug\net8.0\Linkify.Domain.pdb
 F:\Documents\Project\Linkify\Server\Linkify.Domain\obj\Debug\net8.0\ref\Linkify.Domain.dll
+F:\Documents\Project\Linkify\Server\Linkify.Domain\obj\Debug\net8.0\Linkify.Domain.sourcelink.json

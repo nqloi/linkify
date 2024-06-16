@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Linkify.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+389d80ffc83c429143c6ca8c12ba728b794579d1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5a3e7fd86abc6d643221fea71fd101ce30ac745")]
 [assembly: System.Reflection.AssemblyProductAttribute("Linkify.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Linkify.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
