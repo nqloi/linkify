@@ -4,5 +4,46 @@
 
 /.vs
 /Server/.vs
-/Debug/*
-/Server/Linkify.Api/obj/Debug/net8.0/Linkify.Api.AssemblyInfo.cs
+/Debug/
+
+# Ignore Debug folders
+**/obj/Debug/
+
+
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Build directories
+dist/
+build/
+
+# Debug directories
+debug/
+
+# Environment files
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Compiled files
+*.class
+*.o
+*.out
+
+# Temporary files
+*.tmp
+*.swp
+
+# Coverage files
+coverage/
+.nyc_output/
