@@ -1,5 +1,7 @@
 export default {
+  darkMode: 'class', // Thêm dòng này để bật dark mode bằng cách sử dụng class
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  plugins: [require('tailwindcss-primeui')],
   theme: {
     extend: {
       colors: {
@@ -24,6 +26,7 @@ export default {
         'primary-900': 'rgb(var(--primary-900))',
         'primary-950': 'rgb(var(--primary-950))',
 
+        // Thêm màu sắc cho dark mode
         'surface-0': 'rgb(var(--surface-0))',
         'surface-50': 'rgb(var(--surface-50))',
         'surface-100': 'rgb(var(--surface-100))',
@@ -34,10 +37,15 @@ export default {
         'surface-600': 'rgb(var(--surface-600))',
         'surface-700': 'rgb(var(--surface-700))',
         'surface-800': 'rgb(var(--surface-800))',
-        'surface-900': 'rgb(var(--surface-900))',
-        'surface-950': 'rgb(var(--surface-950))'
+        'surface-900': 'rgb(var(--surface-900))'
       }
+    },
+    screens: {
+      sm: '576px',
+      md: '768px',
+      lg: '992px',
+      xl: '1200px',
+      '2xl': '1920px'
     }
-  },
-  plugins: []
+  }
 }
