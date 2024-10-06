@@ -1,10 +1,9 @@
 <template lang="">
-    <div class="text-primary">
+    <div class="bg-white h-full flex-1 rounded p-3">
         Home
     </div>
 </template>
-<script>
-export default {}
+<script setup>
 </script>
 <style lang="">
 </style>

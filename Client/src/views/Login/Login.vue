@@ -1,7 +1,5 @@
 <template lang="">
-    <div class="h-full text-primary">
-        hello world
-    </div>
+    this is login
 </template>
 <script setup>
 </script>
