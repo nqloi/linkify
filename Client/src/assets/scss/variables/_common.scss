@@ -1,0 +1,91 @@
+:root {
+    --primary: #1976D2;
+    /* Blue: RGB(25, 118, 210) */
+    --primary-inverse: #FFFFFF;
+    /* White: RGB(255, 255, 255) */
+    --primary-hover: #1E90FF;
+    /* Dodger Blue: RGB(30, 144, 255) */
+    --primary-active-color: #0D47A1;
+    /* Darker Blue: RGB(13, 71, 161) */
+
+    --primary-50: #E1F5FE;
+    /* RGB(236, 253, 245) */
+    --primary-100: #B3E5FC;
+    /* RGB(209, 250, 229) */
+    --primary-200: #81D4FA;
+    /* RGB(167, 243, 208) */
+    --primary-300: #4FC3F7;
+    /* RGB(110, 231, 183) */
+    --primary-400: #29B6F6;
+    /* RGB(52, 211, 153) */
+    --primary-500: #03A9F4;
+    /* RGB(16, 185, 129) */
+    --primary-600: #039BE5;
+    /* RGB(5, 150, 105) */
+    --primary-700: #0288D1;
+    /* RGB(4, 120, 87) */
+    --primary-800: #0277BD;
+    /* RGB(6, 95, 70) */
+    --primary-900: #01579B;
+    /* RGB(4, 78, 56) */
+    --primary-950: #003C8F;
+    /* RGB(2, 44, 34) */
+
+    --p-primary-50: var(--primary-50);
+    --p-primary-100: var(--primary-100);
+    --p-primary-200: var(--primary-200);
+    --p-primary-300: var(--primary-300);
+    --p-primary-400: var(--primary-400);
+    --p-primary-500: var(--primary-500);
+    --p-primary-600: var(--primary-600);
+    --p-primary-700: var(--primary-700);
+    --p-primary-800: var(--primary-800);
+    --p-primary-900: var(--primary-900);
+    --p-primary-950: var(--primary-950);
+
+    --primary-highlight-opacity: 0.1;
+    --primary-highlight-inverse: 233 30 99;
+    /* Pink */
+    --primary-highlight-hover-opacity: 0.2;
+
+    /* Surface colors */
+    --surface-0: 11 36 71;
+    /* #0B2447 */
+    --surface-50: 25 55 109;
+    /* #19376D */
+    --surface-100: 87 108 188;
+    /* #576CBC */
+    --surface-200: 165 215 232;
+    /* #A5D7E8 */
+    --surface-300: 20 20 20;
+    /* Dark Gray for contrast */
+    --surface-400: 30 30 30;
+    /* Darker Gray for contrast */
+    --surface-500: 50 50 50;
+    /* Gray for contrast */
+    --surface-600: 75 75 75;
+    /* Medium Gray for contrast */
+    --surface-700: 100 100 100;
+    /* Light Gray for contrast */
+    --surface-800: 150 150 150;
+    /* Lighter Gray for contrast */
+    --surface-900: 255 255 255;
+    /* Pure White */
+
+    --text-color: var(--p-text-color);
+    --text-color-secondary: var(--p-text-muted-color);
+    --surface-border: var(--p-content-border-color);
+    --surface-card: var(--p-content-background);
+    --surface-hover: var(--p-content-hover-background);
+    --surface-overlay: var(--p-overlay-popover-background);
+    --transition-duration: var(--p-transition-duration);
+    --maskbg: var(--p-mask-background);
+    --content-border-radius: var(--p-content-border-radius);
+    --layout-section-transition-duration: 0.2s;
+    --element-transition-duration: var(--p-transition-duration);
+    --focus-ring-width: var(--p-focus-ring-width);
+    --focus-ring-style: var(--p-focus-ring-style);
+    --focus-ring-color: var(--p-focus-ring-color);
+    --focus-ring-offset: var(--p-focus-ring-offset);
+    --focus-ring-shadow: var(--p-focus-ring-shadow);
+}
