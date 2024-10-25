@@ -1,6 +1,6 @@
 <script setup>
 const props = defineProps({
-  isDestop: {
+  isDesktop: {
     type: Boolean,
     default: true
   }
@@ -8,7 +8,8 @@ const props = defineProps({
 </script>
 
 <template>
-  <img src="../../assets/images/logo-v2.png" class="logo" />
+  <img v-if="isDesktop" src="../../assets/images/logo-full-text.png" class="logo" />
+  <img v-else src="../../assets/images/logo-small.png" class="logo" />
 </template>
 
 <style>
