@@ -8,10 +8,16 @@
     <div class="right-icons">
       <div :onclick="toggleDarkMode">Toggle Mode</div>
     </div>
+    <div :onclick="handleLogout">Logout</div>
+    <div :onclick="handleCallApi">Call api</div>
+
   </div>
 </template>
 <script setup>
 import Logo from '@/components/common/Logo.vue'
+import router from '@/router';
+import { authService } from '@/services/authenService';
+import { useAuthStore } from '@/stores/authStore';
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
 
@@ -21,6 +27,16 @@ const searchText = ref('')
 const toggleDarkMode = () => {
   document.documentElement.classList.toggle('dark');
 };
+
+const handleLogout = () => {
+  const { logout } = useAuthStore()
+  logout()
+  router.push('auth/login')
+}
+
+const handleCallApi = async () => {
+  await authService.healthCheck()
+}
 </script>
 <style lang="" scoped>
 </style>

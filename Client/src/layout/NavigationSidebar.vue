@@ -4,9 +4,9 @@
       <div class="flex items-center">
         <i class="pi pi-user" style="font-size: 2.5rem"></i>
         <div class="ml-4">
-          <div>name</div>
+          <div>{{ user?.firstName ?? '' }} {{ user?.lastName ?? '' }}</div>
           <div>
-            @nickname
+            @{{ user?.userName ?? '' }}
           </div>
         </div>
       </div>
@@ -16,7 +16,9 @@
   </div>
 </template>
 <script setup>
+import { useAuthStore } from '@/stores/authStore';
 
+const { user } = useAuthStore()
 </script>
 
 <style scoped>
