@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Linkify.Domain.Contants
+namespace Linkify.Domain.Constants
 {
-    public static class LengthConsts
+    public static class LengthConst
     {
         public const int S = 50;
         public const int M = 255;

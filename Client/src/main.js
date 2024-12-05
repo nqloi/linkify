@@ -8,6 +8,7 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import FloatLabel from 'primevue/floatlabel'
 
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
@@ -16,8 +17,10 @@ import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 
-app.use(createPinia())
+app.use(pinia)
 app.use(PrimeVue, {
   theme: {
     preset: Aura,

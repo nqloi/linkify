@@ -1,55 +1,25 @@
-﻿using Linkify.Infrastructure.SecurityManagers.Identity;
-using Microsoft.AspNetCore.Identity;
+﻿using Linkify.Domain.Aggregates.Token;
+using Linkify.Infrastructure.DataAccessManagers.Configurations;
+using Linkify.Infrastructure.SecurityManagers.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Linkify.Infrastructure.DataAccessManagers.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser> 
     {
-        public ApplicationDbContext()
-        {
 
-        }
-
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
 
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    base.OnModelCreating(builder);
+        public DbSet<Token> Token { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        //    builder.Entity<ApplicationUser>(entity =>
-        //    {
-        //        entity.ToTable("Users");  
-        //    });
-
-        //    builder.Entity<IdentityUserRole<string>>(entity =>
-        //    {
-        //        entity.ToTable("UserRoles"); 
-        //    });
-
-        //    builder.Entity<IdentityUserClaim<string>>(entity =>
-        //    {
-        //        entity.ToTable("UserClaims"); 
-        //    });
-
-        //    builder.Entity<IdentityUserLogin<string>>(entity =>
-        //    {
-        //        entity.ToTable("UserLogins"); 
-        //    });
-
-        //    builder.Entity<IdentityRoleClaim<string>>(entity =>
-        //    {
-        //        entity.ToTable("RoleClaims");  
-        //    });
-
-        //    builder.Entity<IdentityUserToken<string>>(entity =>
-        //    {
-        //        entity.ToTable("UserTokens"); 
-        //    });
-        //}
+            modelBuilder.ApplyConfiguration(new TokenConfiguration());
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Linkify.Infrastructure.DataAccessManagers.Context;
+﻿using Linkify.Application.Repositories;
+using Linkify.Infrastructure.DataAccessManagers.Context;
+using Linkify.Infrastructure.DataAccessManagers.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,14 +16,11 @@ public static class DI
         {
             options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 40)));
         });
-        //services.AddDbContext<CommandConte>(options =>
-        //{
-        //    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 40)));
-        //});
-        //services.AddDbContext<ApplicationDbContext>(options =>
-        //{
-        //    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 40)));
-        //});b
+
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped(typeof(IBaseCommandRepository<>), typeof(BaseCommandRepository<>));
+        services.AddScoped<ITokenRepository, TokenRepository>();
 
         return services;
     }
@@ -33,7 +32,7 @@ public static class DI
 
         // Create database using ApplicationDbContext
         var dataContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
-        dataContext.Database.EnsureCreated(); // Ensure database is created (development only)
+        dataContext.Database.Migrate(); 
 
         return host;
     }

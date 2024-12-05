@@ -10,7 +10,8 @@ namespace Linkify.Application.ExternalServices
 {
     public interface IIdentityService
     {
-        Task<AuthenticationResult> LoginAsync(string? username, string? password, CancellationToken cancellationToken = default);
+        Task<AuthenticationResult> LoginAsync(string username, string password, CancellationToken cancellationToken = default);
+        Task<AuthenticationResult> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default);
         Task<AuthenticationResult> RegisterAsync(RegisterCommandRequest registerCommandRequest, CancellationToken cancellationToken = default);
     }
 }

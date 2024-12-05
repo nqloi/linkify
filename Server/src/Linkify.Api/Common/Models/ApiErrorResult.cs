@@ -1,9 +1,4 @@
-﻿// ----------------------------------------------------------------------------
-// Developer:      Ismail Hamzah
-// Email:         go2ismail@gmail.com
-// ----------------------------------------------------------------------------
-
-namespace WebAPI.Common.Models;
+﻿namespace WebAPI.Common.Models;
 
 public class ApiErrorResult
 {
