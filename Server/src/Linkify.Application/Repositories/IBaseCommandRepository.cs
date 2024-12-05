@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Repositories
 {
-    public interface IBaseRepository<T> where T : BaseEntity, IAggregateRoot
+    public interface IBaseCommandRepository<T> where T : BaseEntity, IAggregateRoot
     {
         Task CreateAsync(T entity, CancellationToken cancellationToken = default);
 
@@ -20,9 +20,9 @@ namespace Linkify.Application.Repositories
 
         void Purge(T entity);
 
-        Task<T?> GetAsync(string id, CancellationToken cancellationToken = default);
+        Task<T?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
-        T? Get(string id);
+        T? Get(Guid id);
 
         IQueryable<T> GetQuery();
     }

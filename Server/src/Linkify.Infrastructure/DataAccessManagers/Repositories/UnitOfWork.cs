@@ -3,7 +3,7 @@ using Linkify.Infrastructure.DataAccessManagers.Context;
 
 namespace Linkify.Infrastructure.DataAccessManagers.Repositories
 {
-    public class UnitOfWork(CommandContext commandContext) : IUnitOfWork
+    public class UnitOfWork(ApplicationDbContext commandContext) : IUnitOfWork
     {
         public void Save()
         {
@@ -12,7 +12,7 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
 
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
-            await commandContext.SaveChangesAsync(cancellationToken);
+            await commandContext.SaveChangesAsync(cancellationToken); 
         }
     }
 }

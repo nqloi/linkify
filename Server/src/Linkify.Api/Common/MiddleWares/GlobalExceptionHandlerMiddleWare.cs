@@ -2,9 +2,9 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Authentication;
 
-namespace Linkify.Api.Middlewares
+namespace Linkify.Api.Common.MiddleWares
 {
-    public class GlobalExceptionHandlerMiddleware(RequestDelegate requestDelegate)
+    public class GlobalExceptionHandlerMiddleWare(RequestDelegate requestDelegate)
     {
         private readonly RequestDelegate _requestDelegate = requestDelegate;
 
@@ -16,7 +16,7 @@ namespace Linkify.Api.Middlewares
 
                 if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
                 {
-                    await exceptionHandler.TryHandleAsync(httpContext, new UnauthorizedAccessException(), CancellationToken.None);
+                    await exceptionHandler.TryHandleAsync(httpContext, new UnauthorizedAccessException("Unauthorized - Token missing or invalid"), CancellationToken.None);
                 }
 
                 else if (httpContext.Response.StatusCode == StatusCodes.Status403Forbidden)
