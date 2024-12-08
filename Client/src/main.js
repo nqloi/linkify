@@ -7,6 +7,8 @@ import ToastService from 'primevue/toastservice'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import FloatLabel from 'primevue/floatlabel'
+import ConfirmationService from 'primevue/confirmationservice'
+import Dialog from 'primevue/dialog'
 
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { createApp } from 'vue'
@@ -32,12 +34,13 @@ app.use(PrimeVue, {
     }
   }
 })
+app.use(ConfirmationService)
+app.use(ToastService)
+app.use(router)
 
 app.component('Button', Button)
+app.component('Dialog', Dialog)
 app.component('InputText', InputText)
 app.component('FloatLabel', FloatLabel)
-app.use(ToastService)
-
-app.use(router)
 
 app.mount('#app')
