@@ -1,47 +1,60 @@
-import { authService } from '@/services/authenService'
-import Cookies from 'js-cookie'
+import useAuthService from '@/services/useAuthService'
+import { CACHE_KEYS } from '@/utils/cache/cacheContants'
+import useCache from '@/utils/cache/useCache'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useAuthStore = defineStore(
-  'auth',
-  () => {
-    const defaultUser = {
-      userId: null,
-      userName: null,
-      firstName: null,
-      lastName: null
-    }
+    'auth',
+    () => {
+        const defaultUser = {
+            userId: null,
+            userName: null,
+            firstName: null,
+            lastName: null,
+        }
+        const authService = useAuthService()
+        const { setCache, removeCache } = useCache()
 
-    const isAuthenticated = ref(false)
-    const user = ref(defaultUser)
+        const isAuthenticated = ref(false)
+        const isSessionTimeout = ref(false)
+        const user = ref(defaultUser)
 
-    const login = async (credentials) => {
-      const response = await authService.login(credentials)
+        const login = async (credentials) => {
+            const response = await authService.login(credentials)
 
-      const { accessToken, refreshToken, ...userInfos } = response.content
+            const { accessToken, refreshToken, ...userInfos } = response.content
+            setCache(CACHE_KEYS.ACCESS_TOKEN, accessToken)
+            setCache(CACHE_KEYS.REFRESH_TOKEN, refreshToken)
 
-      Cookies.set('accessToken', accessToken, { expires: 7, secure: true, sameSite: 'Strict' })
-      Cookies.set('refreshToken', refreshToken, { expires: 30, secure: true, sameSite: 'Strict' })
+            isAuthenticated.value = true
+            isSessionTimeout.value = false
+            user.value = userInfos
 
-      isAuthenticated.value = true
-      user.value = userInfos
+            return true
+        }
 
-      return true
-    }
+        const logout = () => {
+            // await authService.logout()
+            removeCache(CACHE_KEYS.ACCESS_TOKEN)
+            removeCache(CACHE_KEYS.REFRESH_TOKEN)
+            Object.assign(user, { ...defaultUser })
+            isAuthenticated.value = false
+        }
 
-    const logout = () => {
-      Cookies.remove('accessToken')
-      Cookies.remove('refreshToken')
-      Object.assign(user, { ...defaultUser })
-      isAuthenticated.value = false
-    }
+        const onSessionTimeout = () => {
+            isAuthenticated.value = false
+            isSessionTimeout.value = true
+            removeCache(CACHE_KEYS.ACCESS_TOKEN)
+            removeCache(CACHE_KEYS.REFRESH_TOKEN)
+            Object.assign(user, { ...defaultUser })
+        }
 
-    const register = async () => {}
+        const register = async () => {}
 
-    return { isAuthenticated, user, login, logout }
-  },
-  {
-    persist: true
-  }
+        return { isAuthenticated, user, login, logout, isSessionTimeout, onSessionTimeout }
+    },
+    {
+        persist: true,
+    },
 )

@@ -1,12 +1,5 @@
-﻿// ----------------------------------------------------------------------------
-// Developer:      Ismail Hamzah
-// Email:         go2ismail@gmail.com
-// ----------------------------------------------------------------------------
-
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using Linkify.Api.Common.Models;
-using Linkify.Application.Features.Authentication.Commands.Login;
-using Linkify.Application.Features.Authentication.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

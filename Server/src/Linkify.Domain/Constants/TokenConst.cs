@@ -10,6 +10,6 @@ namespace Linkify.Domain.Constants
     public static class TokenConst
     {
         public const int MaxLength = LengthConst.XL;
-        public const double ExpiryInDays = 30;
+        public const double ExpiryInDays = 1;
     }
 }
