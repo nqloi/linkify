@@ -43,34 +43,18 @@
     --p-primary-900: var(--primary-900);
     --p-primary-950: var(--primary-950);
 
-    --primary-highlight-opacity: 0.1;
-    --primary-highlight-inverse: 233 30 99;
-    /* Pink */
-    --primary-highlight-hover-opacity: 0.2;
-
-    /* Surface colors */
-    --surface-0: 11 36 71;
-    /* #0B2447 */
-    --surface-50: 25 55 109;
-    /* #19376D */
-    --surface-100: 87 108 188;
-    /* #576CBC */
-    --surface-200: 165 215 232;
-    /* #A5D7E8 */
-    --surface-300: 20 20 20;
-    /* Dark Gray for contrast */
-    --surface-400: 30 30 30;
-    /* Darker Gray for contrast */
-    --surface-500: 50 50 50;
-    /* Gray for contrast */
-    --surface-600: 75 75 75;
-    /* Medium Gray for contrast */
-    --surface-700: 100 100 100;
-    /* Light Gray for contrast */
-    --surface-800: 150 150 150;
-    /* Lighter Gray for contrast */
-    --surface-900: 255 255 255;
-    /* Pure White */
+    --p-surface-0: #ffffff;
+    --p-surface-50: var(--p-slate-50);
+    --p-surface-100: var(--p-slate-100);
+    --p-surface-200: var(--p-slate-200);
+    --p-surface-300: var(--p-slate-300);
+    --p-surface-400: var(--p-slate-400);
+    --p-surface-500: var(--p-slate-500);
+    --p-surface-600: var(--p-slate-600);
+    --p-surface-700: var(--p-slate-700);
+    --p-surface-800: var(--p-slate-800);
+    --p-surface-900: var(--p-slate-900);
+    --p-surface-950: var(--p-slate-950);
 
     --text-color: var(--p-text-color);
     --text-color-secondary: var(--p-text-muted-color);
@@ -88,4 +72,11 @@
     --focus-ring-color: var(--p-focus-ring-color);
     --focus-ring-offset: var(--p-focus-ring-offset);
     --focus-ring-shadow: var(--p-focus-ring-shadow);
+
+    --primary-highlight-opacity: 0.1;
+    --primary-highlight-inverse: 233 30 99;
+    /* Pink */
+    --primary-highlight-hover-opacity: 0.2;
+    --p-message-error-simple-color: var(--p-red-500);
+    --p-form-field-float-label-invalid-color: var(--p-message-error-simple-color);
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Features.Authentication.Commands.Register
 {
-    public record RegisterCommandRequest : IRequest<AuthenticationResult>
+    public record RegisterCommandRequest : IRequest<bool>
     {
         public required string UserName { get; init; }
         public string? Email { get; init; }

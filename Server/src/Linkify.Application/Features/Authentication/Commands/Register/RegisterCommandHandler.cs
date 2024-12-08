@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Features.Authentication.Commands.Register
 {
-    public class RegisterCommandHandler(IIdentityService _identityService) : IRequestHandler<RegisterCommandRequest, AuthenticationResult>
+    public class RegisterCommandHandler(IIdentityService _identityService) : IRequestHandler<RegisterCommandRequest, bool>
     {
-        public async Task<AuthenticationResult> Handle(RegisterCommandRequest request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(RegisterCommandRequest request, CancellationToken cancellationToken)
         {
-            var authenticationResult = await _identityService.RegisterAsync(request, cancellationToken);
+            var registerResult = await _identityService.RegisterAsync(request, cancellationToken);
 
-            return authenticationResult;
+            return registerResult;
         }
     }
 }

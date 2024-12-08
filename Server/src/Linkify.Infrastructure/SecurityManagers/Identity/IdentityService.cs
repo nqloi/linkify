@@ -39,7 +39,7 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
 
         public async Task<AuthenticationResult> LoginAsync(string username, string password, CancellationToken cancellationToken = default)
         {
-            var user = _userManager.Users.FirstOrDefault(user => user.UserName == username);
+            var user = await _userManager.FindByNameAsync(username);
 
             if (user == null)
             {
@@ -76,7 +76,7 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
             };
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(RegisterCommandRequest registerCommandRequest, CancellationToken cancellationToken = default)
+        public async Task<bool> RegisterAsync(RegisterCommandRequest registerCommandRequest, CancellationToken cancellationToken = default)
         {
             var applicationUser = new ApplicationUser(
                registerCommandRequest.UserName,
@@ -89,15 +89,8 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
             {
                 throw new IdentityException(string.Join(", ", result.Errors.Select(e => e.Description)));
             }
-
-            var accessToken = _tokenService.GenerateToken(applicationUser, []);
-            var refreshToken = _tokenService.GenerateRefreshToken();
              
-            return new AuthenticationResult
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
-            };
+            return true;
         }
 
         public async Task<AuthenticationResult> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
@@ -124,6 +117,12 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken,
             };
+        }
+
+        public async Task<bool> CheckDuplicateUsername(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            return user != null;
         }
 
     }

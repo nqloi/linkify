@@ -1,15 +1,14 @@
-﻿using Asp.Versioning;
-using Linkify.Api.Common.Models;
+﻿using Linkify.Api.Common.Models;
 using Linkify.Api.DTOs.Authentication;
 using Linkify.Application.Features.Authentication.Commands.Login;
 using Linkify.Application.Features.Authentication.Commands.Register;
 using Linkify.Application.Features.Authentication.Commands.Token;
 using Linkify.Application.Features.Authentication.Common;
+using Linkify.Application.Features.Authentication.Queries.CheckDuplicateUsername;
 using Linkify.Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading;
 using WebAPI.Controllers;
 
 
@@ -83,11 +82,11 @@ namespace Linkify.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<ApiSuccessResult<AuthenticationResult>>> RegisterAsync(RegisterCommandRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiSuccessResult<bool>>> RegisterAsync([FromBody] RegisterCommandRequest request, CancellationToken cancellationToken)
         {
             var response = await _sender.Send(request, cancellationToken);
 
-            return Ok(new ApiSuccessResult<AuthenticationResult>
+            return Ok(new ApiSuccessResult<bool>
             {
                 Code = StatusCodes.Status200OK,
                 Message = $"Success",
@@ -113,6 +112,21 @@ namespace Linkify.Api.Controllers
             var response = await _sender.Send(refreshTokenRequest, cancellationToken);
 
             return Ok(new ApiSuccessResult<AuthenticationResult>
+            {
+                Code = StatusCodes.Status200OK,
+                Message = $"Success",
+                Content = response
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("check-username")]
+        public async Task<ActionResult<ApiSuccessResult<bool>>> CheckUserName([FromBody] string username, CancellationToken cancellationToken)
+        {
+            var request = new CheckDuplicateUsernameRequest { Username = username};
+            var response = await _sender.Send(request, cancellationToken);
+
+            return Ok(new ApiSuccessResult<bool>
             {
                 Code = StatusCodes.Status200OK,
                 Message = $"Success",
