@@ -75,13 +75,7 @@ const useAxios = (controller, version = defaultVersion, customHeader = {}) => {
             isLoading.value = false
             const contentType = response.headers['content-type'] || ''
             if (contentType.includes('application/json') && response.data?.code !== 200) {
-                return Promise.reject(
-                    new Error(
-                        `${response.data?.code}. ${response.data?.message}. innerException: ${
-                            response.data?.error?.innerException || 'No inner exception'
-                        }`,
-                    ),
-                )
+                return Promise.reject(response.data)
             }
             return response.data
         },
