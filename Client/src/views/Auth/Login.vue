@@ -1,9 +1,9 @@
 <template>
     <div class="flex flex-col pr-8 rounded-lg bg-white w-2/3 h-2/3 p-8 max-w-xl">
-        <div class="text-2xl mb-8">
-            Welcome !
+        <div class="text-2xl mb-8">Welcome !</div>
+        <div class="text-xl font-semibold mb-6">
+            Sign in to <span class="text-primary">Linkify</span>
         </div>
-        <div class="text-xl font-semibold mb-6">Sign in to <span class="text-primary">Linkify</span></div>
         <div class="flex flex-col gap-2 mb-4">
             <label for="username">Username</label>
             <IconField>
@@ -19,52 +19,60 @@
             </IconField>
         </div>
 
-        <div class="flex justify-between mb-6">
-            <div class="flex items-center">
-                <Checkbox inputId="remember-me" name="remember-me" v-model="isRemember" :binary="true" />
-                <label for="remember-me" class="ml-2"> Remember me </label>
-            </div>
-            <div class="cursor-pointer" :onclick="handleForgotPassword">
-                Forgot password?
-            </div>
+        <div class="flex justify-end mb-6">
+            <div class="cursor-pointer" :onclick="handleForgotPassword">Forgot password?</div>
         </div>
         <Button label="Login" class="w-full mb-10" :onclick="handleLogin" />
-        <div class="flex justify-center">Don't have an Account?<span
+        <div class="flex justify-center">
+            Don't have an Account?<span
                 class="font-semibold cursor-pointer text-primary-500"
-                :onclick="handleNavigateRegister">&nbsp;Register</span>
+                :onclick="handleNavigateRegister"
+                >&nbsp;Register</span
+            >
         </div>
     </div>
 </template>
 <script setup>
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
-import Checkbox from 'primevue/checkbox';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/authStore';
+import Checkbox from 'primevue/checkbox'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+import { useCustomToast } from '@/utils/toast/customToast'
+import exceptionType from '@/common/contants/exceptionType'
 
+const toast = useCustomToast()
 const route = useRouter()
 const isRemember = ref(false)
 const username = ref('guest')
 const password = ref('123456@Abc')
 
 const handleForgotPassword = () => {
-    console.log("forgot pass")
+    console.log('forgot pass')
 }
 
 const handleNavigateRegister = () => {
     route.push({
-        name: 'Register'
+        name: 'Register',
     })
 }
 
 const handleLogin = async () => {
     const { login } = useAuthStore()
-    const isAuthenticated = await login({
-        username: username.value,
-        password: password.value
-    });
-    isAuthenticated && route.push('/')
+    try {
+        const isAuthenticated = await login({
+            username: username.value,
+            password: password.value,
+        })
+        isAuthenticated && route.push('/')
+    } catch (error) {
+        if (error?.error?.exceptionType === exceptionType.UnauthorizedAccessException) {
+            toast.showCustomError('User name or password is incorrect.')
+        } else {
+            toast.showCustomError()
+        }
+    }
 }
 </script>
 <style scoped></style>
