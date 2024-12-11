@@ -1,5 +1,7 @@
 <template>
-    <div class="flex flex-col p-8 rounded-lg bg-white w-2/3 min-h-3/4 max-w-xl">
+    <div
+        class="flex flex-col p-4 md:p-6 lg:p-8 rounded-lg bg-white w-full min-h-full sm:w-5/6 sm:min-h-[85%] md:w-4/5 md:min-h-[80%] lg:w-2/3 lg:min-h-3/4 max-w-xl"
+    >
         <div class="text-2xl mb-8">Welcome !</div>
         <div class="text-xl font-semibold mb-6">
             Sign in to <span class="text-primary">Linkify</span>
