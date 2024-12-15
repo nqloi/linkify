@@ -2,6 +2,7 @@
 import ConfirmDialog from 'primevue/confirmdialog'
 import SessionTimeoutDialog from './components/authen/dialog/SessionTimeoutDialog.vue'
 import Toast from 'primevue/toast'
+import GlobalLoading from './components/common/GlobalLoading.vue'
 </script>
 
 <template>
@@ -9,6 +10,7 @@ import Toast from 'primevue/toast'
     <SessionTimeoutDialog />
     <Toast></Toast>
     <router-view />
+    <GlobalLoading> </GlobalLoading>
 </template>
 
 <style scoped></style>

@@ -7,6 +7,10 @@
     /* Dodger Blue: RGB(30, 144, 255) */
     --primary-active-color: #0D47A1;
     /* Darker Blue: RGB(13, 71, 161) */
+    --primary-highlight-opacity: 0.1;
+    --primary-highlight-inverse: 233 30 99;
+    --primary-highlight-hover-opacity: 0.2;
+    --primary-highlight: #90caf9;
 
     --primary-50: #E1F5FE;
     /* RGB(236, 253, 245) */
@@ -73,10 +77,6 @@
     --focus-ring-offset: var(--p-focus-ring-offset);
     --focus-ring-shadow: var(--p-focus-ring-shadow);
 
-    --primary-highlight-opacity: 0.1;
-    --primary-highlight-inverse: 233 30 99;
-    /* Pink */
-    --primary-highlight-hover-opacity: 0.2;
     --p-message-error-simple-color: var(--p-red-500);
     --p-form-field-float-label-invalid-color: var(--p-message-error-simple-color);
 }

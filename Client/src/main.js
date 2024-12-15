@@ -1,7 +1,7 @@
 import 'primeicons/primeicons.css'
-import Aura from '@primevue/themes/aura'
 import './assets/tailwind.css'
 import './assets/scss/styles.scss'
+import Aura from '@primevue/themes/aura'
 
 import ToastService from 'primevue/toastservice'
 import Button from 'primevue/button'
@@ -24,15 +24,15 @@ pinia.use(piniaPluginPersistedstate)
 
 app.use(pinia)
 app.use(PrimeVue, {
-  theme: {
-    preset: Aura,
-    options: {
-      cssLayer: {
-        name: 'primevue',
-        order: 'tailwind-base, primevue, tailwind-utilities'
-      }
-    }
-  }
+    theme: {
+        preset: Aura,
+        options: {
+            cssLayer: {
+                name: 'primevue',
+                order: 'tailwind-base, primevue, tailwind-utilities',
+            },
+        },
+    },
 })
 app.use(ConfirmationService)
 app.use(ToastService)

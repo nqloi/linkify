@@ -1,6 +1,5 @@
-@import './utils';
-@import './variables/common';
-@import './variables/dark';
+@use './utils';
+@use './variables';
 
 html {
     font-size: 14px;
