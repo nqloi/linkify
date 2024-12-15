@@ -125,7 +125,7 @@ import { Form, FormField } from '@primevue/forms'
 import Message from 'primevue/message'
 import { yupResolver } from '@primevue/forms/resolvers/yup'
 import * as yup from 'yup'
-import useAuthService from '@/services/useAuthService'
+import useAuthService from '@/services/authService'
 import { useToast } from 'primevue'
 import { useAuthStore } from '@/stores/authStore'
 

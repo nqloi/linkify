@@ -15,7 +15,7 @@
 <script setup>
 import Logo from '@/components/common/Logo.vue'
 import router from '@/router'
-import useAuthService from '@/services/useAuthService'
+import useAuthService from '@/services/authService'
 import { useAuthStore } from '@/stores/authStore'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'

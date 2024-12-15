@@ -18,15 +18,14 @@
                 <li v-for="item in menuItems" :key="item.label" class="menu-item mb-2">
                     <router-link
                         :to="item.to"
-                        class="flex items-center py-2 px-3 rounded-md hover:bg-primary-highlight"
+                        class="flex items-center py-2 px-3 rounded-md hover:bg-primary-600"
+                        :class="{
+                            'bg-primary-600 text-white': isActiveRoute(item.to),
+                        }"
                     >
-                        <i :class="item.icon + ' text-lg mr-3 text-primary'"></i>
-                        <span class="text-sm font-medium text-text-color">{{ item.label }}</span>
-                        <span
-                            v-if="item.badge"
-                            class="ml-auto bg-primary text-primary-inverse text-xs rounded-full px-2 py-0.5"
-                        >
-                            {{ item.badge }}
+                        <i class="text-lg mr-3" :class="[item.icon]"></i>
+                        <span class="text-md font-medium">
+                            {{ item.label }}
                         </span>
                     </router-link>
                 </li>
@@ -55,6 +54,9 @@
 import SimpleCard from '@/components/common/SimpleCard.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { Avatar, Card } from 'primevue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const user = {
     name: 'Jakob Botosh',
@@ -66,12 +68,12 @@ const user = {
 
 const menuItems = [
     { label: 'Feed', icon: 'pi pi-home', to: '/' },
-    { label: 'Friends', icon: 'pi pi-users', to: '/' },
-    { label: 'Event', icon: 'pi pi-calendar', to: '/', badge: 4 },
-    { label: 'Watch Videos', icon: 'pi pi-video', to: '/' },
-    { label: 'Photos', icon: 'pi pi-image', to: '/' },
-    { label: 'Marketplace', icon: 'pi pi-shopping-cart', to: '/' },
-    { label: 'Files', icon: 'pi pi-folder', to: '/', badge: 7 },
+    { label: 'Friends', icon: 'pi pi-users', to: '/1' },
+    { label: 'Event', icon: 'pi pi-calendar', to: '/2', badge: 4 },
+    { label: 'Watch Videos', icon: 'pi pi-video', to: '/3' },
+    { label: 'Photos', icon: 'pi pi-image', to: '/4' },
+    { label: 'Marketplace', icon: 'pi pi-shopping-cart', to: '/5' },
+    { label: 'Files', icon: 'pi pi-folder', to: '/6', badge: 7 },
 ]
 
 const likedPages = [
@@ -96,6 +98,8 @@ const likedPages = [
         avatar: '/avatars/behance.png',
     },
 ]
+
+const isActiveRoute = (path) => route.path === path
 </script>
 
 <style scoped lang="scss">

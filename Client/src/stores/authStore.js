@@ -1,4 +1,4 @@
-import useAuthService from '@/services/useAuthService'
+import useAuthService from '@/services/authService'
 import { CACHE_KEYS } from '@/utils/cache/cacheContants'
 import useCache from '@/utils/cache/useCache'
 import { defineStore } from 'pinia'

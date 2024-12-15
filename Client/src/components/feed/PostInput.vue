@@ -1,18 +1,14 @@
 <template>
-    <SimpleCard class="post-input p-4">
+    <SimpleCard class="post-input p-4 mb-4">
         <!-- Input row -->
         <div class="flex items-center gap-4 mb-4">
             <Avatar icon="pi pi-user" shape="circle" class="w-10 h-10 bg-blue-500 text-white" />
-            <InputText
-                v-model="postContent"
-                placeholder="What's on your mind?"
-                class="flex-1 rounded-full p-inputtext-sm"
-            />
-            <Button
-                label="Share Post"
-                class="p-button-sm p-button-rounded"
-                :disabled="!postContent"
-            />
+            <div
+                class="flex-1 rounded-full p-input text-sm border border-inherit py-2 px-4 bg-slate-100 hover:bg-slate-200 cursor-pointer"
+                @click="handleOpenDialog"
+            >
+                What's on your mind?
+            </div>
         </div>
 
         <!-- Options row -->
@@ -52,15 +48,17 @@
             />
         </div>
     </SimpleCard>
+    <CreatePostDialog ref="postDialog" @onSaved="handleSavedPost" />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { Avatar } from 'primevue'
 import SimpleCard from '../common/SimpleCard.vue'
+import CreatePostDialog from './CreatePostDialog.vue'
 
 // State management for the post input
-const postContent = ref('')
+const postDialog = ref('')
 
 // Visibility options for the post
 const visibility = ref(null)
@@ -69,6 +67,14 @@ const visibilityOptions = ref([
     { label: 'Friends', value: 'Friends' },
     { label: 'Only Me', value: 'Only Me' },
 ])
+
+const handleOpenDialog = () => {
+    postDialog.value.openDialog()
+}
+
+const handleSavedPost = () => {
+    console.log(12)
+}
 </script>
 
 <style scoped>

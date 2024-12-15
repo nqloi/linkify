@@ -9,9 +9,9 @@ import SidebarRight from './SidebarRight.vue'
     <div class="h-screen flex flex-col">
         <TheHeader />
         <div class="p-4 bg-slate-100 flex flex-column gap-4 flex-1 overflow-hidden">
-            <NavigationSidebar />
+            <NavigationSidebar class="hidden md:flex" />
             <RouterView />
-            <SidebarRight />
+            <SidebarRight class="hidden lg:flex" />
         </div>
     </div>
 </template>
