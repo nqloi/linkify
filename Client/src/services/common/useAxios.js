@@ -117,6 +117,10 @@ const useAxios = (controller, version = defaultVersion, customHeader = {}) => {
 
     const baseService = {
         healthCheck: () => instance.get('/health-check'),
+        create: (data) => instance.post('', data),
+        getAll: () => instance.get(),
+        delete: (id) => instance.delete(id),
+        update: (data) => instance.put('', data),
     }
 
     return {
