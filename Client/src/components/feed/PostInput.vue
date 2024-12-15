@@ -48,7 +48,7 @@
             />
         </div>
     </SimpleCard>
-    <CreatePostDialog ref="postDialog" @onSaved="handleSavedPost" />
+    <CreatePostDialog ref="postDialog" />
 </template>
 
 <script setup>
@@ -70,10 +70,6 @@ const visibilityOptions = ref([
 
 const handleOpenDialog = () => {
     postDialog.value.openDialog()
-}
-
-const handleSavedPost = () => {
-    console.log(12)
 }
 </script>
 
