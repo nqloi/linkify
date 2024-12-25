@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Linkify.Application.Common.Behaviors;
+using Linkify.Application.Mapping;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -10,7 +11,7 @@ namespace Linkify.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

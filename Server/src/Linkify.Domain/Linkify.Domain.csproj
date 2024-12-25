@@ -8,9 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Aggregates\MessageAggregate\" />
-    <Folder Include="Aggregates\PostAggregate\" />
     <Folder Include="Invariants\" />
-    <Folder Include="Exceptions\" />
   </ItemGroup>
 
 </Project>

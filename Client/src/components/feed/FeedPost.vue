@@ -3,7 +3,11 @@
         <!-- Header -->
         <div class="post-header flex items-center justify-between mb-4">
             <div class="flex items-center">
-                <img :src="post.userAvatar" alt="User Avatar" class="w-10 h-10 rounded-full mr-3" />
+                <Avatar
+                    :image="post.avatarUrl ?? defaultAvatar"
+                    alt="User Avatar"
+                    class="w-10 h-10 rounded-full mr-3"
+                />
                 <div>
                     <h5 class="font-bold text-sm">{{ post.userName }}</h5>
                     <p class="text-gray-500 text-xs">{{ post.postDate }}</p>
@@ -14,7 +18,7 @@
 
         <!-- Content -->
         <div class="post-content mb-4">
-            <p class="text-sm text-gray-700 mb-3">{{ post.postContent }}</p>
+            <p class="text-sm text-gray-700 mb-3">{{ post.content }}</p>
             <img :src="post.postImage" alt="Post Image" class="w-full rounded-lg" />
         </div>
 
@@ -38,14 +42,17 @@
                 />
             </div>
             <p>
-                {{ post.reactions.likes }} Like • {{ post.reactions.comments }} Comment •
-                {{ post.reactions.shares }} Share
+                {{ post.reactions?.likes }} Like • {{ post.reactions?.comments }} Comment •
+                {{ post.reactions?.shares }} Share
             </p>
         </div>
     </div>
 </template>
 
 <script setup>
+import { Avatar } from 'primevue'
+import defaultAvatar from '@/assets/images/avatar-default.svg'
+
 defineProps({
     post: {
         type: Object,
