@@ -20,6 +20,7 @@ public static class DI
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IBaseCommandRepository<>), typeof(BaseCommandRepository<>));
+        services.AddScoped(typeof(IBaseQueryRepository<>), typeof(BaseQueryRepository<>));
         services.AddScoped<ITokenRepository, TokenRepository>();
 
         return services;

@@ -52,8 +52,8 @@ import { ref } from 'vue'
 
 const loading = useLoadingStore()
 const postContent = ref('')
-const visible = ref(false) // Trạng thái mở/đóng dialog
-const header = 'Create Post' // Tiêu đề của dialog
+const visible = ref(false)
+const header = 'Create Post'
 const postStore = usePostStore()
 
 const openDialog = () => {
@@ -66,19 +66,11 @@ const closeDialog = () => {
 
 const handleCreatePost = async () => {
     loading.show()
-    postStore.addPost({
-        id: 123,
-        userName: 'NQLoi',
-        userAvatar: 'path_to_avatar2',
-        postDate: 'Recent',
-        postImage: 'path_to_post_image2',
-        postContent: 'Another cool thing to share...',
-        reactions: { likes: 50, comments: 18, shares: 7 },
+    await postStore.addPost({
+        content: postContent.value,
     })
-    setTimeout(() => {
-        loading.hide()
-        visible.value = false
-    }, 1000)
+    loading.hide()
+    visible.value = false
 }
 
 defineExpose({ openDialog, closeDialog })

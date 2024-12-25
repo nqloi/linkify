@@ -1,5 +1,7 @@
 ﻿using Linkify.Application.ExternalServices;
 using Linkify.Infrastructure.DataAccessManagers.Context;
+using Linkify.Infrastructure.SecurityManagers.CurrentUser;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,7 +46,8 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
 
             }).AddEntityFrameworkStores<ApplicationDbContext>();
                 
-            services.AddTransient<IIdentityService, IdentityService>(); 
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }
