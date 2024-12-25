@@ -3,6 +3,9 @@ using Linkify.Api.Common.MiddleWares;
 using Linkify.Application;
 using Linkify.Infrastructure;
 using Linkify.Infrastructure.DataAccessManagers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -61,6 +64,7 @@ app.UseMiddleware<GlobalExceptionHandlerMiddleWare>();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseHttpsRedirection();
 app.UseHttpsRedirection();
 
 app.MapControllers();

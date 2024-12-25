@@ -16,6 +16,8 @@ namespace Linkify.Infrastructure
 
             services.RegisterIdentity(configuration);
 
+            services.AddHttpContextAccessor();
+
             return services;
         }
     }

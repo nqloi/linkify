@@ -45,17 +45,16 @@
 </template>
 
 <script setup>
-import usePostService from '@/services/postService'
 import { useLoadingStore } from '@/stores/loadingStore'
+import { usePostStore } from '@/stores/postStore'
 import { Avatar, Textarea } from 'primevue'
 import { ref } from 'vue'
 
 const loading = useLoadingStore()
 const postContent = ref('')
-const visible = ref(false) // Trạng thái mở/đóng dialog
-const header = 'Create Post' // Tiêu đề của dialog
-
-const emit = defineEmits(['onSaved'])
+const visible = ref(false)
+const header = 'Create Post'
+const postStore = usePostStore()
 
 const openDialog = () => {
     visible.value = true
@@ -66,16 +65,12 @@ const closeDialog = () => {
 }
 
 const handleCreatePost = async () => {
-    const postService = usePostService()
     loading.show()
-    setTimeout(() => {
-        loading.hide()
-        visible.value = false
-        emit('onSaved', { postContent: postContent.value })
-    }, 1000)
-    // await postService.create({
-    //     content: postContent.value,
-    // })
+    await postStore.addPost({
+        content: postContent.value,
+    })
+    loading.hide()
+    visible.value = false
 }
 
 defineExpose({ openDialog, closeDialog })
