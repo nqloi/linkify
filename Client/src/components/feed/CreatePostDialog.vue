@@ -25,7 +25,19 @@
             ></Textarea>
             <div class="flex items-center justify-between mt-4">
                 <div class="flex gap-2">
-                    <Button label="Image/Video" severity="secondary" icon="pi pi-image" class="" />
+                    <FileUpload
+                        mode="basic"
+                        chooseLabel="Image/Video"
+                        chooseIcon="pi pi-images"
+                        @select="onFileSelect"
+                        :multiple="true"
+                        auto
+                        accept="image/*"
+                        customUpload
+                        severity="secondary"
+                        class="p-button-outlined"
+                        :maxFileSize="1000000"
+                    />
                     <Button
                         label="Attachment"
                         severity="secondary"
@@ -49,12 +61,14 @@ import { useLoadingStore } from '@/stores/loadingStore'
 import { usePostStore } from '@/stores/postStore'
 import { Avatar, Textarea } from 'primevue'
 import { ref } from 'vue'
+import FileUpload from 'primevue/fileupload'
 
 const loading = useLoadingStore()
 const postContent = ref('')
 const visible = ref(false)
 const header = 'Create Post'
 const postStore = usePostStore()
+const imageUpload = ref([])
 
 const openDialog = () => {
     visible.value = true
@@ -65,14 +79,30 @@ const closeDialog = () => {
 }
 
 const handleCreatePost = async () => {
+    const formData = new FormData()
+    formData.append('content', postContent.value)
+    formData.append('Images', imageUpload.value)
+
     loading.show()
-    await postStore.addPost({
-        content: postContent.value,
-    })
+    await postStore.addPost(formData)
     loading.hide()
     visible.value = false
 }
 
+const onFileSelect = async (event) => {
+    imageUpload.value.push(...event.files)
+    const formData = new FormData()
+    formData.append('content', postContent.value)
+    const files = event.files
+    for (let i = 0; i < files.length; i++) {
+        formData.append('images', files[i])
+    }
+
+    loading.show()
+    await postStore.addPost(formData)
+    loading.hide()
+    visible.value = false
+}
 defineExpose({ openDialog, closeDialog })
 </script>
 

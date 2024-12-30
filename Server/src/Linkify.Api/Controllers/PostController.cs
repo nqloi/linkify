@@ -1,4 +1,6 @@
 ﻿using Linkify.Api.Common.Models;
+using Linkify.Api.DTOs.Posts;
+using Linkify.Application.Common.Models;
 using Linkify.Application.Features.Posts.Commands.CreatePosts;
 using Linkify.Application.Features.Posts.Queries.GetPost;
 using MediatR;
@@ -10,9 +12,28 @@ namespace Linkify.Api.Controllers
     public class PostController(ISender _sender) : BaseApiController(_sender)
     {
         [HttpPost]
-        public async Task<ActionResult<ApiSuccessResult<bool>>> Create([FromBody] CreatePostCommandRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiSuccessResult<bool>>> Create([FromForm] CreatePostRequest request, CancellationToken cancellationToken)
         {
-            var result = await _sender.Send(request, cancellationToken);
+            // Convert IFormFile to FileData
+            var imageList = request.Images?.Select(file =>
+            {
+                using var memoryStream = new MemoryStream();
+                file.CopyTo(memoryStream);
+                return new FileData
+                {
+                    FileName = file.FileName,
+                    Content = memoryStream.ToArray()
+                };
+            }).ToList();
+
+            // Create command request
+            var command = new CreatePostCommand
+            {
+                Content = request.Content,
+                Images = imageList
+            };
+
+            var result = await _sender.Send(command, cancellationToken);
 
             return Ok(new ApiSuccessResult<bool>
             {

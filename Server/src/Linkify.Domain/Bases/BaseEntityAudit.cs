@@ -1,9 +1,4 @@
 ﻿using Linkify.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linkify.Domain.Bases
 {
@@ -15,12 +10,12 @@ namespace Linkify.Domain.Bases
         public DateTime? UpdatedAt { get; set; }
         public Guid? UpdatedById { get; set; }
 
-        public BaseEntityAudit()
+        public BaseEntityAudit() // Required for EF
         {
 
         }
 
-        protected BaseEntityAudit(Guid? userId)
+        protected BaseEntityAudit(Guid? userId) : base()
         {
             IsDeleted = false;
             CreatedAt = DateTime.UtcNow;

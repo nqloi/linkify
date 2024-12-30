@@ -1,4 +1,5 @@
 ﻿using Linkify.Infrastructure.DataAccessManagers;
+using Linkify.Infrastructure.FileManagers;
 using Linkify.Infrastructure.SecurityManagers.Identity;
 using Linkify.Infrastructure.SecurityManagers.Tokens;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,8 @@ namespace Linkify.Infrastructure
             services.RegisterToken(configuration);
 
             services.RegisterIdentity(configuration);
+
+            services.RegisterFileManager(configuration);
 
             services.AddHttpContextAccessor();
 

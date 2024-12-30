@@ -19,7 +19,7 @@ namespace Linkify.Domain.Bases
 
         protected BaseEntity()
         {
-            Id = new Guid();
+            Id = Guid.NewGuid();
         }
     }
 }

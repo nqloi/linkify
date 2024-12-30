@@ -9,17 +9,31 @@ namespace Linkify.Domain.Aggregates.PostAggregate
         public Guid UserId { get; private set; }
         public string Content { get; private set; }
 
+        private readonly List<PostImage> _postImages = new();
         private readonly List<Comment> _comments = new();
         private readonly List<Reaction> _reactions = new();
 
+        public IReadOnlyCollection<PostImage> PostImages => _postImages.AsReadOnly();
         public IReadOnlyCollection<Comment> Comments => _comments.AsReadOnly();
-        public IReadOnlyCollection<Reaction> Likes => _reactions.AsReadOnly();
+        public IReadOnlyCollection<Reaction> Reactions => _reactions.AsReadOnly();
 
         public Post(Guid userId, string content) : base(userId)
         {
             UserId = userId != Guid.Empty ? userId : throw new ArgumentNullException(nameof(userId));
             Content = !string.IsNullOrWhiteSpace(content) ? content : throw new ArgumentException("Content is required.");
         }
+
+        public Post(Guid userId, string content, List<PostImage> postImages) : this(userId, content)
+        {
+            _postImages.AddRange(postImages);
+        }
+
+        #region Image
+        public void AddImage(PostImage postImages)
+        {
+            _postImages.Add(postImages);
+        }
+        #endregion
 
         public void UpdateContent(string newContent)
         {

@@ -11,9 +11,11 @@ namespace Linkify.Domain.Aggregates.PostAggregate
     public class Comment : BaseEntityAudit
     {
         public Guid UserId { get; private set; }
+        public Guid PostId { get; private set; }
         public string Content { get; private set; }
         private readonly List<Reaction> _reactions = new();
 
+        public Post Post { get; private set; }
         private Comment() { } // EF
         public Comment(Guid userId, string content) : base(userId)
         {
