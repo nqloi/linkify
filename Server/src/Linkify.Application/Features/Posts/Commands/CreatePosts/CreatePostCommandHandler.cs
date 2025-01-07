@@ -1,28 +1,33 @@
-﻿using Linkify.Application.CQS;
+﻿using AutoMapper;
+using Linkify.Application.CQS;
 using Linkify.Application.Extensions;
 using Linkify.Application.ExternalServices;
+using Linkify.Application.Features.Posts.Queries.GetPost;
 using Linkify.Application.Repositories;
 using Linkify.Domain.Aggregates.PostAggregate;
 using MediatR;
 
 namespace Linkify.Application.Features.Posts.Commands.CreatePosts
 {
-    public class CreatePostCommandHandler : BaseCommandHandler<Post>, IRequestHandler<CreatePostCommand, bool>
+    public class CreatePostCommandHandler : BaseCommandHandler<Post>, IRequestHandler<CreatePostCommand, GetPostDto>
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IFileService _fileService;
+        private readonly IMapper _mapper;
 
         public CreatePostCommandHandler(
             IBaseCommandRepository<Post> repository,
             IUnitOfWork unitOfWork,
             ICurrentUserService currentUserService,
-            IFileService fileService) : base(repository, unitOfWork)
+            IFileService fileService,
+            IMapper mapper) : base(repository, unitOfWork)
         {
             _currentUserService = currentUserService;
             _fileService = fileService;
+            _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreatePostCommand request, CancellationToken cancellationToken)
+        public async Task<GetPostDto> Handle(CreatePostCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUserService.GetUserId();
             var post = new Post(_currentUserService.GetUserId(), request.Content);
@@ -51,7 +56,7 @@ namespace Linkify.Application.Features.Posts.Commands.CreatePosts
             await _repository.CreateAsync(post, cancellationToken);
             await _unitOfWork.SaveAsync(cancellationToken);
 
-            return true;
+            return _mapper.Map<GetPostDto>(post);
         }
     }
 }

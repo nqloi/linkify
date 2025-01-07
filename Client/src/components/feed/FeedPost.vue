@@ -4,13 +4,13 @@
         <div class="post-header flex items-center justify-between mb-4">
             <div class="flex items-center">
                 <Avatar
-                    :image="post.avatarUrl ?? defaultAvatar"
+                    :image="props.avatarUrl ?? defaultAvatar"
                     alt="User Avatar"
                     class="w-10 h-10 rounded-full mr-3"
                 />
                 <div>
-                    <h5 class="font-bold text-sm">{{ post.userName }}</h5>
-                    <p class="text-gray-500 text-xs">{{ post.postDate }}</p>
+                    <h5 class="font-bold text-sm">{{ props.userName }}</h5>
+                    <p class="text-gray-500 text-xs">{{ props.postDate }}</p>
                 </div>
             </div>
             <Button icon="pi pi-ellipsis-h" class="p-button-text" />
@@ -18,8 +18,31 @@
 
         <!-- Content -->
         <div class="post-content mb-4">
-            <p class="text-sm text-gray-700 mb-3">{{ post.content }}</p>
-            <img :src="post.postImage" alt="Post Image" class="w-full rounded-lg" />
+            <p class="0 mb-3">{{ content }}</p>
+
+            <!-- Image Grid -->
+            <div v-if="imageUrls?.length" class="grid gap-2 bg-gray-100" :class="gridColsClass">
+                <template v-for="(url, index) in visibleImages" :key="index">
+                    <div
+                        class="relative overflow-hidden rounded-lg flex items-center justify-center bg-gray-300 cursor-pointer"
+                        :class="imageWrapperClass(index)"
+                        @click="openModal(index)"
+                    >
+                        <Image
+                            :src="url"
+                            alt="Post Image"
+                            :imageClass="`w-auto h-auto ${imageHeightClass} object-contain`"
+                        />
+                        <template v-if="index === 3 && imageUrls.length > 4">
+                            <div
+                                class="absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center text-2xl font-bold"
+                            >
+                                +{{ imageUrls.length - 4 }}
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
         </div>
 
         <!-- Footer (Reactions) -->
@@ -42,36 +65,64 @@
                 />
             </div>
             <p>
-                {{ post.reactions?.likes }} Like • {{ post.reactions?.comments }} Comment •
-                {{ post.reactions?.shares }} Share
+                {{ reactions?.likes }} Like • {{ reactions?.comments }} Comment •
+                {{ reactions?.shares }} Share
             </p>
         </div>
     </div>
 </template>
 
 <script setup>
-import { Avatar } from 'primevue'
+import { computed, ref } from 'vue'
+import { Avatar, Image } from 'primevue'
 import defaultAvatar from '@/assets/images/avatar-default.svg'
+import { useImageViewerStore } from '@/stores/imageviewerStore'
 
-defineProps({
-    post: {
+const imageViewerStore = useImageViewerStore()
+
+const props = defineProps({
+    content: {
+        type: String,
+    },
+    imageUrls: {
+        type: Array,
+    },
+    reactions: {
         type: Object,
-        required: true,
     },
 })
+
+const maxVisibleImages = 4
+
+const visibleImages = computed(() => props.imageUrls.slice(0, maxVisibleImages))
+
+const gridColsClass = computed(() => {
+    const length = props.imageUrls.length
+    if (length === 1) return 'grid-cols-1'
+    if (length === 2) return 'grid-cols-2'
+    if (length === 3) return 'grid-cols-3 grid-rows-2'
+    return 'grid-cols-2 grid-rows-2'
+})
+
+const imageWrapperClass = (index) => {
+    if (visibleImages.value.length === 3 && index === 0) {
+        return 'col-span-2 row-span-2'
+    }
+    return ''
+}
+
+const imageHeightClass = computed(() => {
+    return props.imageUrls.length > 3 ? 'max-h-[360px]' : 'max-h-[660px]'
+})
+
+const openModal = (index) => {
+    imageViewerStore.openViewer(props.imageUrls, index)
+}
 </script>
 
 <style scoped>
-.feed-post {
-    border: 1px solid #e5e7eb;
-}
-
-.post-header img {
-    object-fit: cover;
-}
-
-.post-content img {
-    max-height: 400px;
-    object-fit: cover;
+.last-image-overlay {
+    grid-row: span 2;
+    grid-column: span 2;
 }
 </style>

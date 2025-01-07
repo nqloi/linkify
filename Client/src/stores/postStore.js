@@ -11,7 +11,7 @@ export const usePostStore = defineStore('post', () => {
     // Actions
     const addPost = async (newPost) => {
         const response = await postService.create(newPost)
-        response?.content && posts.value.unshift(newPost)
+        response?.content && posts.value.unshift(response.content)
     }
 
     const setPosts = (posts) => {

@@ -1,4 +1,5 @@
 ﻿using Linkify.Domain.Bases;
+using Linkify.Domain.Specifications;
 using System.Linq.Expressions;
 
 namespace Linkify.Application.Repositories
@@ -11,5 +12,6 @@ namespace Linkify.Application.Repositories
         IQueryable<TEntity> Query();
         Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
         Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> GetWithSpecificationAsync(BaseSpecification<TEntity> specification);
     }
 }

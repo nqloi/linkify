@@ -1,6 +1,6 @@
 <template>
     <div class="home overflow-auto flex-1 w-full flex flex-col items-center">
-        <div class="max-w-screen-lg w-full">
+        <div class="max-w-screen-md w-full">
             <StoryBar class="mb-4" />
             <PostInput class="mb-4" />
             <FeedList class="flex-1" />

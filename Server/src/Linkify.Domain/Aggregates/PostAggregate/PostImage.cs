@@ -15,7 +15,7 @@ namespace Linkify.Domain.Aggregates.PostAggregate
         public Post Post { get; private set; }
 
         // Constructor
-        public PostImage(Guid postId, string imageUrl)
+        public PostImage(Guid postId, string imageUrl) : base(postId)
         {
             PostId = postId;
             ImageUrl = imageUrl;

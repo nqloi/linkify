@@ -12,7 +12,7 @@ namespace Linkify.Api.Controllers
     public class PostController(ISender _sender) : BaseApiController(_sender)
     {
         [HttpPost]
-        public async Task<ActionResult<ApiSuccessResult<bool>>> Create([FromForm] CreatePostRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiSuccessResult<GetPostDto>>> Create([FromForm] CreatePostRequest request, CancellationToken cancellationToken)
         {
             // Convert IFormFile to FileData
             var imageList = request.Images?.Select(file =>
@@ -35,7 +35,7 @@ namespace Linkify.Api.Controllers
 
             var result = await _sender.Send(command, cancellationToken);
 
-            return Ok(new ApiSuccessResult<bool>
+            return Ok(new ApiSuccessResult<GetPostDto>
             {
                 Content = result
             });

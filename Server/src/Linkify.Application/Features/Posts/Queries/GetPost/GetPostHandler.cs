@@ -3,6 +3,7 @@ using Linkify.Application.CQS;
 using Linkify.Application.ExternalServices;
 using Linkify.Application.Repositories;
 using Linkify.Domain.Aggregates.PostAggregate;
+using Linkify.Domain.Specifications.Posts;
 using MediatR;
 
 namespace Linkify.Application.Features.Posts.Queries.GetPost
@@ -20,7 +21,9 @@ namespace Linkify.Application.Features.Posts.Queries.GetPost
         {
             var userId = _currentUserService.GetUserId();
 
-            var posts = await _repository.FindAsync(item => item.UserId == userId);
+            var spec = new PostWithDetailsSpecification(userId);
+
+            var posts = await _repository.GetWithSpecificationAsync(spec);
 
             return _mapper.Map<IEnumerable<GetPostDto>>(posts);
         }

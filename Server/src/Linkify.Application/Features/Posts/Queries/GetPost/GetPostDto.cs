@@ -10,6 +10,10 @@ namespace Linkify.Application.Features.Posts.Queries.GetPost
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public string Content { get; set; }
+        public string Content { get; set; } = "";
+
+        public List<string> ImageUrls { get; set; } = [];
+
+        public object Creator { get; set; }
     }
 }

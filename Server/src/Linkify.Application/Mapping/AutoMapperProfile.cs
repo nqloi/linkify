@@ -13,7 +13,9 @@ namespace Linkify.Application.Mapping
     {
         public AutoMapperProfile()
         {
-            CreateMap<Post, GetPostDto>();
+            CreateMap<Post, GetPostDto>()
+            .ForMember(des => des.ImageUrls, opt => opt.MapFrom(src => src.PostImages.Select(pi => pi.ImageUrl).ToList()));
         }
     }
 }
+

@@ -60,7 +60,7 @@
 import { useLoadingStore } from '@/stores/loadingStore'
 import { usePostStore } from '@/stores/postStore'
 import { Avatar, Textarea } from 'primevue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import FileUpload from 'primevue/fileupload'
 
 const loading = useLoadingStore()
@@ -68,7 +68,7 @@ const postContent = ref('')
 const visible = ref(false)
 const header = 'Create Post'
 const postStore = usePostStore()
-const imageUpload = ref([])
+const formData = new FormData()
 
 const openDialog = () => {
     visible.value = true
@@ -79,9 +79,7 @@ const closeDialog = () => {
 }
 
 const handleCreatePost = async () => {
-    const formData = new FormData()
     formData.append('content', postContent.value)
-    formData.append('Images', imageUpload.value)
 
     loading.show()
     await postStore.addPost(formData)
@@ -90,19 +88,20 @@ const handleCreatePost = async () => {
 }
 
 const onFileSelect = async (event) => {
-    imageUpload.value.push(...event.files)
-    const formData = new FormData()
-    formData.append('content', postContent.value)
-    const files = event.files
+    const { files = [] } = event ?? {}
     for (let i = 0; i < files.length; i++) {
         formData.append('images', files[i])
     }
-
-    loading.show()
-    await postStore.addPost(formData)
-    loading.hide()
-    visible.value = false
 }
+
+const resetForm = () => {
+    postContent.value = ''
+}
+
+watch(visible, () => {
+    !visible.value && resetForm()
+})
+
 defineExpose({ openDialog, closeDialog })
 </script>
 

@@ -1,5 +1,6 @@
 ﻿using Linkify.Application.Repositories;
 using Linkify.Domain.Bases;
+using Linkify.Domain.Specifications;
 using Linkify.Infrastructure.DataAccessManagers.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -39,6 +40,12 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
         public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
         {
             return await _dbSet.AsNoTracking().CountAsync(predicate);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetWithSpecificationAsync(BaseSpecification<TEntity> specification)
+        {
+            var query = SpecificationEvaluator<TEntity>.GetQuery(_dbSet.AsQueryable(), specification);
+            return await query.ToListAsync();
         }
     }
 }
