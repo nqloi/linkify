@@ -1,13 +1,15 @@
 ﻿using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Aggregates.Token;
+using Linkify.Domain.Aggregates.UserProfile;
 using Linkify.Infrastructure.DataAccessManagers.Configurations;
 using Linkify.Infrastructure.SecurityManagers.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Linkify.Infrastructure.DataAccessManagers.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser> 
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid> 
     {
 
         public ApplicationDbContext(DbContextOptions options) : base(options)
@@ -22,11 +24,15 @@ namespace Linkify.Infrastructure.DataAccessManagers.Context
 
         public DbSet<Reaction> Reaction { get; set; }
 
+        public DbSet<UserProfile> UserProfile { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new TokenConfiguration());
+
+            modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
         }
     }
 }

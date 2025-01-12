@@ -14,6 +14,10 @@ namespace Linkify.Application.Features.Posts.Queries.GetPost
 
         public List<string> ImageUrls { get; set; } = [];
 
-        public object Creator { get; set; }
+        public string? CreatorName { get; set; }
+        public string? CreatorAvatarUrl { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public int ReactionCount { get; set; }
+        public int CommentCount { get; set; }
     }
 }

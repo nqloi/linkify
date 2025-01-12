@@ -19,7 +19,7 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
             builder.HasOne<ApplicationUser>()
             .WithMany()
                 .HasForeignKey(e => e.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(e => e.RefreshToken)
                 .HasMaxLength(LengthConst.M)

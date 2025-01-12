@@ -19,9 +19,6 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
         {
             base.Configure(builder);
 
-            builder.Property(e => e.UserId)
-                .IsRequired();
-
             // Properties
             builder.Property(p => p.UserId)
                 .IsRequired();

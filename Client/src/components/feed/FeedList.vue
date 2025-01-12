@@ -6,6 +6,8 @@
             :key="post.id"
             :content="post.content"
             :imageUrls="post.imageUrls"
+            :creatorName="post.creatorName"
+            :createdAt="post.createdAt"
             class="mb-4"
         />
         <ImageViewer />

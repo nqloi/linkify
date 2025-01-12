@@ -22,8 +22,8 @@ namespace Linkify.Infrastructure.SecurityManagers.Tokens
         {
             var claims = new List<Claim> 
             {
-                new (ClaimTypes.NameIdentifier, user.Id),
-                new (JwtRegisteredClaimNames.Sub, user.Id),
+                new (ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new (JwtRegisteredClaimNames.Email, user.Email ?? ""),
                 new (JwtRegisteredClaimNames.PhoneNumber, user.PhoneNumber ?? ""),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

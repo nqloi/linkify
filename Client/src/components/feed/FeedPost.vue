@@ -9,8 +9,8 @@
                     class="w-10 h-10 rounded-full mr-3"
                 />
                 <div>
-                    <h5 class="font-bold text-sm">{{ props.userName }}</h5>
-                    <p class="text-gray-500 text-xs">{{ props.postDate }}</p>
+                    <h5 class="font-bold">{{ props.creatorName }}</h5>
+                    <p class="text-gray-500 text-xs">{{ timeAgo(props.createdAt) }}</p>
                 </div>
             </div>
             <Button icon="pi pi-ellipsis-h" class="p-button-text" />
@@ -77,6 +77,7 @@ import { computed, ref } from 'vue'
 import { Avatar, Image } from 'primevue'
 import defaultAvatar from '@/assets/images/avatar-default.svg'
 import { useImageViewerStore } from '@/stores/imageviewerStore'
+import { timeAgo } from '@/utils/time/timeUtil'
 
 const imageViewerStore = useImageViewerStore()
 
@@ -89,6 +90,15 @@ const props = defineProps({
     },
     reactions: {
         type: Object,
+    },
+    creatorName: {
+        type: String,
+    },
+    creatorAvatarUrl: {
+        type: String,
+    },
+    createdAt: {
+        type: [Date, String],
     },
 })
 
