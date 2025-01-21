@@ -61,5 +61,29 @@ namespace Linkify.Infrastructure.FileManagers.CloudinaryService
             var segments = uri.Segments;
             return string.Join("", segments.Skip(2)).Split('.')[0];
         }
+
+        public async Task<bool> DeleteMultipleFilesAsync(IEnumerable<string> fileUrls)
+        {
+            var deletionTasks = fileUrls.Select(async fileUrl =>
+            {
+                var publicId = GetPublicIdFromUrl(fileUrl);
+                var deletionParams = new DeletionParams(publicId);
+                var deletionResult = await _cloudinary.DestroyAsync(deletionParams);
+
+                return deletionResult.Result == "ok";
+            });
+
+            var results = await Task.WhenAll(deletionTasks);
+
+            return results.All(result => result);
+        }
+
+        public async Task<bool> DeleteFolderAsync(string folderPath)
+        {
+            await _cloudinary.DeleteResourcesByPrefixAsync(folderPath);
+            var listResult = await _cloudinary.DeleteFolderAsync(folderPath);
+
+            return listResult.Deleted.Count > 0;
+        }
     }
 }

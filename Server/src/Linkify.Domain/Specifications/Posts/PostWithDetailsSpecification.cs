@@ -14,6 +14,8 @@ namespace Linkify.Domain.Specifications.Posts
             Criteria = p => p.UserId == userId;
             AddInclude(p => p.PostImages);
             AddInclude(p => p.Comments);
+            AddInclude(p => p.UserProfile);
+            ApplyOrderByDescending(p => p.CreatedAt);
         }
     }
 

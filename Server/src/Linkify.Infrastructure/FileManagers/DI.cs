@@ -1,4 +1,5 @@
-﻿using Linkify.Application.ExternalServices;
+﻿using Linkify.Application.Configurations;
+using Linkify.Application.ExternalServices;
 using Linkify.Infrastructure.FileManagers.CloudinaryService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,8 @@ namespace Linkify.Infrastructure.FileManagers
         public static IServiceCollection RegisterFileManager(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
+            services.Configure<CloudFolderPathSettings>(configuration.GetSection("CloudFolderPaths"));
+
             services.AddTransient<IFileService, CloudinaryFileService>();
 
             return services;

@@ -1,7 +1,7 @@
 ﻿using Linkify.Domain.Bases;
 using Linkify.Domain.Interfaces;
 
-namespace Linkify.Domain.Aggregates.UserProfile
+namespace Linkify.Domain.Aggregates.UserProfileAggregate
 {
     public class UserProfile : BaseEntityAudit, IAggregateRoot
     {

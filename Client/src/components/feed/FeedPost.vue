@@ -4,16 +4,17 @@
         <div class="post-header flex items-center justify-between mb-4">
             <div class="flex items-center">
                 <Avatar
-                    :image="props.avatarUrl ?? defaultAvatar"
+                    :image="props.creator.avatarUrl ?? defaultAvatar"
                     alt="User Avatar"
                     class="w-10 h-10 rounded-full mr-3"
                 />
                 <div>
-                    <h5 class="font-bold">{{ props.creatorName }}</h5>
+                    <h5 class="font-bold">{{ props.creator.displayName }}</h5>
                     <p class="text-gray-500 text-xs">{{ timeAgo(props.createdAt) }}</p>
                 </div>
             </div>
-            <Button icon="pi pi-ellipsis-h" class="p-button-text" />
+            <Button icon="pi pi-ellipsis-h" class="p-button-text" @click="toggleMenuAction" />
+            <Menu ref="actionMenu" id="action-menu" :model="actionItems" :popup="true" />
         </div>
 
         <!-- Content -->
@@ -74,14 +75,25 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { Avatar, Image } from 'primevue'
+import { Avatar, Image, Menu } from 'primevue'
 import defaultAvatar from '@/assets/images/avatar-default.svg'
 import { useImageViewerStore } from '@/stores/imageviewerStore'
 import { timeAgo } from '@/utils/time/timeUtil'
+import { useCustomToast } from '@/utils/toast/customToast'
+import { usePostStore } from '@/stores/postStore'
+import { useAuthStore } from '@/stores/authStore'
+import { useLoadingStore } from '@/stores/loadingStore'
 
 const imageViewerStore = useImageViewerStore()
+const toast = useCustomToast()
+const postStore = usePostStore()
+const { user } = useAuthStore()
 
 const props = defineProps({
+    id: {
+        type: String,
+        require: true,
+    },
     content: {
         type: String,
     },
@@ -90,6 +102,14 @@ const props = defineProps({
     },
     reactions: {
         type: Object,
+    },
+    creator: {
+        type: Object,
+        default: {
+            id: null,
+            displayName: '',
+            avatarUrl: '',
+        },
     },
     creatorName: {
         type: String,
@@ -102,9 +122,25 @@ const props = defineProps({
     },
 })
 
+const actionMenu = ref()
+const loading = useLoadingStore()
 const maxVisibleImages = 4
 
 const visibleImages = computed(() => props.imageUrls.slice(0, maxVisibleImages))
+const isPostOwner = computed(() => user.userId === props.creator.id)
+
+const actionItems = [
+    {
+        label: 'Delete',
+        icon: 'pi pi-trash',
+        command: async () => {
+            loading.show()
+            await postStore.deletePost(props.id)
+            loading.hide()
+            toast.showCustomSuccess('Deleted success!')
+        },
+    },
+]
 
 const gridColsClass = computed(() => {
     const length = props.imageUrls.length
@@ -127,6 +163,10 @@ const imageHeightClass = computed(() => {
 
 const openModal = (index) => {
     imageViewerStore.openViewer(props.imageUrls, index)
+}
+
+const toggleMenuAction = (event) => {
+    actionMenu.value.toggle(event)
 }
 </script>
 

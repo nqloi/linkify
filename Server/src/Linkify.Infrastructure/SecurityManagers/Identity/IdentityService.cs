@@ -3,7 +3,7 @@ using Linkify.Application.Features.Authentication.Commands.Register;
 using Linkify.Application.Features.Authentication.Common;
 using Linkify.Application.Repositories;
 using Linkify.Domain.Aggregates.Token;
-using Linkify.Domain.Aggregates.UserProfile;
+using Linkify.Domain.Aggregates.UserProfileAggregate;
 using Linkify.Infrastructure.SecurityManagers.Tokens;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;

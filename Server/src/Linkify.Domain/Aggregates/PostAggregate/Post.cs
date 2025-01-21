@@ -1,4 +1,5 @@
-﻿using Linkify.Domain.Bases;
+﻿using Linkify.Domain.Aggregates.UserProfileAggregate;
+using Linkify.Domain.Bases;
 using Linkify.Domain.Enums;
 using Linkify.Domain.Interfaces;
 
@@ -12,6 +13,9 @@ namespace Linkify.Domain.Aggregates.PostAggregate
         private readonly List<PostImage> _postImages = new();
         private readonly List<Comment> _comments = new();
         private readonly List<Reaction> _reactions = new();
+
+        // Navigation Property
+        public UserProfile UserProfile { get; private set; }
 
         public IReadOnlyCollection<PostImage> PostImages => _postImages.AsReadOnly();
         public IReadOnlyCollection<Comment> Comments => _comments.AsReadOnly();
@@ -100,5 +104,10 @@ namespace Linkify.Domain.Aggregates.PostAggregate
             }
         }
         #endregion
+
+        public void SetUserProfile(UserProfile userProfile)
+        {
+            UserProfile = userProfile ?? throw new ArgumentNullException(nameof(userProfile));
+        }
     }
 }

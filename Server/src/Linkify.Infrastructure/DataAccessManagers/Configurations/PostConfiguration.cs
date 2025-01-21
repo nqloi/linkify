@@ -1,15 +1,7 @@
 ﻿using Linkify.Domain.Aggregates.PostAggregate;
-using Linkify.Domain.Aggregates.Token;
-using Linkify.Domain.Constants;
 using Linkify.Infrastructure.DataAccessManagers.Configurations.Bases;
-using Linkify.Infrastructure.SecurityManagers.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Linkify.Infrastructure.DataAccessManagers.Configurations
 {
@@ -39,6 +31,13 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
             builder.HasMany(p => p.Reactions)
                 .WithOne(r => r.Post)
                 .HasForeignKey(r => r.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // UserProfile one-to-one
+            builder.HasOne(p => p.UserProfile)
+                .WithMany()
+                .HasForeignKey(p => p.UserId)
+                .HasPrincipalKey(up => up.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

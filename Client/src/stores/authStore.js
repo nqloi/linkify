@@ -12,6 +12,7 @@ export const useAuthStore = defineStore(
             userName: null,
             firstName: null,
             lastName: null,
+            avatarUrl: null,
         }
         const authService = useAuthService()
         const { setCache, removeCache } = useCache()
@@ -50,9 +51,17 @@ export const useAuthStore = defineStore(
             Object.assign(user, { ...defaultUser })
         }
 
-        const register = async () => {}
+        const getDisplayName = () => user.value.firstName + ' ' + user.value.lastName
 
-        return { isAuthenticated, user, login, logout, isSessionTimeout, onSessionTimeout }
+        return {
+            isAuthenticated,
+            user,
+            login,
+            logout,
+            isSessionTimeout,
+            onSessionTimeout,
+            getDisplayName,
+        }
     },
     {
         persist: true,

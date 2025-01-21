@@ -1,6 +1,6 @@
 ﻿using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Aggregates.Token;
-using Linkify.Domain.Aggregates.UserProfile;
+using Linkify.Domain.Aggregates.UserProfileAggregate;
 using Linkify.Domain.Constants;
 using Linkify.Infrastructure.DataAccessManagers.Configurations.Bases;
 using Linkify.Infrastructure.SecurityManagers.Identity;
@@ -39,8 +39,9 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
                 .HasMaxLength(LengthConst.L);
 
             builder.HasOne<ApplicationUser>()
-                .WithMany() 
+                .WithMany()
                 .HasForeignKey(up => up.UserId)
+                .HasPrincipalKey(up => up.Id)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
         }

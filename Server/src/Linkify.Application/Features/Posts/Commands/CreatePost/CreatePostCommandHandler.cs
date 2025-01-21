@@ -7,7 +7,7 @@ using Linkify.Application.Repositories;
 using Linkify.Domain.Aggregates.PostAggregate;
 using MediatR;
 
-namespace Linkify.Application.Features.Posts.Commands.CreatePosts
+namespace Linkify.Application.Features.Posts.Commands.CreatePost
 {
     public class CreatePostCommandHandler : BaseCommandHandler<Post>, IRequestHandler<CreatePostCommand, GetPostDto>
     {

@@ -4,10 +4,10 @@
         <FeedPost
             v-for="post in posts"
             :key="post.id"
+            :id="post.id"
             :content="post.content"
             :imageUrls="post.imageUrls"
-            :creatorName="post.creatorName"
-            :createdAt="post.createdAt"
+            :creator="post.creator"
             class="mb-4"
         />
         <ImageViewer />

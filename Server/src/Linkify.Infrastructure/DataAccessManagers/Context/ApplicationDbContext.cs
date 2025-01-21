@@ -1,6 +1,6 @@
 ﻿using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Aggregates.Token;
-using Linkify.Domain.Aggregates.UserProfile;
+using Linkify.Domain.Aggregates.UserProfileAggregate;
 using Linkify.Infrastructure.DataAccessManagers.Configurations;
 using Linkify.Infrastructure.SecurityManagers.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -33,6 +33,8 @@ namespace Linkify.Infrastructure.DataAccessManagers.Context
             modelBuilder.ApplyConfiguration(new TokenConfiguration());
 
             modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
+
+            modelBuilder.ApplyConfiguration(new PostConfiguration());
         }
     }
 }

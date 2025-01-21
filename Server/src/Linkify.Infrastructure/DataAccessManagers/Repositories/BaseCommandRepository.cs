@@ -32,6 +32,15 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
             _context.Update(entity);
         }
 
+        public void DeleteById(Guid id)
+        {
+            var entity = _context.Find(typeof(T), id);
+            if (entity != null)
+            {
+                _context.Remove(entity);
+            }
+        }
+
         public T? Get(Guid id)
         {
             var entity = _context.Set<T>().ApplyIsDeletedFilter().SingleOrDefault(x => x.Id == id);
@@ -57,6 +66,11 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
         public void Purge(T entity)
         {
             _context.Remove(entity);
+        }
+
+        public Task PurgeAsync(T entity, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
 
         public void Update(T entity)
