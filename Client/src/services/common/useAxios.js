@@ -37,6 +37,9 @@ const useAxios = (controller, version = defaultVersion, customHeader = {}) => {
             const response = await instance.post(
                 'https://localhost:7029/api/v1/auth/refresh-token',
                 refreshToken,
+                {
+                    'Content-Type': 'application/json',
+                },
             )
             const { accessToken } = response.content
 

@@ -22,10 +22,10 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
             return entity;
         }
 
-        public async Task<List<Token>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+        public async Task<List<Token>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             var entities = await _context.Token
-            .Where(x => x.UserId == userId.ToString())
+            .Where(x => x.UserId == userId)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 

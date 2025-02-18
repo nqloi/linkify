@@ -1,5 +1,6 @@
 ﻿using Linkify.Application.Extensions;
 using Linkify.Application.Repositories;
+using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Bases;
 using Linkify.Domain.Interfaces;
 using Linkify.Infrastructure.DataAccessManagers.Context;
@@ -32,6 +33,15 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
             _context.Update(entity);
         }
 
+        public void DeleteById(Guid id)
+        {
+            var entity = _context.Find(typeof(T), id);
+            if (entity != null)
+            {
+                _context.Remove(entity);
+            }
+        }
+
         public T? Get(Guid id)
         {
             var entity = _context.Set<T>().ApplyIsDeletedFilter().SingleOrDefault(x => x.Id == id);
@@ -59,8 +69,15 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
             _context.Remove(entity);
         }
 
+        public Task PurgeAsync(T entity, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(T entity)
         {
+            var entry = _context.Entry(entity);
+            Console.WriteLine($"Entity State: {entry.State}");
             _context.Update(entity);
         }
 
@@ -71,6 +88,18 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
             {
                 _context.Entry(entity).Property(property).IsModified = true;
             }
+        }
+
+        public async Task<T?> GetWithIncludesAsync(Guid id, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _context.Set<T>().ApplyIsDeletedFilter();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
     }

@@ -1,5 +1,8 @@
 ﻿using Linkify.Api.Common.Models;
-using Linkify.Application.Features.Posts.Commands.CreatePosts;
+using Linkify.Api.DTOs.Posts;
+using Linkify.Application.Common.Models;
+using Linkify.Application.Features.Posts.Commands.CreatePost;
+using Linkify.Application.Features.Posts.Commands.DeletePost;
 using Linkify.Application.Features.Posts.Queries.GetPost;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +13,30 @@ namespace Linkify.Api.Controllers
     public class PostController(ISender _sender) : BaseApiController(_sender)
     {
         [HttpPost]
-        public async Task<ActionResult<ApiSuccessResult<bool>>> Create([FromBody] CreatePostCommandRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult<ApiSuccessResult<GetPostDto>>> Create([FromForm] CreatePostRequest request, CancellationToken cancellationToken)
         {
-            var result = await _sender.Send(request, cancellationToken);
+            // Convert IFormFile to FileData
+            var imageList = request.Images?.Select(file =>
+            {
+                using var memoryStream = new MemoryStream();
+                file.CopyTo(memoryStream);
+                return new FileData
+                {
+                    FileName = file.FileName,
+                    Content = memoryStream.ToArray()
+                };
+            }).ToList();
 
-            return Ok(new ApiSuccessResult<bool>
+            // Create command request
+            var command = new CreatePostCommand
+            {
+                Content = request.Content,
+                Images = imageList
+            };
+
+            var result = await _sender.Send(command, cancellationToken);
+
+            return Ok(new ApiSuccessResult<GetPostDto>
             {
                 Content = result
             });
@@ -26,6 +48,18 @@ namespace Linkify.Api.Controllers
             var result = await _sender.Send(request, cancellationToken);
 
             return Ok(new ApiSuccessResult<IEnumerable<GetPostDto>>
+            {
+                Content = result
+            });
+        }
+
+        [HttpDelete("{postId}")]
+        public async Task<ActionResult<ApiSuccessResult<IEnumerable<GetPostDto>>>> DeleteById([FromRoute]Guid postId, CancellationToken cancellationToken)
+        {
+            var request = new DeletePostRequest { PostId = postId };
+            var result = await _sender.Send(request, cancellationToken);
+
+            return Ok(new ApiSuccessResult<bool>
             {
                 Content = result
             });

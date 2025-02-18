@@ -17,4 +17,8 @@
 		<ProjectReference Include="..\Linkify.Domain\Linkify.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Features\Posts\Common\" />
+	</ItemGroup>
+
 </Project>

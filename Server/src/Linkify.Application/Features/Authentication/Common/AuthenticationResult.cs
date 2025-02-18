@@ -1,10 +1,10 @@
 ﻿namespace Linkify.Application.Features.Authentication.Common
 {
     public record AuthenticationResult(
-        string AccessToken = "",
-        string RefreshToken = "",
+        string? AccessToken = "",
+        string? RefreshToken = "",
         string? UserName = "", 
-        string UserId = "",
+        Guid? UserId = null,
         string? FirstName = "",
         string? LastName = "");
 }

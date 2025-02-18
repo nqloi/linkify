@@ -1,17 +1,25 @@
 import usePostService from '@/services/postService'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useAuthStore } from './authStore'
 
 export const usePostStore = defineStore('post', () => {
     const postService = usePostService()
-
+    const { user, getDisplayName } = useAuthStore()
     // State
     const posts = ref([])
 
     // Actions
     const addPost = async (newPost) => {
         const response = await postService.create(newPost)
-        response.content && posts.value.unshift(newPost)
+        const result = response.content
+        result.creator = {
+            id: user.userId,
+            displayName: getDisplayName(),
+            avatarUrl: user.avatarUrl,
+        }
+
+        posts.value.unshift(result)
     }
 
     const setPosts = (posts) => {
@@ -23,5 +31,10 @@ export const usePostStore = defineStore('post', () => {
         posts.value = response?.content ?? []
     }
 
-    return { posts, addPost, setPosts, initPosts }
+    const deletePost = async (postId) => {
+        await postService.delete(postId)
+        posts.value = posts.value.filter((item) => item.id !== postId)
+    }
+
+    return { posts, addPost, setPosts, initPosts, deletePost }
 })

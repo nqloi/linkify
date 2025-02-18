@@ -1,4 +1,5 @@
-﻿using Linkify.Domain.Bases;
+﻿using Linkify.Domain.Aggregates.UserProfileAggregate;
+using Linkify.Domain.Bases;
 using Linkify.Domain.Enums;
 using Linkify.Domain.Interfaces;
 
@@ -9,17 +10,34 @@ namespace Linkify.Domain.Aggregates.PostAggregate
         public Guid UserId { get; private set; }
         public string Content { get; private set; }
 
+        private readonly List<PostImage> _postImages = new();
         private readonly List<Comment> _comments = new();
         private readonly List<Reaction> _reactions = new();
 
+        // Navigation Property
+        public UserProfile UserProfile { get; private set; }
+
+        public IReadOnlyCollection<PostImage> PostImages => _postImages.AsReadOnly();
         public IReadOnlyCollection<Comment> Comments => _comments.AsReadOnly();
-        public IReadOnlyCollection<Reaction> Likes => _reactions.AsReadOnly();
+        public IReadOnlyCollection<Reaction> Reactions => _reactions.AsReadOnly();
 
         public Post(Guid userId, string content) : base(userId)
         {
             UserId = userId != Guid.Empty ? userId : throw new ArgumentNullException(nameof(userId));
             Content = !string.IsNullOrWhiteSpace(content) ? content : throw new ArgumentException("Content is required.");
         }
+
+        public Post(Guid userId, string content, List<PostImage> postImages) : this(userId, content)
+        {
+            _postImages.AddRange(postImages);
+        }
+
+        #region Image
+        public void AddImage(PostImage postImages)
+        {
+            _postImages.Add(postImages);
+        }
+        #endregion
 
         public void UpdateContent(string newContent)
         {
@@ -56,10 +74,17 @@ namespace Linkify.Domain.Aggregates.PostAggregate
         #endregion
 
         #region Comment
-        public void AddComment(Guid userId, string content)
+        public void AddComment(Comment comment)
         {
-            _comments.Add(new Comment(userId, content));
+            if (comment == null)
+                throw new ArgumentNullException(nameof(comment));
+
+            if (comment.PostId != this.Id)
+                throw new InvalidOperationException("Comment does not belong to this post.");
+
+            _comments.Add(comment);
         }
+
 
         public void UpdateComment(Guid commentId, string newContent)
         {

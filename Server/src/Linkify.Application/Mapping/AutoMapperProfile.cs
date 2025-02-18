@@ -13,7 +13,9 @@ namespace Linkify.Application.Mapping
     {
         public AutoMapperProfile()
         {
-            CreateMap<Post, GetPostDto>();
+            PostMappingConfiguration.Configure(this);
+            CommentMappingConfiguration.Configure(this);
         }
     }
 }
+
