@@ -1,7 +1,7 @@
 <template>
-    <div class="feed-post bg-white p-4 rounded-lg shadow-md">
+    <div class="feed-post bg-white pt-4 rounded-lg shadow-md">
         <!-- Header -->
-        <div class="post-header flex items-center justify-between mb-4">
+        <div class="post-header flex items-center justify-between mb-4 mx-4">
             <div class="flex items-center">
                 <Avatar
                     :image="props.creator.avatarUrl ?? defaultAvatar"
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Content -->
-        <div class="post-content mb-4">
+        <div class="post-content mb-4 mx-4">
             <p class="0 mb-3">{{ content }}</p>
 
             <!-- Image Grid -->
@@ -47,29 +47,52 @@
         </div>
 
         <!-- Footer (Reactions) -->
-        <div class="post-footer flex items-center justify-between text-sm text-gray-600">
-            <div class="flex items-center gap-4">
+        <div
+            class="flex items-center justify-between text-sm text-gray-600 bg-gray-50 dark:bg-gray-800 shadow-sm rounded-b-lg px-4"
+        >
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Like Button -->
                 <Button
                     icon="pi pi-thumbs-up"
                     label="Like"
-                    class="p-button-text p-button-sm text-gray-600"
+                    class="p-button-text p-button flex items-center gap-1 text-gray-600 hover:text-primary transition"
+                    :class="{ 'text-primary': isLiked }"
+                    @click="toggleLike"
                 />
+                <!-- Comment Button -->
                 <Button
                     icon="pi pi-comment"
                     label="Comment"
-                    class="p-button-text p-button-sm text-gray-600"
+                    class="p-button-text p-button flex items-center gap-1 text-gray-600 hover:text-primary transition"
+                    @click="handleShowComment"
                 />
+                <!-- Share Button -->
                 <Button
                     icon="pi pi-share-alt"
                     label="Share"
-                    class="p-button-text p-button-sm text-gray-600"
+                    class="p-button-text p-button flex items-center gap-1 text-gray-600 hover:text-primary transition"
                 />
             </div>
-            <p>
-                {{ reactions?.likes }} Like • {{ reactions?.comments }} Comment •
-                {{ reactions?.shares }} Share
+
+            <!-- Reaction Summary -->
+            <p class="text-xs sm:text-sm text-gray-500">
+                <span class="font-semibold text-gray-700 dark:text-gray-300">{{
+                    reactions?.likes
+                }}</span>
+                Like •
+                <span class="font-semibold text-gray-700 dark:text-gray-300">{{
+                    reactions?.comments
+                }}</span>
+                Comment •
+                <span class="font-semibold text-gray-700 dark:text-gray-300">{{
+                    reactions?.shares
+                }}</span>
+                Share
             </p>
         </div>
+
+        <!-- Comment Section -->
+        <CommentSection :postId="id" v-if="showComments" class="p-4" />
     </div>
 </template>
 
@@ -83,6 +106,7 @@ import { useCustomToast } from '@/utils/toast/customToast'
 import { usePostStore } from '@/stores/postStore'
 import { useAuthStore } from '@/stores/authStore'
 import { useLoadingStore } from '@/stores/loadingStore'
+import CommentSection from './comment/CommentSection.vue'
 
 const imageViewerStore = useImageViewerStore()
 const toast = useCustomToast()
@@ -128,6 +152,7 @@ const maxVisibleImages = 4
 
 const visibleImages = computed(() => props.imageUrls.slice(0, maxVisibleImages))
 const isPostOwner = computed(() => user.userId === props.creator.id)
+const showComments = ref(false)
 
 const actionItems = [
     {
@@ -168,6 +193,8 @@ const openModal = (index) => {
 const toggleMenuAction = (event) => {
     actionMenu.value.toggle(event)
 }
+
+const handleShowComment = () => (showComments.value = !showComments.value)
 </script>
 
 <style scoped>

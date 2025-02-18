@@ -74,10 +74,17 @@ namespace Linkify.Domain.Aggregates.PostAggregate
         #endregion
 
         #region Comment
-        public void AddComment(Guid userId, string content)
+        public void AddComment(Comment comment)
         {
-            _comments.Add(new Comment(userId, content));
+            if (comment == null)
+                throw new ArgumentNullException(nameof(comment));
+
+            if (comment.PostId != this.Id)
+                throw new InvalidOperationException("Comment does not belong to this post.");
+
+            _comments.Add(comment);
         }
+
 
         public void UpdateComment(Guid commentId, string newContent)
         {
@@ -104,10 +111,5 @@ namespace Linkify.Domain.Aggregates.PostAggregate
             }
         }
         #endregion
-
-        public void SetUserProfile(UserProfile userProfile)
-        {
-            UserProfile = userProfile ?? throw new ArgumentNullException(nameof(userProfile));
-        }
     }
 }

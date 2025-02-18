@@ -35,6 +35,8 @@ namespace Linkify.Infrastructure.DataAccessManagers.Context
             modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
 
             modelBuilder.ApplyConfiguration(new PostConfiguration());
+
+            modelBuilder.ApplyConfiguration(new CommentConfiguration());
         }
     }
 }

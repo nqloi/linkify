@@ -1,4 +1,4 @@
-﻿using Linkify.Application.Features.Posts.Common;
+﻿using Linkify.Application.Features.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

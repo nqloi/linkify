@@ -27,7 +27,6 @@ namespace Linkify.Application.Repositories
         T? Get(Guid id);
 
         IQueryable<T> GetQuery();
-
-
+        Task<T?> GetWithIncludesAsync(Guid id, CancellationToken cancellationToken = default, params System.Linq.Expressions.Expression<Func<T, object>>[] includes);
     }
 }

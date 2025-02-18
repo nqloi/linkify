@@ -12,16 +12,4 @@ namespace WebAPI.Controllers;
 public abstract class BaseApiController(ISender sender) : ControllerBase
 {
     protected readonly ISender _sender = sender;
-
-    //[AllowAnonymous]
-    [HttpGet("health-check")]
-    public ActionResult<ApiSuccessResult<bool>> HealthCheck()
-    {
-        return new ApiSuccessResult<bool>
-        {
-            Code = StatusCodes.Status200OK,
-            Message = $"Success",
-            Content = true
-        };
-    }
 }

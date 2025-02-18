@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Linkify.Application.Features.Posts.Common;
+using Linkify.Application.Features.Common;
 using Linkify.Application.Features.Posts.Queries.GetPost;
 using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Aggregates.UserProfileAggregate;

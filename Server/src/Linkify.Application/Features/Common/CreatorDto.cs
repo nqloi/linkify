@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Linkify.Application.Features.Posts.Common
+namespace Linkify.Application.Features.Common
 {
     public record CreatorDto
     {

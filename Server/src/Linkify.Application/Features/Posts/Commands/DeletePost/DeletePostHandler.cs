@@ -24,7 +24,8 @@ namespace Linkify.Application.Features.Posts.Commands.DeletePost
             IBaseCommandRepository<Post> repository, 
             IUnitOfWork unitOfWork, 
             IFileService fileService,
-            IOptions<CloudFolderPathSettings> options) : base(repository, unitOfWork)
+            ICurrentUserService currentUserService,
+            IOptions<CloudFolderPathSettings> options) : base(repository, unitOfWork, currentUserService)
         {
             _fileService = fileService;
             _folderPath = options.Value;

@@ -11,7 +11,6 @@ namespace Linkify.Application.Features.Posts.Commands.CreatePost
 {
     public class CreatePostCommandHandler : BaseCommandHandler<Post>, IRequestHandler<CreatePostCommand, GetPostDto>
     {
-        private readonly ICurrentUserService _currentUserService;
         private readonly IFileService _fileService;
         private readonly IMapper _mapper;
 
@@ -20,9 +19,8 @@ namespace Linkify.Application.Features.Posts.Commands.CreatePost
             IUnitOfWork unitOfWork,
             ICurrentUserService currentUserService,
             IFileService fileService,
-            IMapper mapper) : base(repository, unitOfWork)
+            IMapper mapper) : base(repository, unitOfWork, currentUserService)
         {
-            _currentUserService = currentUserService;
             _fileService = fileService;
             _mapper = mapper;
         }

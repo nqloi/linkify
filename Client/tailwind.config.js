@@ -20,7 +20,6 @@ const colors = {
     'primary-900': 'var(--primary-900)',
     'primary-950': 'var(--primary-950)',
 
-    // Thêm màu sắc cho dark mode
     'surface-0': 'var(--surface-0)',
     'surface-50': 'var(--surface-50)',
     'surface-100': 'var(--surface-100)',
@@ -35,7 +34,7 @@ const colors = {
 }
 
 export default {
-    darkMode: 'class', // Thêm dòng này để bật dark mode bằng cách sử dụng class
+    darkMode: 'class',
     content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
     plugins: [require('tailwindcss-primeui')],
     theme: {
