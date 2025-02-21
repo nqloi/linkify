@@ -97,7 +97,7 @@ const toggleExpand = () => {
 
 // Check if the current user is the comment owner
 const authStore = useAuthStore()
-const isCommentOwner = computed(() => authStore.user?.id === props.creator.id)
+const isCommentOwner = computed(() => authStore.user?.userId === props.creator.id)
 
 // Action handlers
 const handleLike = () => emit('like', props.id)

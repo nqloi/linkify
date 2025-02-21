@@ -1,4 +1,5 @@
-﻿using Linkify.Application.Features.Comments.Common;
+﻿using ErrorOr;
+using Linkify.Application.Features.Comments.Common;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Features.Comments.Commands.CreateComment
 {
-    public record CreateCommentCommand : IRequest<Guid>
+    public record CreateCommentCommand : IRequest<ErrorOr<Guid>>
     {
         public Guid UserId { get; set; }
         public Guid PostId { get; set; }

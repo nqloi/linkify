@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Linkify.Application.Features.Posts.Queries.GetPost
+namespace Linkify.Application.Features.Posts.Common
 {
     public record GetPostDto
     {
@@ -15,8 +15,8 @@ namespace Linkify.Application.Features.Posts.Queries.GetPost
         public List<string> ImageUrls { get; set; } = [];
 
         public DateTime? CreatedAt { get; set; }
-        public int ReactionCount { get; set; }
-        public int CommentCount { get; set; }
+        public PostStatsDto Stats { get; set; } = new();
         public required CreatorDto Creator { get; set; }
+        public required UserPostActionsDto UserActions { get; set; }
     }
 }

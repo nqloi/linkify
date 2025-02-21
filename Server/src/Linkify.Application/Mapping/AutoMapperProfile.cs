@@ -13,6 +13,7 @@ namespace Linkify.Application.Mapping
     {
         public AutoMapperProfile()
         {
+            UserProfileMappingConfiguration.Configure(this);
             PostMappingConfiguration.Configure(this);
             CommentMappingConfiguration.Configure(this);
         }

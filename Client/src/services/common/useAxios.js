@@ -41,11 +41,12 @@ const useAxios = (controller, version = defaultVersion, customHeader = {}) => {
                     'Content-Type': 'application/json',
                 },
             )
-            const { accessToken } = response.content
+            const { accessToken, refreshToken: newRefreshToken } = response.content
 
             if (!accessToken) throw new Error('Failed to refresh access token')
 
             setCache(CACHE_KEYS.ACCESS_TOKEN, accessToken)
+            setCache(CACHE_KEYS.REFRESH_TOKEN, newRefreshToken)
             processQueue(null, accessToken)
             return accessToken
         } catch (error) {

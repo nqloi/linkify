@@ -1,5 +1,6 @@
 ﻿using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Aggregates.UserProfileAggregate;
+using Linkify.Domain.Constants;
 using Linkify.Infrastructure.DataAccessManagers.Configurations.Bases;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -21,7 +22,7 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
 
             builder.Property(c => c.Content)
                 .IsRequired()
-                .HasMaxLength(1000); // Set a maximum length for the comment content
+                .HasMaxLength(LengthConst.L); // Set a maximum length for the comment content
 
             // UserProfile (Many-to-One)
             builder.HasOne(c => c.UserProfile)

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Linkify.Application.Features.Common;
-using Linkify.Application.Features.Posts.Queries.GetPost;
+using Linkify.Application.Features.Posts.Common;
 using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Aggregates.UserProfileAggregate;
 using System;
@@ -17,9 +17,17 @@ namespace Linkify.Application.Mapping
         {
             profile.CreateMap<Post, GetPostDto>()
                 .ForMember(des => des.ImageUrls, opt => opt.MapFrom(src => src.PostImages.Select(pi => pi.ImageUrl).ToList()))
-                .ForMember(des => des.Creator, opt => opt.MapFrom(src => src.UserProfile));
+                .ForMember(des => des.Creator, opt => opt.MapFrom(src => new CreatorDto
+                {
+                    Id = src.UserId,
+                    DisplayName = src.UserProfile.DisplayName,
 
-            profile.CreateMap<UserProfile, CreatorDto>();
+                }))
+                .ForMember(des => des.Stats, opt => opt.MapFrom(src => new PostStatsDto
+                {
+                    CommentCount = src.Comments.Count,
+                    ReactionCount = src.Reactions.Count,
+                }));
         }
     }
 }

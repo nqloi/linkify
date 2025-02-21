@@ -15,6 +15,7 @@ namespace Linkify.Domain.Specifications.Posts
             AddInclude(p => p.PostImages);
             AddInclude(p => p.Comments);
             AddInclude(p => p.UserProfile);
+            AddInclude(p => p.Reactions);
             ApplyOrderByDescending(p => p.CreatedAt);
         }
     }

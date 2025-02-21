@@ -1,8 +1,11 @@
 ﻿using Linkify.Api.Common.Models;
 using Linkify.Api.DTOs.Posts;
 using Linkify.Application.Common.Models;
+using Linkify.Application.Features.Posts.Commands.AddOrUpdateReaction;
 using Linkify.Application.Features.Posts.Commands.CreatePost;
 using Linkify.Application.Features.Posts.Commands.DeletePost;
+using Linkify.Application.Features.Posts.Commands.RemoveReaction;
+using Linkify.Application.Features.Posts.Common;
 using Linkify.Application.Features.Posts.Queries.GetPost;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -63,6 +66,23 @@ namespace Linkify.Api.Controllers
             {
                 Content = result
             });
+        }
+
+        [HttpPost("{postId}/reaction")]
+        public async Task<IActionResult> AddOrUpdateReaction(Guid postId, [FromBody] AddOrUpdateReactionCommand request)
+        {
+            request.PostId = postId;
+            var result = await _sender.Send(request);
+            return HandleResult(result);
+        }
+
+        [HttpDelete("{postId}/reaction")]
+        public async Task<IActionResult> RemoveReaction(Guid postId)
+        {
+            var command = new RemoveReactionCommand { PostId = postId };
+            var result = await _sender.Send(command);
+
+            return HandleResult(result);
         }
     }
 }

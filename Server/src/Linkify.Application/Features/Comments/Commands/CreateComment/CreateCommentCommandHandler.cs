@@ -1,4 +1,5 @@
-﻿using Linkify.Application.CQS;
+﻿using ErrorOr;
+using Linkify.Application.CQS;
 using Linkify.Application.ExternalServices;
 using Linkify.Application.Features.Comments.Common;
 using Linkify.Application.Features.Posts.Commands.CreatePost;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Features.Comments.Commands.CreateComment
 {
-    public class CreateCommentCommandHandler : BaseCommandHandler<Post>, IRequestHandler<CreateCommentCommand, Guid>
+    public class CreateCommentCommandHandler : BaseCommandHandler<Post>, IRequestHandler<CreateCommentCommand, ErrorOr<Guid>>
     {
         public CreateCommentCommandHandler(
             IBaseCommandRepository<Post> repository, 
@@ -23,22 +24,27 @@ namespace Linkify.Application.Features.Comments.Commands.CreateComment
         {
         }
 
-        public async Task<Guid> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Guid>> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
         {
             var post = await _repository.GetWithIncludesAsync(request.PostId, cancellationToken, p => p.Comments);
 
             if (post == null)
             {
-                throw new ArgumentException("PostId does not exist");
+                return Error.NotFound("Post.NotFound", "PostId does not exist.");
             }
 
             Comment comment = new(_currentUserService.GetUserId(), request.PostId, request.Content);
-            
-            post.AddComment(comment);
+
+            var result = post.AddComment(comment);
+            if (!result.IsSuccess)
+            {
+                return Error.Validation("Comment.AddFailed", result.Error!);
+            }
 
             await _unitOfWork.SaveAsync(cancellationToken);
 
             return comment.Id;
         }
+
     }
 }
