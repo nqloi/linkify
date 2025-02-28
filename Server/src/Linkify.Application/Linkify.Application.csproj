@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="13.0.1" />
+	  <PackageReference Include="ErrorOr" Version="2.0.1" />
 	  <PackageReference Include="FluentValidation" Version="11.10.0" />
 	  <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
 	  <PackageReference Include="MediatR" Version="12.4.1" />
@@ -15,10 +16,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Linkify.Domain\Linkify.Domain.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Features\Posts\Common\" />
 	</ItemGroup>
 
 </Project>

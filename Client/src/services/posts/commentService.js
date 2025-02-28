@@ -1,4 +1,4 @@
-import useAxios from './common/useAxios'
+import useAxios from '../common/useAxios'
 
 const useCommentService = (postId) => {
     const controller = `post/${postId}/comment`

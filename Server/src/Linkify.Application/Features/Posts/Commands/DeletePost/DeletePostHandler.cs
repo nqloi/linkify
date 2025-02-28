@@ -33,9 +33,17 @@ namespace Linkify.Application.Features.Posts.Commands.DeletePost
 
         public async Task<bool> Handle(DeletePostRequest request, CancellationToken cancellationToken)
         {
-            _repository.DeleteById(request.PostId);
-            await _fileService.DeleteFolderAsync($"{_folderPath.Post}/{request.PostId}");
+            var post = await _repository.GetWithIncludesAsync(request.PostId, cancellationToken, p => p.PostImages);
 
+            if (post == null) { 
+                return false;
+            }
+
+            _repository.DeleteById(request.PostId);
+            if(post.PostImages.Count > 0)
+            {
+                await _fileService.DeleteFolderAsync($"{_folderPath.Post}/{request.PostId}");
+            }
             await _unitOfWork.SaveAsync(cancellationToken);
             return true;
         }

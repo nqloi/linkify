@@ -1,5 +1,5 @@
 ﻿using Linkify.Application.Common.Models;
-using Linkify.Application.Features.Posts.Queries.GetPost;
+using Linkify.Application.Features.Posts.Common;
 using MediatR;
 
 namespace Linkify.Application.Features.Posts.Commands.CreatePost

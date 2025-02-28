@@ -52,13 +52,7 @@
         >
             <div class="flex items-center gap-2 sm:gap-4">
                 <!-- Like Button -->
-                <Button
-                    icon="pi pi-thumbs-up"
-                    label="Like"
-                    class="p-button-text p-button flex items-center gap-1 text-gray-600 hover:text-primary transition"
-                    :class="{ 'text-primary': isLiked }"
-                    @click="toggleLike"
-                />
+                <ReactionButton :postId="id" :userReactionType="userActions?.reactionType" />
                 <!-- Comment Button -->
                 <Button
                     icon="pi pi-comment"
@@ -79,11 +73,11 @@
                 <span class="font-semibold text-gray-700 dark:text-gray-300">{{
                     reactions?.likes
                 }}</span>
-                Like •
+                {{ stats?.reactionCount ?? 0 }} Like •
                 <span class="font-semibold text-gray-700 dark:text-gray-300">{{
                     reactions?.comments
                 }}</span>
-                Comment •
+                {{ stats?.commentCount ?? 0 }} Comment •
                 <span class="font-semibold text-gray-700 dark:text-gray-300">{{
                     reactions?.shares
                 }}</span>
@@ -107,6 +101,9 @@ import { usePostStore } from '@/stores/postStore'
 import { useAuthStore } from '@/stores/authStore'
 import { useLoadingStore } from '@/stores/loadingStore'
 import CommentSection from './comment/CommentSection.vue'
+import useReactionService from '@/services/posts/reactionService'
+import reactionType from '@/common/enums/reactionType'
+import ReactionButton from './ReactionButton.vue'
 
 const imageViewerStore = useImageViewerStore()
 const toast = useCustomToast()
@@ -135,14 +132,17 @@ const props = defineProps({
             avatarUrl: '',
         },
     },
-    creatorName: {
-        type: String,
-    },
-    creatorAvatarUrl: {
-        type: String,
-    },
     createdAt: {
         type: [Date, String],
+    },
+    stats: {
+        type: Object,
+        required: true,
+        default: () => ({ reactionCount: 0, commentCount: 0, shareCount: 0 }),
+    },
+    userActions: {
+        type: Object,
+        default: () => ({ reactionType: Number, isSaved: false }),
     },
 })
 
@@ -153,6 +153,10 @@ const maxVisibleImages = 4
 const visibleImages = computed(() => props.imageUrls.slice(0, maxVisibleImages))
 const isPostOwner = computed(() => user.userId === props.creator.id)
 const showComments = ref(false)
+const isReacted = ref(!!props.userActions?.isReacted)
+
+// Service
+const reactionService = useReactionService(props.id)
 
 const actionItems = [
     {
@@ -192,6 +196,15 @@ const openModal = (index) => {
 
 const toggleMenuAction = (event) => {
     actionMenu.value.toggle(event)
+}
+
+const toggleReact = async () => {
+    isReacted.value = !isReacted.value
+    if (props.userActions.isReacted) {
+        await reactionService.delete()
+    } else {
+        await reactionService.addOrUpdate(reactionType.Like)
+    }
 }
 
 const handleShowComment = () => (showComments.value = !showComments.value)

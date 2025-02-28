@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Linkify.Application.Features.Posts.Common;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;

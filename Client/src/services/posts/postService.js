@@ -1,4 +1,4 @@
-import useAxios from './common/useAxios'
+import useAxios from '../common/useAxios'
 
 const usePostService = () => {
     const controller = 'post'

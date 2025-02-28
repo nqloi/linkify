@@ -2,6 +2,7 @@
 using Linkify.Domain.Bases;
 using Linkify.Domain.Enums;
 using Linkify.Domain.Interfaces;
+using Linkify.Domain.Shared;
 
 namespace Linkify.Domain.Aggregates.PostAggregate
 {
@@ -74,42 +75,52 @@ namespace Linkify.Domain.Aggregates.PostAggregate
         #endregion
 
         #region Comment
-        public void AddComment(Comment comment)
+        public Result<bool> AddComment(Comment comment)
         {
             if (comment == null)
-                throw new ArgumentNullException(nameof(comment));
+            {
+                return Result<bool>.Failure("Comment cannot be null.");
+            }
 
             if (comment.PostId != this.Id)
-                throw new InvalidOperationException("Comment does not belong to this post.");
+            {
+                return Result<bool>.Failure("Comment does not belong to this post.");
+            }
 
             _comments.Add(comment);
+            return Result<bool>.Success(true);
         }
 
-
-        public void UpdateComment(Guid commentId, string newContent)
+        public Result<Comment> UpdateComment(Guid commentId, string newContent)
         {
             if (string.IsNullOrWhiteSpace(newContent))
-                throw new ArgumentException("Updated content cannot be empty.");
+            {
+                return Result<Comment>.Failure("Updated content cannot be empty.");
+            }
 
             var existingComment = _comments.FirstOrDefault(c => c.Id == commentId);
             if (existingComment == null)
-                throw new InvalidOperationException("Comment not found.");
+            {
+                return Result<Comment>.Failure("Comment not found.");
+            }
 
             existingComment.UpdateContent(newContent);
+            return Result<Comment>.Success(existingComment);
         }
 
-        public void DeleteComment(Guid commentId)
+        public Result<bool> DeleteComment(Guid commentId)
         {
             var comment = _comments.FirstOrDefault(c => c.Id == commentId);
-            if (comment != null)
+
+            if (comment == null)
             {
-                _comments.Remove(comment);
+                return Result<bool>.Failure("Comment not found.");
             }
-            else
-            {
-                throw new InvalidOperationException("Comment not found.");
-            }
+
+            _comments.Remove(comment);
+            return Result<bool>.Success(true);
         }
+
         #endregion
     }
 }

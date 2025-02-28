@@ -8,6 +8,9 @@
             :content="post.content"
             :imageUrls="post.imageUrls"
             :creator="post.creator"
+            :createdAt="post.createdAt"
+            :stats="post.stats"
+            :userActions="post.userActions"
             class="mb-4"
         />
         <ImageViewer />

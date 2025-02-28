@@ -1,4 +1,4 @@
-import usePostService from '@/services/postService'
+import usePostService from '@/services/posts/postService'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useAuthStore } from './authStore'

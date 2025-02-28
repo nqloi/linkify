@@ -32,7 +32,12 @@
                 class="w-8 h-8 shrink-0 mr-2"
                 shape="circle"
             />
-            <InputText v-model="newComment" placeholder="Write a comment..." class="w-full" />
+            <InputText
+                v-model="newComment"
+                placeholder="Write a comment..."
+                class="w-full"
+                @keyup.enter="addComment"
+            />
             <Button label="Post" class="p-button-sm ml-2" variant="outlined" @click="addComment" />
         </div>
     </div>
@@ -43,8 +48,7 @@ import { ref, computed, onMounted } from 'vue'
 import { Avatar, Button, InputText } from 'primevue'
 import CommentItem from './CommentItem.vue'
 import defaultAvatar from '@/assets/images/avatar-default.svg'
-import { timeAgo } from '@/utils/time/timeUtil'
-import useCommentService from '@/services/commentService'
+import useCommentService from '@/services/posts/commentService'
 import { useAuthStore } from '@/stores/authStore'
 
 // Props for the component
@@ -60,14 +64,11 @@ const authStore = useAuthStore()
 // Reactive state for comments and new comment input
 const comments = ref([])
 const newComment = ref('')
-const visibleCommentCount = ref(2) // Number of comments to show initially
+const visibleCommentCount = ref(5) // Number of comments to show initially
 const commentsPerLoad = 10 // Number of comments to load each time
 
 // Service
 const commentService = useCommentService(props.postId)
-
-// Computed property to get visible comments
-const visibleComments = computed(() => comments.value.slice(0, visibleCommentCount.value))
 
 // Computed property to check if there are more comments to load
 const hasMoreComments = computed(() => visibleCommentCount.value < comments.value.length)
@@ -91,13 +92,22 @@ const addComment = async () => {
                 id: response.content,
                 content: newComment.value,
                 creator: {
-                    userId: authStore.user.userId,
+                    id: authStore.user.userId,
                     avatarUrl: authStore.user.avatarUrl,
                     displayName: authStore.getDisplayName(),
                 },
             })
             newComment.value = ''
         }
+    }
+}
+
+const handleDelete = async (commentId) => {
+    try {
+        await commentService.delete(commentId)
+        comments.value = comments.value.filter((c) => c.id !== commentId)
+    } catch (error) {
+        console.log(error)
     }
 }
 
