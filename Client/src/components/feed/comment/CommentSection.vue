@@ -27,11 +27,7 @@
 
         <!-- Add new comment form -->
         <div class="pt-2 flex shadow-top">
-            <Avatar
-                :image="authStore.user.avatarUrl || defaultAvatar"
-                class="w-8 h-8 shrink-0 mr-2"
-                shape="circle"
-            />
+            <UserAvatar class="mr-2" :avatarUrl="authStore.user.avatarUrl" />
             <InputText
                 v-model="newComment"
                 placeholder="Write a comment..."
@@ -50,6 +46,7 @@ import CommentItem from './CommentItem.vue'
 import defaultAvatar from '@/assets/images/avatar-default.svg'
 import useCommentService from '@/services/posts/commentService'
 import { useAuthStore } from '@/stores/authStore'
+import UserAvatar from '@/components/common/UserAvatar.vue'
 
 // Props for the component
 const props = defineProps({

@@ -3,6 +3,8 @@ using Linkify.Api.Common.MiddleWares;
 using Linkify.Application;
 using Linkify.Infrastructure;
 using Linkify.Infrastructure.DataAccessManagers;
+using Linkify.Infrastructure.RealtimeManagers.ChatManagers;
+using Linkify.Infrastructure.RealtimeManagers.NotificationManagers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -33,13 +35,13 @@ builder.Services.AddCors(options =>
 
     });
 
-    //options.AddPolicy("AllowSpecificOrigin", builder =>
-    //{
-    //    builder.WithOrigins("http://localhost:5173")
-    //           .AllowAnyMethod()
-    //           .AllowAnyHeader()
-    //           .AllowCredentials();
-    //});
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("http://localhost:5173")
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
+    });
 });
 
 // Exception
@@ -58,7 +60,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors();
+app.UseCors("AllowSpecificOrigin");
 
 app.UseMiddleware<GlobalExceptionHandlerMiddleWare>();
 app.UseAuthentication();
@@ -68,5 +70,9 @@ app.UseHttpsRedirection();
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
+// Map SignalR Hub
+app.MapHub<ChatHub>("/hubs/chat");
+app.MapHub<NotificationHub>("/hubs/notification");
 
 app.Run();

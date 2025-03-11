@@ -1,11 +1,7 @@
 <template>
     <div class="comment-item flex gap-2">
         <!-- Avatar -->
-        <Avatar
-            :image="creator.avatarUrl || defaultAvatar"
-            class="w-8 h-8 shrink-0"
-            shape="circle"
-        />
+        <UserAvatar :image="creator.avatarUrl || defaultAvatar" :size="SIZE.SM" class="shrink-0" />
 
         <div class="comment-content">
             <!-- User Info -->
@@ -53,7 +49,9 @@ import { ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { timeAgo } from '@/utils/time/timeUtil'
 import defaultAvatar from '@/assets/images/avatar-default.svg'
-import { Avatar, InputText, Button } from 'primevue'
+import { InputText, Button } from 'primevue'
+import UserAvatar from '@/components/common/UserAvatar.vue'
+import { SIZE } from '@/common/constants/size'
 
 // Props - Receives comment data from parent
 const props = defineProps({

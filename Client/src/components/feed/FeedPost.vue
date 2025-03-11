@@ -3,11 +3,7 @@
         <!-- Header -->
         <div class="post-header flex items-center justify-between mb-4 mx-4">
             <div class="flex items-center">
-                <Avatar
-                    :image="props.creator.avatarUrl ?? defaultAvatar"
-                    alt="User Avatar"
-                    class="w-10 h-10 rounded-full mr-3"
-                />
+                <UserAvatar class="mr-3" :avatarUrl="creator.avatarUrl" />
                 <div>
                     <h5 class="font-bold">{{ props.creator.displayName }}</h5>
                     <p class="text-gray-500 text-xs">{{ timeAgo(props.createdAt) }}</p>
@@ -104,6 +100,7 @@ import CommentSection from './comment/CommentSection.vue'
 import useReactionService from '@/services/posts/reactionService'
 import reactionType from '@/common/enums/reactionType'
 import ReactionButton from './ReactionButton.vue'
+import UserAvatar from '../common/UserAvatar.vue'
 
 const imageViewerStore = useImageViewerStore()
 const toast = useCustomToast()

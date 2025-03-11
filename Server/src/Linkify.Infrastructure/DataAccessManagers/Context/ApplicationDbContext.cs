@@ -1,4 +1,6 @@
-﻿using Linkify.Domain.Aggregates.PostAggregate;
+﻿using Linkify.Domain.Aggregates.FriendshipAggregate;
+using Linkify.Domain.Aggregates.NotificationAggregate;
+using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Aggregates.Token;
 using Linkify.Domain.Aggregates.UserProfileAggregate;
 using Linkify.Infrastructure.DataAccessManagers.Configurations;
@@ -26,6 +28,12 @@ namespace Linkify.Infrastructure.DataAccessManagers.Context
 
         public DbSet<UserProfile> UserProfile { get; set; }
 
+        public DbSet<FriendRequest> FriendRequest { get; set; }
+
+        public DbSet<Friendship> Friendship { get; set; }
+
+        public DbSet<Notification> Notification { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -37,6 +45,12 @@ namespace Linkify.Infrastructure.DataAccessManagers.Context
             modelBuilder.ApplyConfiguration(new PostConfiguration());
 
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ReactionConfiguration());
+
+            modelBuilder.ApplyConfiguration(new FriendRequestConfiguration());
+
+            modelBuilder.ApplyConfiguration(new FriendshipConfiguration());
         }
     }
 }

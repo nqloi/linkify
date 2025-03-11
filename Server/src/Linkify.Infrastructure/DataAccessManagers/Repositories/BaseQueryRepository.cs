@@ -68,5 +68,9 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
             return await query.ToListAsync(cancellationToken);
         }
 
+        public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken);
+        }
     }
 }

@@ -8,11 +8,8 @@
     >
         <template #header>
             <div class="inline-flex items-center justify-center gap-2">
-                <Avatar
-                    image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-                    shape="circle"
-                />
-                <span class="font-bold whitespace-nowrap">Amy Elsner</span>
+                <UserAvatar :avatarUrl="user.avatarUrl" :size="SIZE.SM" />
+                <span class="font-bold whitespace-nowrap">{{ getDisplayName() }}</span>
             </div>
         </template>
         <div class="post-form">
@@ -91,8 +88,11 @@ import { usePostStore } from '@/stores/postStore'
 import { Avatar, Textarea, Badge } from 'primevue'
 import { ref, watch } from 'vue'
 import FileUpload from 'primevue/fileupload'
-import { SIZE_UNITS, SIZE_BASE } from '@/common/contants/file'
+import { SIZE_UNITS, SIZE_BASE } from '@/common/constants/file'
 import { useCustomToast } from '@/utils/toast/customToast'
+import UserAvatar from '../common/UserAvatar.vue'
+import { useAuthStore } from '@/stores/authStore'
+import { SIZE } from '@/common/constants/size'
 
 const toast = useCustomToast()
 const MAX_IMAGE_LENGTH = 5
@@ -103,6 +103,10 @@ const header = 'Create Post'
 const postStore = usePostStore()
 const formData = new FormData()
 const fileUploads = ref([])
+
+// store
+const { user, getDisplayName } = useAuthStore()
+
 const openDialog = () => {
     visible.value = true
 }

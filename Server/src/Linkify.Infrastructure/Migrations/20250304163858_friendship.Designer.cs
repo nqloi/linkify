@@ -4,6 +4,7 @@ using Linkify.Infrastructure.DataAccessManagers.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Linkify.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304163858_friendship")]
+    partial class friendship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,12 +28,16 @@ namespace Linkify.Infrastructure.Migrations
             modelBuilder.Entity("Linkify.Domain.Aggregates.FriendshipAggregate.FriendRequest", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid?>("CreatedById")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("FriendshipId")
                         .HasColumnType("char(36)");
 
                     b.Property<bool>("IsDeleted")
@@ -56,6 +63,8 @@ namespace Linkify.Infrastructure.Migrations
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FriendshipId");
 
                     b.HasIndex("ReceiverId");
 
@@ -105,40 +114,6 @@ namespace Linkify.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Friendship");
-                });
-
-            modelBuilder.Entity("Linkify.Domain.Aggregates.NotificationAggregate.Notification", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("ActionUrl")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("Linkify.Domain.Aggregates.PostAggregate.Comment", b =>
@@ -575,9 +550,8 @@ namespace Linkify.Infrastructure.Migrations
                 {
                     b.HasOne("Linkify.Domain.Aggregates.FriendshipAggregate.Friendship", null)
                         .WithMany("FriendRequests")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FriendshipId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Linkify.Domain.Aggregates.PostAggregate.Comment", b =>

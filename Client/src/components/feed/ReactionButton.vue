@@ -5,9 +5,9 @@
             :class="selectedReaction.textColor"
             variant="text"
             @click="toggleReaction"
-            @mouseover="showReactions = true"
+            @mouseover="scheduleShowReactions"
         >
-            <img :src="selectedReaction.icon" class="w-5 h-5" />
+            <img v-if="!!selectedReaction.icon" :src="selectedReaction.icon" class="w-5 h-5" />
             {{ selectedReaction.label }}
         </Button>
         <Transition name="fade">
@@ -109,16 +109,21 @@ const setReaction = async (reaction) => {
 }
 
 const toggleReaction = async () => {
-    if (selectedReaction.value.type === reactionType.Like) {
-        selectedReaction.value = reactions[0]
+    if (selectedReaction.value.type) {
+        selectedReaction.value = defaultReaction
         await reactionService.delete()
     } else {
-        await reactionService.addOrUpdate(selectedReaction.value.type)
+        selectedReaction.value = getReactionByType(reactionType.Like)
+        await reactionService.addOrUpdate(reactionType.Like)
     }
 }
 
 const scheduleHideReactions = () => {
-    hideTimeout.value = setTimeout(() => (showReactions.value = false), 500)
+    hideTimeout.value = setTimeout(() => (showReactions.value = false), 700)
+}
+
+const scheduleShowReactions = () => {
+    setTimeout(() => (showReactions.value = true), 700)
 }
 
 const cancelHideReactions = () => {
