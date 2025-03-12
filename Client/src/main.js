@@ -18,8 +18,16 @@ import PrimeVue from 'primevue/config'
 
 import App from './App.vue'
 import router from './router'
+import { startChatService } from './services/chat/useChatService'
+import { startNotificationService } from './services/notifications/useNotificationService'
 
 const app = createApp(App)
+
+// service
+startChatService()
+startNotificationService()
+
+// store
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 

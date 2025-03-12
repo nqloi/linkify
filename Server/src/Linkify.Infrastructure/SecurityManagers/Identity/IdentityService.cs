@@ -4,6 +4,7 @@ using Linkify.Application.Features.Authentication.Common;
 using Linkify.Application.Repositories;
 using Linkify.Domain.Aggregates.Token;
 using Linkify.Domain.Aggregates.UserProfileAggregate;
+using Linkify.Domain.Constants;
 using Linkify.Infrastructure.SecurityManagers.Tokens;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -102,7 +103,7 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
 
         public async Task<AuthenticationResult> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
         {
-            var token = await _tokenRepository.GetByRefreshTokenAsync(refreshToken);
+            var token = await _tokenRepository.GetByRefreshTokenAsync(refreshToken, cancellationToken);
 
             if (token.ExpiryDate < DateTime.UtcNow)
             {
@@ -118,6 +119,13 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
 
             var newAccessToken = _tokenService.GenerateToken(user, new List<Claim>());
             var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+            token.RefreshToken = newRefreshToken;
+            token.ExpiryDate = DateTime.UtcNow.AddDays(TokenConst.ExpiryInDays);
+
+            _tokenRepository.Update(token);
+
+            await _unitOfWork.SaveAsync(cancellationToken);
 
             return new AuthenticationResult
             {

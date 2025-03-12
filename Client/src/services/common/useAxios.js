@@ -125,6 +125,7 @@ const useAxios = (controller, version = defaultVersion, customHeader = {}) => {
         getAll: () => instance.get(),
         delete: (id) => instance.delete(id),
         update: (data) => instance.put('', data),
+        getById: (id) => instance.get(`/${id}`),
     }
 
     return {

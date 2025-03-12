@@ -1,7 +1,7 @@
 import useAxios from '../common/useAxios'
 
 const useCommentService = (postId) => {
-    const controller = `post/${postId}/comment`
+    const controller = `posts/${postId}/comments`
 
     const { baseService } = useAxios(controller)
 

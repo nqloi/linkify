@@ -22,6 +22,125 @@ namespace Linkify.Infrastructure.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("Linkify.Domain.Aggregates.FriendshipAggregate.FriendRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("UpdatedById")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("ReceiverId", "Status");
+
+                    b.ToTable("FriendRequest");
+                });
+
+            modelBuilder.Entity("Linkify.Domain.Aggregates.FriendshipAggregate.Friendship", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("FriendsSince")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid>("PrimaryUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("SecondaryUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("UpdatedById")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PrimaryUserId", "SecondaryUserId")
+                        .IsUnique();
+
+                    b.ToTable("Friendship");
+                });
+
+            modelBuilder.Entity("Linkify.Domain.Aggregates.NotificationAggregate.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ActionUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notification");
+                });
+
             modelBuilder.Entity("Linkify.Domain.Aggregates.PostAggregate.Comment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -452,6 +571,15 @@ namespace Linkify.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Linkify.Domain.Aggregates.FriendshipAggregate.FriendRequest", b =>
+                {
+                    b.HasOne("Linkify.Domain.Aggregates.FriendshipAggregate.Friendship", null)
+                        .WithMany("FriendRequests")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Linkify.Domain.Aggregates.PostAggregate.Comment", b =>
                 {
                     b.HasOne("Linkify.Domain.Aggregates.PostAggregate.Post", "Post")
@@ -573,6 +701,11 @@ namespace Linkify.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Linkify.Domain.Aggregates.FriendshipAggregate.Friendship", b =>
+                {
+                    b.Navigation("FriendRequests");
                 });
 
             modelBuilder.Entity("Linkify.Domain.Aggregates.PostAggregate.Post", b =>

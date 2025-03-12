@@ -50,5 +50,13 @@ namespace Linkify.Application.Repositories
         /// Executes the given query asynchronously and returns the result as a list.
         /// </summary>
         Task<List<T>> QueryAsync<T>(IQueryable<T> query, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Executes the given query asynchronously and returns the result as a TEntity or default.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     }
 }

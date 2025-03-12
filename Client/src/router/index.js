@@ -9,17 +9,17 @@ const routes = [
             {
                 path: '',
                 name: 'Home',
-                component: () => import('../views/Home/Home.vue'),
+                component: () => import('../views/home/Home.vue'),
             },
             {
                 path: '1',
                 name: 'Home1',
-                component: () => import('../views/Home/Home.vue'),
+                component: () => import('../views/home/Home.vue'),
             },
             {
                 path: '2',
                 name: 'Home2',
-                component: () => import('../views/Home/Home.vue'),
+                component: () => import('../views/home/Home.vue'),
             },
         ],
         meta: {
@@ -33,12 +33,12 @@ const routes = [
             {
                 path: 'login',
                 name: 'Login',
-                component: () => import('@/views/Auth/Login.vue'),
+                component: () => import('@/views/auth/Login.vue'),
             },
             {
                 path: 'register',
                 name: 'Register',
-                component: () => import('@/views/Auth/Register.vue'),
+                component: () => import('@/views/auth/Register.vue'),
             },
             {
                 path: '',
@@ -52,9 +52,17 @@ const routes = [
     {
         path: '/404',
         name: 'NotFound',
-        component: () => import('@/views/Common/NotFound.vue'),
+        component: () => import('@/views/common/NotFound.vue'),
         meta: {
             isPublicPage: true,
+        },
+    },
+    {
+        path: '/profile/:id',
+        name: 'Profile',
+        component: () => import('@/views/profile/Profile.vue'),
+        meta: {
+            isPublicPage: false,
         },
     },
 ]
