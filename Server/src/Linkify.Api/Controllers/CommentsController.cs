@@ -8,8 +8,8 @@ using WebAPI.Controllers;
 
 namespace Linkify.Api.Controllers
 {
-    [Route("api/v{version:apiVersion}/post/{postId:guid}/comment")]
-    public class CommentController(ISender _sender) : BaseApiController(_sender)
+    [Route("api/v{version:apiVersion}/posts/{postId:guid}/comments")]
+    public class CommentsController(ISender _sender) : BaseApiController(_sender)
     {
         [HttpGet]
         public async Task<IActionResult> GetCommentsByPostId(Guid postId)

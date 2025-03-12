@@ -1,7 +1,7 @@
 import useAxios from '../common/useAxios'
 
 const useReactionService = (postId) => {
-    const controller = `post/${postId}/reaction`
+    const controller = `posts/${postId}/reactions`
 
     const { baseService } = useAxios(controller)
 

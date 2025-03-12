@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="post-header flex items-center justify-between mb-4 mx-4">
             <div class="flex items-center">
-                <UserAvatar class="mr-3" :avatarUrl="creator.avatarUrl" />
+                <UserAvatar class="mr-3" :avatarUrl="creator.avatarUrl" :userId="creator.id" />
                 <div>
                     <h5 class="font-bold">{{ props.creator.displayName }}</h5>
                     <p class="text-gray-500 text-xs">{{ timeAgo(props.createdAt) }}</p>

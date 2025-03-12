@@ -1,7 +1,12 @@
 <template>
     <div class="comment-item flex gap-2">
         <!-- Avatar -->
-        <UserAvatar :image="creator.avatarUrl || defaultAvatar" :size="SIZE.SM" class="shrink-0" />
+        <UserAvatar
+            :image="creator.avatarUrl || defaultAvatar"
+            :size="SIZE.SM"
+            class="shrink-0"
+            :userId="creator.id"
+        />
 
         <div class="comment-content">
             <!-- User Info -->

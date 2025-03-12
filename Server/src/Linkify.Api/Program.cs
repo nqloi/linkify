@@ -1,3 +1,4 @@
+using Linkify.Api.Common.Conventions;
 using Linkify.Api.Common.Handlers;
 using Linkify.Api.Common.MiddleWares;
 using Linkify.Application;
@@ -6,6 +7,7 @@ using Linkify.Infrastructure.DataAccessManagers;
 using Linkify.Infrastructure.RealtimeManagers.ChatManagers;
 using Linkify.Infrastructure.RealtimeManagers.NotificationManagers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -17,7 +19,11 @@ builder.Services.AddApiVersioning(options =>
 {
     options.ReportApiVersions = true;
 });
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(new RouteTokenTransformerConvention(new KebabCaseRouteTransformer()));
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

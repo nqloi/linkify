@@ -13,7 +13,7 @@ using WebAPI.Controllers;
 
 namespace Linkify.Api.Controllers
 {
-    public class PostController(ISender _sender) : BaseApiController(_sender)
+    public class PostsController(ISender _sender) : BaseApiController(_sender)
     {
         [HttpPost]
         public async Task<ActionResult<ApiSuccessResult<GetPostDto>>> Create([FromForm] CreatePostRequest request, CancellationToken cancellationToken)

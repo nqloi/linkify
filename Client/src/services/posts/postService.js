@@ -1,7 +1,7 @@
 import useAxios from '../common/useAxios'
 
 const usePostService = () => {
-    const controller = 'post'
+    const controller = 'posts'
     const { baseService } = useAxios(controller)
 
     const create = (data) => {

@@ -7,10 +7,7 @@
 
         <!-- User Info Section -->
         <div class="user-info-section text-center">
-            <div class="username font-bold text-2xl mb-1">
-                {{ user.username }}
-            </div>
-            <div class="full-name text-gray-600 mb-4">{{ user.firstName }} {{ user.lastName }}</div>
+            <div class="full-name text-gray-600 mb-4">{{ userProfile.displayName }}</div>
         </div>
 
         <!-- Actions Section -->
@@ -36,19 +33,23 @@
 import { useAuthStore } from '@/stores/authStore'
 import UserAvatar from '@/components/common/UserAvatar.vue'
 import { SIZE } from '@/common/constants/size'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useToast } from 'primevue'
 import { onChatMessageReceived } from '@/services/chat/useChatService'
+import useUserProfileService from '@/services/userProfiles/userProfileService'
+import { useRoute } from 'vue-router'
+
 const toast = useToast()
 const authStore = useAuthStore()
+const route = useRoute()
 const { user, fetchCurrentUser } = authStore
+const userProfile = ref({})
+const userProfileService = useUserProfileService()
 
 onMounted(async () => {
-    if (!user) {
-        await fetchCurrentUser()
-    }
-
-    onChatMessageReceived((msg) => console.log(msg))
+    const res = await userProfileService.getById(route.params.id)
+    userProfile.value = res.content
+    // onChatMessageReceived((msg) => console.log(msg))
 })
 
 const handleEditProfile = () => {

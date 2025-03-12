@@ -27,7 +27,11 @@
 
         <!-- Add new comment form -->
         <div class="pt-2 flex shadow-top">
-            <UserAvatar class="mr-2" :avatarUrl="authStore.user.avatarUrl" />
+            <UserAvatar
+                class="mr-2"
+                :avatarUrl="authStore.user.avatarUrl"
+                :userId="authStore.user.userId"
+            />
             <InputText
                 v-model="newComment"
                 placeholder="Write a comment..."

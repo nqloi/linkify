@@ -15,7 +15,6 @@ import { computed } from 'vue'
 import { SIZE, TAILWIND_SIZE_MAP } from '@/common/constants/size'
 import { Avatar } from 'primevue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore'
 
 const props = defineProps({
     avatarUrl: {
@@ -30,10 +29,14 @@ const props = defineProps({
         type: String,
         default: null,
     },
+    userId: {
+        type: String,
+        default: null,
+        required: true,
+    },
 })
 
 const router = useRouter()
-const authStore = useAuthStore()
 
 const avatarSizeClasses = computed(() => {
     return TAILWIND_SIZE_MAP[props.size] || TAILWIND_SIZE_MAP[SIZE.MD] // Use the mapping or default to medium
@@ -50,7 +53,7 @@ const avatarStyle = computed(() => {
 })
 
 const goToProfile = () => {
-    router.push({ name: 'Profile', params: { username: authStore.user.userName } })
+    router.push({ name: 'Profile', params: { id: props.userId } })
 }
 </script>
 
