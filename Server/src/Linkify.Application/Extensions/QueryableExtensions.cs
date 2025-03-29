@@ -1,4 +1,8 @@
-﻿using Linkify.Domain.Interfaces;
+﻿using Linkify.Application.Common.Helper;
+using Linkify.Application.Common.Models;
+using Linkify.Domain.Interfaces;
+using Linkify.Domain.Shared;
+using System.Linq.Expressions;
 
 namespace Linkify.Application.Extensions
 {
