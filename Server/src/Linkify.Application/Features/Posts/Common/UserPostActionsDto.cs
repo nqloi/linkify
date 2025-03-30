@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Features.Posts.Common
 {
-    public class UserPostActionsDto
+    public record UserPostActionsDto
     {
-        public ReactionType ReactionType { get; set; }
-        public bool IsSaved { get; set; }
+        public ReactionType ReactionType { get; set; } = ReactionType.None;
+        public bool IsSaved { get; set; } = false;
     }
 }

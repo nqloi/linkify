@@ -1,4 +1,5 @@
-﻿using Linkify.Domain.Bases;
+﻿using Linkify.Application.Common.Models;
+using Linkify.Domain.Bases;
 using Linkify.Domain.Specifications;
 using System.Linq.Expressions;
 
@@ -58,5 +59,9 @@ namespace Linkify.Application.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+
+        //Task<List<T>> GetCursorPagingList<T>(IQueryable<T> query, 
+        //    CursorPaginationParameters cursorPaginationParameters, 
+        //    CancellationToken cancellationToken = default);
     }
 }

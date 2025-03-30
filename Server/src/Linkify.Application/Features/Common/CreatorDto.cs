@@ -8,7 +8,8 @@ namespace Linkify.Application.Features.Common
 {
     public record CreatorDto
     {
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
+        public required string UserName { get; set; }
         public required string DisplayName { get; set; }
         public string? AvatarUrl { get; set; }
     }

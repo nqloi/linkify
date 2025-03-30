@@ -1,16 +1,9 @@
-﻿using Linkify.Domain.Aggregates.PostAggregate;
-using Linkify.Domain.Aggregates.Token;
-using Linkify.Domain.Aggregates.UserProfileAggregate;
+﻿using Linkify.Domain.Aggregates.UserProfileAggregate;
 using Linkify.Domain.Constants;
 using Linkify.Infrastructure.DataAccessManagers.Configurations.Bases;
 using Linkify.Infrastructure.SecurityManagers.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linkify.Infrastructure.DataAccessManagers.Configurations
 {
@@ -25,6 +18,10 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
             builder.Property(e => e.UserId)
                 .IsRequired();
 
+            builder.Property(up => up.UserName)
+                .IsRequired()
+                .HasMaxLength(LengthConst.M);
+
             builder.Property(up => up.AvatarUrl)
                 .HasMaxLength(LengthConst.L);
 
@@ -35,13 +32,42 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
             builder.HasIndex(up => up.UserId)
                 .IsUnique();
 
+            builder.HasIndex(up => up.UserName)
+                .IsUnique();
+
             builder.Property(up => up.Bio)
                 .HasMaxLength(LengthConst.L);
 
+            builder.Property(up => up.Email)
+                .HasMaxLength(LengthConst.M);
+
+            builder.Property(up => up.PhoneNumber)
+                .HasMaxLength(LengthConst.M);
+
+            builder.Property(up => up.DateOfBirth)
+                .HasColumnType("date");
+
+            builder.Property(up => up.Address)
+                .HasMaxLength(LengthConst.L);
+
+            builder.Property(up => up.Location)
+                .HasMaxLength(LengthConst.M);
+
+            builder.Property(up => up.Work)
+                .HasMaxLength(LengthConst.M);
+
+            builder.Property(up => up.Education)
+                .HasMaxLength(LengthConst.M);
+
+            builder.Property(up => up.Relationship)
+                .HasMaxLength(LengthConst.M);
+
+            builder.Property(up => up.JoinedDate)
+                .IsRequired();
+
             builder.HasOne<ApplicationUser>()
-                .WithMany()
-                .HasForeignKey(up => up.UserId)
-                .HasPrincipalKey(up => up.Id)
+                .WithOne()
+                .HasForeignKey<UserProfile>(up => up.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
         }

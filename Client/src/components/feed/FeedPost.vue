@@ -3,7 +3,7 @@
         <!-- Header -->
         <div class="post-header flex items-center justify-between mb-4 mx-4">
             <div class="flex items-center">
-                <UserAvatar class="mr-3" :avatarUrl="creator.avatarUrl" :userId="creator.id" />
+                <UserAvatar class="mr-3" :user="creator" />
                 <div>
                     <h5 class="font-bold">{{ props.creator.displayName }}</h5>
                     <p class="text-gray-500 text-xs">{{ timeAgo(props.createdAt) }}</p>
@@ -87,25 +87,21 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { Avatar, Image, Menu } from 'primevue'
-import defaultAvatar from '@/assets/images/avatar-default.svg'
-import { useImageViewerStore } from '@/stores/imageviewerStore'
-import { timeAgo } from '@/utils/time/timeUtil'
-import { useCustomToast } from '@/utils/toast/customToast'
-import { usePostStore } from '@/stores/postStore'
-import { useAuthStore } from '@/stores/authStore'
 import { useLoadingStore } from '@/stores/loadingStore'
-import CommentSection from './comment/CommentSection.vue'
-import useReactionService from '@/services/posts/reactionService'
-import reactionType from '@/common/enums/reactionType'
-import ReactionButton from './ReactionButton.vue'
+import { usePostStore } from '@/stores/postStore'
+import { timeAgo } from '@/utils/timeUtil'
+import { useCustomToast } from '@/utils/toast/customToast'
+import { Image, Menu } from 'primevue'
+import { computed, ref } from 'vue'
+
+import { useImageViewerStore } from '@/stores/imageViewerStore'
 import UserAvatar from '../common/UserAvatar.vue'
+import CommentSection from './comment/CommentSection.vue'
+import ReactionButton from './ReactionButton.vue'
 
 const imageViewerStore = useImageViewerStore()
 const toast = useCustomToast()
 const postStore = usePostStore()
-const { user } = useAuthStore()
 
 const props = defineProps({
     id: {
@@ -123,11 +119,11 @@ const props = defineProps({
     },
     creator: {
         type: Object,
-        default: {
+        default: () => ({
             id: null,
             displayName: '',
             avatarUrl: '',
-        },
+        }),
     },
     createdAt: {
         type: [Date, String],
@@ -148,12 +144,8 @@ const loading = useLoadingStore()
 const maxVisibleImages = 4
 
 const visibleImages = computed(() => props.imageUrls.slice(0, maxVisibleImages))
-const isPostOwner = computed(() => user.userId === props.creator.id)
+// const isPostOwner = computed(() => user.userId === props.creator.id)
 const showComments = ref(false)
-const isReacted = ref(!!props.userActions?.isReacted)
-
-// Service
-const reactionService = useReactionService(props.id)
 
 const actionItems = [
     {
@@ -193,15 +185,6 @@ const openModal = (index) => {
 
 const toggleMenuAction = (event) => {
     actionMenu.value.toggle(event)
-}
-
-const toggleReact = async () => {
-    isReacted.value = !isReacted.value
-    if (props.userActions.isReacted) {
-        await reactionService.delete()
-    } else {
-        await reactionService.addOrUpdate(reactionType.Like)
-    }
 }
 
 const handleShowComment = () => (showComments.value = !showComments.value)

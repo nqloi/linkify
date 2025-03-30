@@ -1,5 +1,5 @@
 import useAuthService from '@/services/authService'
-import { CACHE_KEYS } from '@/utils/cache/cacheContants'
+import { CACHE_KEYS } from '@/utils/cache/cacheConstants'
 import useCache from '@/utils/cache/useCache'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -55,10 +55,10 @@ export const useAuthStore = defineStore(
 
         return {
             isAuthenticated,
+            isSessionTimeout,
             user,
             login,
             logout,
-            isSessionTimeout,
             onSessionTimeout,
             getDisplayName,
         }

@@ -1,12 +1,7 @@
 <template>
     <div class="comment-item flex gap-2">
         <!-- Avatar -->
-        <UserAvatar
-            :image="creator.avatarUrl || defaultAvatar"
-            :size="SIZE.SM"
-            class="shrink-0"
-            :userId="creator.id"
-        />
+        <UserAvatar :user="creator" :size="SIZE.SM" class="shrink-0" />
 
         <div class="comment-content">
             <!-- User Info -->
@@ -52,8 +47,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
-import { timeAgo } from '@/utils/time/timeUtil'
-import defaultAvatar from '@/assets/images/avatar-default.svg'
+import { timeAgo } from '@/utils/timeUtil'
 import { InputText, Button } from 'primevue'
 import UserAvatar from '@/components/common/UserAvatar.vue'
 import { SIZE } from '@/common/constants/size'
@@ -100,7 +94,7 @@ const toggleExpand = () => {
 
 // Check if the current user is the comment owner
 const authStore = useAuthStore()
-const isCommentOwner = computed(() => authStore.user?.userId === props.creator.id)
+const isCommentOwner = computed(() => authStore.user?.userId === props.creator.userId)
 
 // Action handlers
 const handleLike = () => emit('like', props.id)

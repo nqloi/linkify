@@ -1,9 +1,5 @@
 ﻿using Linkify.Domain.Aggregates.PostAggregate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Linkify.Domain.Shared;
 
 namespace Linkify.Domain.Specifications.Comments
 {
@@ -13,7 +9,6 @@ namespace Linkify.Domain.Specifications.Comments
         {
             Criteria = p => p.PostId == postId;
             AddInclude(p => p.UserProfile);
-            ApplyOrderByDescending(p => p.CreatedAt);
         }
     }
 }
