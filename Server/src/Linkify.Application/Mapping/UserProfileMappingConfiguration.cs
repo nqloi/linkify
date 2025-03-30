@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Linkify.Application.Features.Common;
 using Linkify.Application.Features.Posts.Common;
+using Linkify.Application.Features.UserProfiles.Queries.Get;
 using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Aggregates.UserProfileAggregate;
 using System;
@@ -15,8 +16,9 @@ namespace Linkify.Application.Mapping
     {
         public static void Configure(Profile profile)
         {
-            profile.CreateMap<UserProfile, CreatorDto>()
-                    .ForMember(des => des.Id, opt => opt.MapFrom(src => src.UserId));
+            profile.CreateMap<UserProfile, CreatorDto>();
+
+            profile.CreateMap<UserProfile, UserProfileDto>();
         }
     }
 }

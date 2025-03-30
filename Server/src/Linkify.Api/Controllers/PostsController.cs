@@ -6,6 +6,7 @@ using Linkify.Application.Features.Posts.Commands.CreatePost;
 using Linkify.Application.Features.Posts.Commands.DeletePost;
 using Linkify.Application.Features.Posts.Commands.RemoveReaction;
 using Linkify.Application.Features.Posts.Common;
+using Linkify.Application.Features.Posts.Queries.GetByUserId;
 using Linkify.Application.Features.Posts.Queries.GetPost;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -81,6 +82,21 @@ namespace Linkify.Api.Controllers
         {
             var command = new RemoveReactionCommand { PostId = postId };
             var result = await _sender.Send(command);
+
+            return HandleResult(result);
+        }
+
+        [HttpGet("users/{userId:guid}")]
+        public async Task<IActionResult> GetByUserId([FromRoute] Guid userId ,[FromQuery] CursorPaginationParameters request, CancellationToken cancellationToken)
+        {
+            var query = new GetPagedPostsByUserIdQuery
+            {
+                UserId = userId,
+                Cursor = request.Cursor,
+                Limit = request.Limit
+            };
+
+            var result = await _sender.Send(query, cancellationToken);
 
             return HandleResult(result);
         }

@@ -1,11 +1,9 @@
 ﻿using Linkify.Application.Repositories;
-using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Bases;
 using Linkify.Domain.Specifications;
 using Linkify.Infrastructure.DataAccessManagers.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Threading;
 
 namespace Linkify.Infrastructure.DataAccessManagers.Repositories
 {
@@ -51,16 +49,15 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
             return await query.CountAsync();
         }
 
-
         public async Task<IEnumerable<TEntity>> GetWithSpecificationAsync(BaseSpecification<TEntity> specification, CancellationToken cancellationToken = default)
         {
-            var query = SpecificationEvaluator<TEntity>.GetQuery(_dbSet.AsQueryable(), specification);
+            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
             return await query.ToListAsync(cancellationToken);
         }
 
         public IQueryable<TEntity> GetWithSpecification(BaseSpecification<TEntity> spec)
         {
-            return SpecificationEvaluator<TEntity>.GetQuery(_dbSet.AsQueryable(), spec);
+            return SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), spec);
         }
 
         public async Task<List<T>> QueryAsync<T>(IQueryable<T> query, CancellationToken cancellationToken = default)

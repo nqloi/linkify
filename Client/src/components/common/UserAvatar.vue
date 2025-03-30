@@ -1,6 +1,6 @@
 <template>
     <Avatar
-        :image="props.avatarUrl ?? defaultAvatar"
+        :image="props.user.avatarUrl ?? defaultAvatar"
         alt="User Avatar"
         :class="avatarSizeClasses"
         class="rounded-full cursor-pointer"
@@ -17,9 +17,6 @@ import { Avatar } from 'primevue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
-    avatarUrl: {
-        type: String,
-    },
     size: {
         type: String,
         default: SIZE.MD, // Use the constant for the default
@@ -29,10 +26,13 @@ const props = defineProps({
         type: String,
         default: null,
     },
-    userId: {
-        type: String,
-        default: null,
-        required: true,
+    user: {
+        type: Object,
+        default: () => ({
+            userId: null,
+            avatarUrl: '',
+            username: '',
+        }),
     },
 })
 
@@ -53,7 +53,7 @@ const avatarStyle = computed(() => {
 })
 
 const goToProfile = () => {
-    router.push({ name: 'Profile', params: { id: props.userId } })
+    router.push({ name: 'Profile', params: { id: props.user.userId } })
 }
 </script>
 

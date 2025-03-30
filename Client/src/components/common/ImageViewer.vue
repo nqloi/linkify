@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import { useImageViewerStore } from '@/stores/imageviewerStore'
+import { useImageViewerStore } from '@/stores/imageViewerStore'
 import { useCustomToast } from '@/utils/toast/customToast'
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 

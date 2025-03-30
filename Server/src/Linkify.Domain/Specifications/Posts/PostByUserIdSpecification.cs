@@ -7,24 +7,15 @@ using System.Threading.Tasks;
 
 namespace Linkify.Domain.Specifications.Posts
 {
-    public class PostWithDetailsSpecification : BaseSpecification<Post>
+    public class PostByUserIdSpecification : BaseSpecification<Post>
     {
-        public PostWithDetailsSpecification(Guid userId)
+        public PostByUserIdSpecification(Guid userId)
         {
             Criteria = p => p.UserId == userId;
             AddInclude(p => p.PostImages);
             AddInclude(p => p.Comments);
             AddInclude(p => p.UserProfile);
             AddInclude(p => p.Reactions);
-            ApplyOrderByDescending(p => p.CreatedAt);
-        }
-    }
-
-    public class PostsByUserSpecification : BaseSpecification<Post>
-    {
-        public PostsByUserSpecification(Guid userId)
-        {
-            Criteria = p => p.UserId == userId;
         }
     }
 }

@@ -27,11 +27,7 @@
 
         <!-- Add new comment form -->
         <div class="pt-2 flex shadow-top">
-            <UserAvatar
-                class="mr-2"
-                :avatarUrl="authStore.user.avatarUrl"
-                :userId="authStore.user.userId"
-            />
+            <UserAvatar class="mr-2" :user="user" />
             <InputText
                 v-model="newComment"
                 placeholder="Write a comment..."
@@ -44,13 +40,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { Avatar, Button, InputText } from 'primevue'
-import CommentItem from './CommentItem.vue'
-import defaultAvatar from '@/assets/images/avatar-default.svg'
+import UserAvatar from '@/components/common/UserAvatar.vue'
 import useCommentService from '@/services/posts/commentService'
 import { useAuthStore } from '@/stores/authStore'
-import UserAvatar from '@/components/common/UserAvatar.vue'
+import { Button, InputText } from 'primevue'
+import { computed, onMounted, ref } from 'vue'
+import CommentItem from './CommentItem.vue'
 
 // Props for the component
 const props = defineProps({

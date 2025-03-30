@@ -1,17 +1,14 @@
-﻿using Linkify.Domain.Bases;
+﻿using Linkify.Application.Common.Helper;
+using Linkify.Application.Common.Models;
 using Linkify.Domain.Specifications;
+using Linkify.Domain.Specifications.Paging;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linkify.Infrastructure.DataAccessManagers.Repositories
 {
-    public static class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
+    public static class SpecificationEvaluator
     {
-        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, BaseSpecification<TEntity> spec)
+        public static IQueryable<TEntity> GetQuery<TEntity>(IQueryable<TEntity> inputQuery, BaseSpecification<TEntity> spec) where TEntity : class
         {
             IQueryable<TEntity> query = inputQuery;
 
@@ -20,33 +17,25 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
                 query = query.Where(spec.Criteria);
             }
 
-            foreach (var include in spec.Includes)
-            {
-                query = query.Include(include);
-            }
+            query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
-            bool isFirstOrderBy = true;
-            foreach (var (keySelector, isDescending) in spec.OrderByExpressions)
-            {
-                if (isFirstOrderBy)
-                {
-                    query = isDescending
-                        ? query.OrderByDescending(keySelector)
-                        : query.OrderBy(keySelector);
-                    isFirstOrderBy = false;
-                }
-                else
-                {
-                    query = isDescending
-                        ? ((IOrderedQueryable<TEntity>)query).ThenByDescending(keySelector)
-                        : ((IOrderedQueryable<TEntity>)query).ThenBy(keySelector);
-                }
-            }
-
-            if (spec.Skip.HasValue && spec.Take.HasValue)
-            {
-                query = query.Skip(spec.Skip.Value).Take(spec.Take.Value);
-            }
+            //bool isFirstOrderBy = true;
+            //foreach (var (keySelector, isDescending) in spec.OrderByExpressions)
+            //{
+            //    if (isFirstOrderBy)
+            //    {
+            //        query = isDescending
+            //            ? query.OrderByDescending(keySelector)
+            //            : query.OrderBy(keySelector);
+            //        isFirstOrderBy = false;
+            //    }
+            //    else
+            //    {
+            //        query = isDescending
+            //            ? ((IOrderedQueryable<TEntity>)query).ThenByDescending(keySelector)
+            //            : ((IOrderedQueryable<TEntity>)query).ThenBy(keySelector);
+            //    }
+            //}
 
             return query;
         }

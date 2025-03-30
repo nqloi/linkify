@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores/authStore'
-import { createRouter, createWebHistory, NavigationFailureType } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
     {
@@ -59,11 +59,29 @@ const routes = [
     },
     {
         path: '/profile/:id',
-        name: 'Profile',
-        component: () => import('@/views/profile/Profile.vue'),
-        meta: {
-            isPublicPage: false,
-        },
+        component: () => import('@/layout/ProfileLayout.vue'),
+        children: [
+            {
+                name: 'Profile',
+                path: '',
+                component: () => import('@/views/profile/ProfileTimeline.vue'),
+            },
+            // {
+            //     path: 'about',
+            //     name: 'profile-about',
+            //     component: () => import('@/views/profile/ProfileAbout.vue'),
+            // },
+            // {
+            //     path: 'friends',
+            //     name: 'profile-friends',
+            //     component: () => import('@/views/profile/ProfileFriendsList.vue'),
+            // },
+            // {
+            //     path: 'photos',
+            //     name: 'profile-photos',
+            //     component: () => import('@/views/profile/ProfilePhotosList.vue'),
+            // },
+        ],
     },
 ]
 
@@ -73,9 +91,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    // if (!to.matched?.length) {
-    //   next('/404')
-    // }
+    if (!to.matched?.length) {
+        next('/404')
+    }
 
     const { isAuthenticated } = useAuthStore()
 

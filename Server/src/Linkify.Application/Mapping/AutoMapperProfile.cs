@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Linkify.Application.Features.Posts.Queries.GetPost;
 using Linkify.Domain.Aggregates.PostAggregate;
+using Linkify.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;

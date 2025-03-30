@@ -20,7 +20,7 @@ namespace Linkify.Application.Features.Posts.Queries.GetPost
         public async Task<IEnumerable<GetPostDto>> Handle(GetPostRequest request, CancellationToken cancellationToken)
         {
             var userId = _currentUserService.GetUserId();
-            var spec = new PostWithDetailsSpecification(userId);
+            var spec = new PostByUserIdSpecification(userId);
 
             var query = _repository.GetWithSpecification(spec)
                .Select(post => new GetPostDto
@@ -28,12 +28,7 @@ namespace Linkify.Application.Features.Posts.Queries.GetPost
                    Id = post.Id,
                    Content = post.Content,
                    CreatedAt = post.CreatedAt,
-                   Creator = new CreatorDto
-                   {
-                       Id = post.UserProfile.UserId,
-                       DisplayName = post.UserProfile.DisplayName,
-                       AvatarUrl = post.UserProfile.AvatarUrl,
-                   },
+                   Creator = _mapper.Map<CreatorDto>(post.UserProfile),
                    Stats = new PostStatsDto
                    {
                        ReactionCount = post.Reactions.Count(),

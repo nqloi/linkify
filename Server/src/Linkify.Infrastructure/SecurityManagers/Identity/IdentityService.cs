@@ -86,7 +86,8 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
 
             var userProfile = new UserProfile() { 
                 DisplayName = registerCommandRequest.FirstName + " " + registerCommandRequest.LastName, 
-                UserId = applicationUser.Id
+                UserId = applicationUser.Id,
+                UserName = registerCommandRequest.UserName
             };
 
             await _userProfileRepo.CreateAsync(userProfile);

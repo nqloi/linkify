@@ -15,19 +15,8 @@ namespace Linkify.Application.Mapping
     {
         public static void Configure(Profile profile)
         {
-            profile.CreateMap<Post, GetPostDto>()
-                .ForMember(des => des.ImageUrls, opt => opt.MapFrom(src => src.PostImages.Select(pi => pi.ImageUrl).ToList()))
-                .ForMember(des => des.Creator, opt => opt.MapFrom(src => new CreatorDto
-                {
-                    Id = src.UserId,
-                    DisplayName = src.UserProfile.DisplayName,
-
-                }))
-                .ForMember(des => des.Stats, opt => opt.MapFrom(src => new PostStatsDto
-                {
-                    CommentCount = src.Comments.Count,
-                    ReactionCount = src.Reactions.Count,
-                }));
+            profile.CreateMap<Reaction, UserPostActionsDto>()
+            .ForMember(des => des.ReactionType, opt => opt.MapFrom(src => src.Type));
         }
     }
 }

@@ -1,19 +1,17 @@
-import useAxios from '../common/useAxios'
+import useAxios, { createAxiosConfig } from '../common/useAxios'
+import { createResourcePath } from '@/utils/routeUtils'
 
 const useCommentService = (postId) => {
-    const controller = `posts/${postId}/comments`
+    const controller = createResourcePath('posts', postId, 'comments')
 
-    const { baseService } = useAxios(controller)
+    const defaultConfig = createAxiosConfig({
+        controller,
+    })
 
-    const create = (newComment) => {
-        const { baseService } = useAxios(controller)
-
-        return baseService.create(newComment)
-    }
+    const { baseService } = useAxios(defaultConfig)
 
     return {
         ...baseService,
-        create,
     }
 }
 

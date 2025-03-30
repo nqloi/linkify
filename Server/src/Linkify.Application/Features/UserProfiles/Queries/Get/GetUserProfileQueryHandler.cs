@@ -22,21 +22,14 @@ namespace Linkify.Application.Features.UserProfiles.Queries.Get
 
         public async Task<ErrorOr<UserProfileDto>> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
         {
-            var user = await _repository.FirstOrDefaultAsync(u => u.UserId == request.UserId);
+            var userProfile = await _repository.FirstOrDefaultAsync(u => u.UserId == request.UserId);
 
-            if (user == null)
+            if (userProfile == null)
             {
                 return Error.NotFound("GetUserProfileQuery.Get", "User not found");
             }
 
-            var userProfileDto = new UserProfileDto
-            {
-                UserId = user.UserId,
-                AvatarUrl = user.AvatarUrl,
-                DisplayName = user.DisplayName,
-            };
-
-            return userProfileDto;
+            return _mapper.Map<UserProfileDto>(userProfile);
         }
     }
 }

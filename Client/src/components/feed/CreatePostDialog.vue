@@ -8,7 +8,7 @@
     >
         <template #header>
             <div class="inline-flex items-center justify-center gap-2">
-                <UserAvatar :avatarUrl="user.avatarUrl" :size="SIZE.SM" />
+                <UserAvatar :size="SIZE.SM" :user="user" />
                 <span class="font-bold whitespace-nowrap">{{ getDisplayName() }}</span>
             </div>
         </template>
@@ -85,7 +85,7 @@
 <script setup>
 import { useLoadingStore } from '@/stores/loadingStore'
 import { usePostStore } from '@/stores/postStore'
-import { Avatar, Textarea, Badge } from 'primevue'
+import { Textarea } from 'primevue'
 import { ref, watch } from 'vue'
 import FileUpload from 'primevue/fileupload'
 import { SIZE_UNITS, SIZE_BASE } from '@/common/constants/file'
