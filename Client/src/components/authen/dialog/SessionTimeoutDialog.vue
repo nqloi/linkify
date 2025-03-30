@@ -36,7 +36,7 @@ watch(
 
 const handleLoginAgain = async () => {
     visible.value = false
-    router.push('auth/login')
+    router.push('/auth/login')
 }
 </script>
 
