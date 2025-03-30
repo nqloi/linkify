@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Linkify.Application.Features.Posts.Queries.GetPost;
 using Linkify.Domain.Aggregates.PostAggregate;
+using Linkify.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,10 @@ namespace Linkify.Application.Mapping
     {
         public AutoMapperProfile()
         {
-            CreateMap<Post, GetPostDto>();
+            UserProfileMappingConfiguration.Configure(this);
+            PostMappingConfiguration.Configure(this);
+            CommentMappingConfiguration.Configure(this);
         }
     }
 }
+

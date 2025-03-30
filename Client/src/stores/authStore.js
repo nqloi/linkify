@@ -1,5 +1,5 @@
 import useAuthService from '@/services/authService'
-import { CACHE_KEYS } from '@/utils/cache/cacheContants'
+import { CACHE_KEYS } from '@/utils/cache/cacheConstants'
 import useCache from '@/utils/cache/useCache'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -12,6 +12,7 @@ export const useAuthStore = defineStore(
             userName: null,
             firstName: null,
             lastName: null,
+            avatarUrl: null,
         }
         const authService = useAuthService()
         const { setCache, removeCache } = useCache()
@@ -50,9 +51,17 @@ export const useAuthStore = defineStore(
             Object.assign(user, { ...defaultUser })
         }
 
-        const register = async () => {}
+        const getDisplayName = () => user.value.firstName + ' ' + user.value.lastName
 
-        return { isAuthenticated, user, login, logout, isSessionTimeout, onSessionTimeout }
+        return {
+            isAuthenticated,
+            isSessionTimeout,
+            user,
+            login,
+            logout,
+            onSessionTimeout,
+            getDisplayName,
+        }
     },
     {
         persist: true,

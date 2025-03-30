@@ -3,16 +3,11 @@ using Linkify.Application.Features.Authentication.Commands.Register;
 using Linkify.Application.Features.Authentication.Common;
 using Linkify.Application.Repositories;
 using Linkify.Domain.Aggregates.Token;
-using Linkify.Domain.Aggregates.UserAggregate;
-using Linkify.Infrastructure.DataAccessManagers.Repositories;
+using Linkify.Domain.Aggregates.UserProfileAggregate;
+using Linkify.Domain.Constants;
 using Linkify.Infrastructure.SecurityManagers.Tokens;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Linkify.Infrastructure.SecurityManagers.Identity
 {
@@ -23,18 +18,21 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
         private readonly ITokenRepository _tokenRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IBaseCommandRepository<UserProfile> _userProfileRepo;
 
         public IdentityService(UserManager<ApplicationUser> userManager,
             ITokenService tokenService,
             ITokenRepository tokenRepository,
             IUnitOfWork unitOfWork,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IBaseCommandRepository<UserProfile> userProfileRepo)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _tokenRepository = tokenRepository;
             _unitOfWork = unitOfWork;
             _signInManager = signInManager;
+            _userProfileRepo = userProfileRepo;
         }
 
         public async Task<AuthenticationResult> LoginAsync(string username, string password, CancellationToken cancellationToken = default)
@@ -83,7 +81,18 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
                registerCommandRequest.FirstName,
                registerCommandRequest.LastName
             );
+
             var result = await _userManager.CreateAsync(applicationUser, registerCommandRequest.Password);
+
+            var userProfile = new UserProfile() { 
+                DisplayName = registerCommandRequest.FirstName + " " + registerCommandRequest.LastName, 
+                UserId = applicationUser.Id,
+                UserName = registerCommandRequest.UserName
+            };
+
+            await _userProfileRepo.CreateAsync(userProfile);
+
+            await _unitOfWork.SaveAsync(cancellationToken);
 
             if (!result.Succeeded)
             {
@@ -95,14 +104,14 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
 
         public async Task<AuthenticationResult> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
         {
-            var token = await _tokenRepository.GetByRefreshTokenAsync(refreshToken);
+            var token = await _tokenRepository.GetByRefreshTokenAsync(refreshToken, cancellationToken);
 
             if (token.ExpiryDate < DateTime.UtcNow)
             {
                 throw new IdentityException("Refresh token has expired, please re-login");
             }
 
-            var user = await _userManager.FindByIdAsync(token.UserId);
+            var user = await _userManager.FindByIdAsync(token.UserId.ToString());
 
             if (user == null)
             {
@@ -111,6 +120,13 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
 
             var newAccessToken = _tokenService.GenerateToken(user, new List<Claim>());
             var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+            token.RefreshToken = newRefreshToken;
+            token.ExpiryDate = DateTime.UtcNow.AddDays(TokenConst.ExpiryInDays);
+
+            _tokenRepository.Update(token);
+
+            await _unitOfWork.SaveAsync(cancellationToken);
 
             return new AuthenticationResult
             {

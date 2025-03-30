@@ -5,7 +5,6 @@
             :numVisible="5"
             :numScroll="1"
             orientation="horizontal"
-            class="custom-carousel"
             :circular="true"
             :showIndicators="false"
             @onPage="loadMoreStories"

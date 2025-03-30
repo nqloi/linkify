@@ -7,8 +7,9 @@ namespace Linkify.Domain.Aggregates.PostAggregate
     {
         public Guid UserId { get; private set; } // Who reacted
         public ReactionType Type { get; private set; } // Type of reaction
+        public Guid PostId { get; private set; }
+        public Post Post { get; private set; }
 
-        private Reaction() { } // Required for EF Core
         public Reaction(Guid userId, ReactionType type) : base(userId)
         {
             if (userId == Guid.Empty) throw new ArgumentNullException(nameof(userId));

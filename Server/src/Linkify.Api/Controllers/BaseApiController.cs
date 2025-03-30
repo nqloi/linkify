@@ -1,8 +1,10 @@
 ﻿using Asp.Versioning;
+using ErrorOr;
 using Linkify.Api.Common.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Common.Models;
 
 namespace WebAPI.Controllers;
 
@@ -13,15 +15,22 @@ public abstract class BaseApiController(ISender sender) : ControllerBase
 {
     protected readonly ISender _sender = sender;
 
-    //[AllowAnonymous]
-    [HttpGet("health-check")]
-    public ActionResult<ApiSuccessResult<bool>> HealthCheck()
+    protected IActionResult HandleResult<T>(ErrorOr<T> result)
     {
-        return new ApiSuccessResult<bool>
+        if (result.IsError)
         {
-            Code = StatusCodes.Status200OK,
-            Message = $"Success",
-            Content = true
-        };
+            var error = result.Errors.FirstOrDefault();
+
+            return BadRequest(new ApiErrorResult
+            {
+                Code = StatusCodes.Status400BadRequest,
+                Message = error.Description
+            });
+        }
+
+        return Ok(new ApiSuccessResult<T>
+        {
+            Content = result.Value
+        });
     }
 }

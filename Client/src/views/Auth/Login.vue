@@ -37,12 +37,11 @@
 <script setup>
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
-import Checkbox from 'primevue/checkbox'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import { useCustomToast } from '@/utils/toast/customToast'
-import exceptionType from '@/common/contants/exceptionType'
+import exceptionType from '@/common/constants/exceptionType'
 
 const toast = useCustomToast()
 const route = useRouter()

@@ -9,7 +9,8 @@ const useAuthService = () => {
         login: (credentials) => instance.post('/login', credentials),
         logout: () => instance.post('/logout'),
         register: (registerInfo) => instance.post('/register', registerInfo),
-        checkDuplicateUsername: (username) => instance.post('/check-username', username),
+        checkDuplicateUsername: (username) =>
+            instance.post('/check-username', JSON.stringify(username)),
     }
 }
 

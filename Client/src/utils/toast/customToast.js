@@ -22,7 +22,7 @@ export const useCustomToast = () => {
     }
 
     return {
-        ...toast, // Kế thừa các method gốc từ useToast
+        ...toast,
         showCustomSuccess,
         showCustomError,
     }

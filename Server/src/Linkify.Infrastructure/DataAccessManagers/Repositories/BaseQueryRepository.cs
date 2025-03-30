@@ -1,5 +1,6 @@
 ﻿using Linkify.Application.Repositories;
 using Linkify.Domain.Bases;
+using Linkify.Domain.Specifications;
 using Linkify.Infrastructure.DataAccessManagers.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -11,34 +12,62 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
         protected readonly ApplicationDbContext _context = context;
         protected readonly DbSet<TEntity> _dbSet = context.Set<TEntity>();
 
-        public async Task<TEntity?> GetByIdAsync(Guid id)
+        public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.FindAsync(id, cancellationToken);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _dbSet.AsNoTracking().ToListAsync();
+            return await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
+            return await _dbSet.AsNoTracking().Where(predicate).ToListAsync(cancellationToken);
         }
 
-        public IQueryable<TEntity> Query()
+        public IQueryable<TEntity> AsNoTrackingQuery()
         {
             return _dbSet.AsNoTracking();
         }
 
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.AsNoTracking().AnyAsync(predicate);
+            return await _dbSet.AsNoTracking().AnyAsync(predicate, cancellationToken);
         }
 
-        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.AsNoTracking().CountAsync(predicate);
+            var query = _context.Set<TEntity>().AsQueryable();
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            return await query.CountAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetWithSpecificationAsync(BaseSpecification<TEntity> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
+            return await query.ToListAsync(cancellationToken);
+        }
+
+        public IQueryable<TEntity> GetWithSpecification(BaseSpecification<TEntity> spec)
+        {
+            return SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), spec);
+        }
+
+        public async Task<List<T>> QueryAsync<T>(IQueryable<T> query, CancellationToken cancellationToken = default)
+        {
+            return await query.ToListAsync(cancellationToken);
+        }
+
+        public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken);
         }
     }
 }

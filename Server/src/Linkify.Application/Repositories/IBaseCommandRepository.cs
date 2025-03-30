@@ -20,10 +20,13 @@ namespace Linkify.Application.Repositories
 
         void Purge(T entity);
 
+        void DeleteById(Guid id);
+
         Task<T?> GetAsync(Guid id, CancellationToken cancellationToken = default);
 
         T? Get(Guid id);
 
         IQueryable<T> GetQuery();
+        Task<T?> GetWithIncludesAsync(Guid id, CancellationToken cancellationToken = default, params System.Linq.Expressions.Expression<Func<T, object>>[] includes);
     }
 }

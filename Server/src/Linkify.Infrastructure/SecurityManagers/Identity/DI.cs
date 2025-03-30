@@ -44,8 +44,8 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
                 // SignIn settings
                 options.SignIn.RequireConfirmedEmail = identitySettings.SignIn.RequireConfirmedEmail;
 
-            }).AddEntityFrameworkStores<ApplicationDbContext>();
-                
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 

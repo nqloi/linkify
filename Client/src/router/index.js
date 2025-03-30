@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores/authStore'
-import { createRouter, createWebHistory, NavigationFailureType } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
     {
@@ -9,17 +9,17 @@ const routes = [
             {
                 path: '',
                 name: 'Home',
-                component: () => import('../views/Home/Home.vue'),
+                component: () => import('../views/home/Home.vue'),
             },
             {
                 path: '1',
                 name: 'Home1',
-                component: () => import('../views/Home/Home.vue'),
+                component: () => import('../views/home/Home.vue'),
             },
             {
                 path: '2',
                 name: 'Home2',
-                component: () => import('../views/Home/Home.vue'),
+                component: () => import('../views/home/Home.vue'),
             },
         ],
         meta: {
@@ -33,12 +33,12 @@ const routes = [
             {
                 path: 'login',
                 name: 'Login',
-                component: () => import('@/views/Auth/Login.vue'),
+                component: () => import('@/views/auth/Login.vue'),
             },
             {
                 path: 'register',
                 name: 'Register',
-                component: () => import('@/views/Auth/Register.vue'),
+                component: () => import('@/views/auth/Register.vue'),
             },
             {
                 path: '',
@@ -52,10 +52,36 @@ const routes = [
     {
         path: '/404',
         name: 'NotFound',
-        component: () => import('@/views/Common/NotFound.vue'),
+        component: () => import('@/views/common/NotFound.vue'),
         meta: {
             isPublicPage: true,
         },
+    },
+    {
+        path: '/profile/:id',
+        component: () => import('@/layout/ProfileLayout.vue'),
+        children: [
+            {
+                name: 'Profile',
+                path: '',
+                component: () => import('@/views/profile/ProfileTimeline.vue'),
+            },
+            // {
+            //     path: 'about',
+            //     name: 'profile-about',
+            //     component: () => import('@/views/profile/ProfileAbout.vue'),
+            // },
+            // {
+            //     path: 'friends',
+            //     name: 'profile-friends',
+            //     component: () => import('@/views/profile/ProfileFriendsList.vue'),
+            // },
+            // {
+            //     path: 'photos',
+            //     name: 'profile-photos',
+            //     component: () => import('@/views/profile/ProfilePhotosList.vue'),
+            // },
+        ],
     },
 ]
 
@@ -65,9 +91,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    // if (!to.matched?.length) {
-    //   next('/404')
-    // }
+    if (!to.matched?.length) {
+        next('/404')
+    }
 
     const { isAuthenticated } = useAuthStore()
 
