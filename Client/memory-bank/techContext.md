@@ -8,12 +8,18 @@
    - Vue Router (Routing)
    - Tailwind CSS (Styling)
    - SCSS (Custom Styling)
+   - PrimeVue (Lib component)
 
 2. Key Dependencies
    - Axios (HTTP Client)
    - socket.io-client (WebSocket)
    - @vueuse/core (Vue Composables)
    - dayjs (Time Formatting)
+   - moment
+
+## Coding convention
+   - Always prioritize using built-in components from PrimeVue v4.
+   - Some components are already globally imported and do not need to be imported again: Button, Dialog, InputText, FloatLabel, ConfirmDialog.
 
 ## Development Setup
 1. Project Structure

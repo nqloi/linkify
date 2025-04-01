@@ -27,9 +27,9 @@ Linkify is a social media application that enables users to connect, share posts
 
 ## Technical Stack
 - Frontend: Vue.js with Vue Router and Pinia
-- UI: Tailwind CSS
+- UI library: Tailwind CSS, PrimeVue v4, validate with Yup
 - HTTP Client: Axios
-- Real-time: WebSocket integration
+- Real-time: WebSocket integration, mediatR for realtime
 
 ## Project Goals
 - Create an intuitive and responsive social media platform
