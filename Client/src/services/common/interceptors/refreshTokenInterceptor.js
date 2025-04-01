@@ -21,9 +21,7 @@ export const createRefreshTokenInterceptor = (instance, refreshTokenUrl) => {
             const refreshToken = getCache(CACHE_KEYS.REFRESH_TOKEN)
             if (!refreshToken) throw new Error('No refresh token available')
 
-            const response = await instance.post(refreshTokenUrl, {
-                refreshToken,
-            })
+            const response = await instance.post(refreshTokenUrl, refreshToken)
             const { accessToken, refreshToken: newRefreshToken } = response.content
 
             if (!accessToken) throw new Error('Failed to refresh access token')

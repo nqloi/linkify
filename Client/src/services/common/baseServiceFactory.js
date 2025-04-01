@@ -50,21 +50,40 @@ const encodeQueryParams = (params = {}) => {
     return searchParams
 }
 
+// Utility to handle FormData
+const createFormData = (data) => {
+    if (data instanceof FormData) return data
+    const formData = new FormData()
+    Object.entries(data).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+            if (value instanceof File) {
+                formData.append(key, value)
+            } else if (typeof value === 'object') {
+                formData.append(key, JSON.stringify(value))
+            } else {
+                formData.append(key, value)
+            }
+        }
+    })
+    return formData
+}
+
 export const createBaseService = (instance) => {
-    const makeRequest = async (method, url = '', data = null, params = null) => {
+    const makeRequest = async (method, url = '', data = null, params = null, config = {}) => {
         const finalUrl = url ? `/${url}` : ''
 
-        const config = {
+        const requestConfig = {
             method,
             url: finalUrl,
             paramsSerializer: {
                 serialize: (params) => encodeQueryParams(params).toString(),
             },
             ...(data && { data }),
-            ...(params && { params }), // Pass params directly, let axios handle with paramsSerializer
+            ...(params && { params }),
+            ...config,
         }
 
-        return instance(config)
+        return instance(requestConfig)
     }
 
     return {
@@ -80,14 +99,53 @@ export const createBaseService = (instance) => {
 
         getById: (id) => makeRequest('get', id),
 
+        // File upload methods
+        upload: (endpoint, data) => {
+            const formData = createFormData(data)
+            return makeRequest('post', endpoint, formData, null, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+        },
+
+        updateWithFile: (endpoint, data) => {
+            const formData = createFormData(data)
+            return makeRequest('put', endpoint, formData, null, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+        },
+
         // Additional utility methods
         patch: (id, data) => makeRequest('patch', id, data),
+
+        patchWithFile: (endpoint, data) => {
+            const formData = createFormData(data)
+            return makeRequest('patch', endpoint, formData, null, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+        },
 
         head: (url) => makeRequest('head', url),
 
         options: (url) => makeRequest('options', url),
 
-        // Custom request method for flexibility
-        request: (method, url, data, params) => makeRequest(method, url, data, params),
+        // Custom request methods for flexibility
+        request: (method, url, data, params, config) =>
+            makeRequest(method, url, data, params, config),
+
+        uploadRequest: (method, url, data, config = {}) => {
+            const formData = createFormData(data)
+            return makeRequest(method, url, formData, null, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                ...config,
+            })
+        },
     }
 }
