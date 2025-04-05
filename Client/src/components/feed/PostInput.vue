@@ -54,8 +54,8 @@
 </template>
 
 <script setup>
-import { Fragment, ref } from 'vue'
 import { Avatar } from 'primevue'
+import { ref } from 'vue'
 import SimpleCard from '../common/SimpleCard.vue'
 import CreatePostDialog from './CreatePostDialog.vue'
 

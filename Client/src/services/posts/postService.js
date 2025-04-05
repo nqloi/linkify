@@ -7,12 +7,20 @@ const usePostService = () => {
 
     const defaultConfig = createAxiosConfig({
         controller,
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
     })
 
     const { baseService } = useAxios(defaultConfig)
+
+    const create = (data) => {
+        const { baseService } = useAxios({
+            controller,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+
+        return baseService.create(data)
+    }
 
     const getCursorPagedUserPosts = (userId, pagingParams = {}) => {
         const path = createResourcePath('users', userId)
@@ -24,6 +32,7 @@ const usePostService = () => {
 
     return {
         ...baseService,
+        create,
         getCursorPagedUserPosts,
     }
 }

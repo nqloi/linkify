@@ -5,20 +5,14 @@
 
         <!-- Main Content -->
         <div class="md:col-span-2">
-            <!-- <CreatePost
-                v-if="profileStore.isCurrentUser"
-                @create="profileStore.handleCreatePost"
-                class="mb-4"
-            /> -->
+            <PostInput class="mb-4" />
             <ProfilePosts />
         </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useProfileStore } from '@/stores/profileStore'
-import ProfileSidebar from './components/ProfileSidebar.vue'
+import PostInput from '@/components/feed/PostInput.vue'
 import ProfilePosts from './components/ProfilePosts.vue'
-// import CreatePost from '@/components/common/CreatePost.vue'
+import ProfileSidebar from './components/ProfileSidebar.vue'
 </script>

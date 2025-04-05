@@ -59,7 +59,7 @@
                             :label="isFriend ? 'Friends' : 'Add Friend'"
                             :icon="isFriend ? 'pi pi-check' : 'pi pi-user-plus'"
                             :class="{ 'p-button-outlined': isFriend }"
-                            @click="$emit('friend-action')"
+                            @click="handleFriendRequest"
                             class="rounded-full"
                         />
                         <Button
@@ -84,8 +84,9 @@
 </template>
 
 <script setup>
-import Button from 'primevue/button'
 import defaultAvatar from '@/assets/images/avatar-default.svg'
+import useFriendShipService from '@/services/friendShips/friendShipService'
+import Button from 'primevue/button'
 
 const props = defineProps({
     userProfile: {
@@ -110,6 +111,19 @@ const emit = defineEmits([
     'message',
     'more-actions',
 ])
+
+const handleFriendRequest = async () => {
+    const friendShipService = useFriendShipService()
+    try {
+        await friendShipService.sendRequestAddFriend(props.userProfile.userId)
+    } catch (error) {
+        console.error('Error adding friend:', error)
+    }
+}
+
+const handleRemoveFriend = () => {
+    console.log(1)
+}
 
 const handleImageError = (e) => {
     e.target.src = '/default-avatar.jpg'

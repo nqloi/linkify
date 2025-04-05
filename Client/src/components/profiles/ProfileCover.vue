@@ -36,7 +36,11 @@
 
         <!-- Quick Actions Menu (Only for current user) -->
         <div v-if="isCurrentUser" class="absolute bottom-4 right-4 flex">
-            <Button icon="pi pi-camera" @click="$emit('change-cover')"
+            <Button
+                icon="pi pi-camera"
+                @click="$emit('change-cover')"
+                class="min-w-44"
+                severity="secondary"
                 >Edit your cover photo</Button
             >
         </div>
