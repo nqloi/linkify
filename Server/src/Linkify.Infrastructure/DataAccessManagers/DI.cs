@@ -1,7 +1,8 @@
-﻿using Linkify.Application.Repositories;
+﻿﻿using Linkify.Application.Repositories;
 using Linkify.Infrastructure.DataAccessManagers.Context;
 using Linkify.Infrastructure.DataAccessManagers.Repositories;
 using Linkify.Infrastructure.DataAccessManagers.Repositories.Posts;
+using Linkify.Infrastructure.DataAccessManagers.Repositories.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ public static class DI
         services.AddScoped(typeof(IBaseQueryRepository<>), typeof(BaseQueryRepository<>));
         services.AddScoped<ITokenRepository, TokenRepository>();
         services.AddScoped<IPostRepository, PostRepository>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
 
         return services;
     }

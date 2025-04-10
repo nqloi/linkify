@@ -79,6 +79,6 @@ app.MapControllers();
 
 // Map SignalR Hub
 app.MapHub<ChatHub>("/hubs/chat");
-app.MapHub<NotificationHub>("/hubs/notification");
+app.MapHub<NotificationHub>("/hubs/notifications").RequireAuthorization();
 
 app.Run();

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Features.Comments.Commands.CreateComment
 {
-    public class CreateCommentCommandHandler : BaseCommandHandler<Post>, IRequestHandler<CreateCommentCommand, ErrorOr<Guid>>
+    public class CreateCommentCommandHandler : BaseCommandHandler<Post, IBaseCommandRepository<Post>>, IRequestHandler<CreateCommentCommand, ErrorOr<Guid>>
     {
         public CreateCommentCommandHandler(
             IBaseCommandRepository<Post> repository, 

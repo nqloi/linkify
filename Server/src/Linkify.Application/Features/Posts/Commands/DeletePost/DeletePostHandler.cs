@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Features.Posts.Commands.DeletePost
 {
-    public class DeletePostHandler : BaseCommandHandler<Post>, IRequestHandler<DeletePostRequest, bool>
+    public class DeletePostHandler : BaseCommandHandler<Post, IBaseCommandRepository<Post>>, IRequestHandler<DeletePostRequest, bool>
     {
         private readonly IFileService _fileService;
         CloudFolderPathSettings _folderPath;

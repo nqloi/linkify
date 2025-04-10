@@ -52,8 +52,7 @@
 
 <script setup>
 import SimpleCard from '@/components/common/SimpleCard.vue'
-import { useAuthStore } from '@/stores/authStore'
-import { Avatar, Card } from 'primevue'
+import { Avatar } from 'primevue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -103,10 +102,6 @@ const isActiveRoute = (path) => route.path === path
 </script>
 
 <style scoped lang="scss">
-.dark-card {
-    @apply dark:bg-surface-0 dark:text-white;
-}
-
 .sidebar-left {
     background-color: var(--p-surface-card);
     color: var(--text-color);

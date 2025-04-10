@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Features.Comments.Commands.DeleteComment
 {
-    public class DeleteCommentCommandHandler : BaseCommandHandler<Post>, IRequestHandler<DeleteCommentCommand, ErrorOr<bool>>
+    public class DeleteCommentCommandHandler : BaseCommandHandler<Post, IBaseCommandRepository<Post>>, IRequestHandler<DeleteCommentCommand, ErrorOr<bool>>
     {
         public DeleteCommentCommandHandler(IBaseCommandRepository<Post> repository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : base(repository, unitOfWork, currentUserService)
         {

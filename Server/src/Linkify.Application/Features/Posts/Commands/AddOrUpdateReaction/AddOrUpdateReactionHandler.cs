@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Linkify.Application.Features.Posts.Commands.AddOrUpdateReaction
 {
-    public class AddOrUpdateReactionHandler : BaseCommandHandler<Post>, IRequestHandler<AddOrUpdateReactionCommand, ErrorOr<bool>>
+    public class AddOrUpdateReactionHandler : BaseCommandHandler<Post, IBaseCommandRepository<Post>>, IRequestHandler<AddOrUpdateReactionCommand, ErrorOr<bool>>
     {
         public AddOrUpdateReactionHandler(IBaseCommandRepository<Post> repository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : base(repository, unitOfWork, currentUserService)
         {

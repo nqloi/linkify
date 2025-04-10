@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Linkify.Application.Features.Comments.Commands.UpdateComment
 {
-    public class UpdateCommentCommandHandler : BaseCommandHandler<Post>, IRequestHandler<UpdateCommentCommand, ErrorOr<bool>>
+    public class UpdateCommentCommandHandler : BaseCommandHandler<Post, IBaseCommandRepository<Post>>, IRequestHandler<UpdateCommentCommand, ErrorOr<bool>>
     {
         public UpdateCommentCommandHandler(IBaseCommandRepository<Post> repository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : base(repository, unitOfWork, currentUserService)
         {

@@ -1,6 +1,26 @@
 @use './utils';
 @use './variables';
+@use './variables/scrollbar';
 
 html {
     font-size: 14px;
+}
+
+/* Global scrollbar styling */
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-hover);
 }

@@ -27,13 +27,17 @@
                         @click="toggleDarkMode"
                         severity="secondary"
                         variant="outlined"
-                        class="p-2 mr-24 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                        class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
                         v-tooltip.left="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
                     >
                         <i class="pi" :class="isDarkMode ? 'pi-sun' : 'pi-moon'"></i>
                     </Button>
 
-                    <div class="relative">
+                    <!-- Notifications -->
+                    <TheNotificationPanel />
+
+                    <!-- User Menu -->
+                    <div class="relative ml-2">
                         <Avatar
                             :image="profileStore.avatarUrl ?? defaultAvatar"
                             @click="toggleUserMenu"
@@ -51,22 +55,23 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 import { useProfileStore } from '@/stores/profileStore'
 import Logo from '@/components/common/Logo.vue'
 import defaultAvatar from '@/assets/images/avatar-default.svg'
 import Menu from 'primevue/menu'
 import router from '@/router'
-import { Avatar } from 'primevue'
+import { Avatar, Button } from 'primevue'
+import TheNotificationPanel from '@/components/notification/TheNotificationPanel.vue'
 
 const authStore = useAuthStore()
 const profileStore = useProfileStore()
-const userProfile = computed(() => profileStore.currentUserProfile)
+
+const userProfile = ref(profileStore.currentUserProfile)
 const menu = ref()
 const searchText = ref('')
 const isDarkMode = ref(false)
-
 // Menu items for user dropdown
 const menuItems = [
     {
@@ -100,19 +105,24 @@ const toggleDarkMode = () => {
 }
 
 onMounted(() => {
-    // Initialize dark mode from localStorage or system preference
-    const savedDarkMode = localStorage.getItem('darkMode')
-    if (savedDarkMode !== null) {
-        isDarkMode.value = savedDarkMode === 'true'
-    } else {
-        isDarkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
+    try {
+        // Initialize dark mode from localStorage or system preference
+        const savedDarkMode = localStorage.getItem('darkMode')
+        if (savedDarkMode !== null) {
+            isDarkMode.value = savedDarkMode === 'true'
+        } else {
+            isDarkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+        }
 
-    // Apply initial dark mode state
-    if (isDarkMode.value) {
-        document.documentElement.classList.add('dark')
-    } else {
-        document.documentElement.classList.remove('dark')
+        // Apply initial dark mode state
+        if (isDarkMode.value) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    } catch (error) {
+        console.error('Error initializing dark mode:', error)
+        isDarkMode.value = false
     }
 })
 </script>

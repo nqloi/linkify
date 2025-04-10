@@ -1,5 +1,55 @@
 .dark {
-    --surface-ground: var(--p-surface-950);
-    --code-background: var(--p-surface-800);
-    --code-color: var(--p-surface-100);
+    // Dark theme RGB values
+    --surface-900-rgb: 26, 32, 44; // #1a202c
+    --surface-800-rgb: 45, 55, 72; // #2d3748
+    --surface-700-rgb: 74, 85, 104; // #4a5568
+    --surface-600-rgb: 113, 128, 150; // #718096
+    --surface-500-rgb: 160, 174, 192; // #a0aec0
+    --surface-400-rgb: 203, 213, 224; // #cbd5e0
+    --surface-50-rgb: 247, 250, 252; // #f7fafc
+
+    // Dark theme opacity values
+    --surface-hover-opacity: 0.1;
+    --surface-active-opacity: 0.15;
+
+    // Base surface colors
+    --surface-ground: rgb(var(--surface-900-rgb));
+    --surface-card: rgb(var(--surface-900-rgb));
+    --surface-border: rgb(var(--surface-800-rgb));
+    --surface-hover: rgba(var(--surface-800-rgb), var(--surface-hover-opacity));
+
+    // PrimeVue dark mode overrides
+    --primary-color: var(--p-primary-400);
+    --text-color: rgb(var(--surface-50-rgb));
+    --text-color-secondary: rgba(var(--surface-400-rgb), 0.9);
+    --overlay-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+    // Skeleton in dark mode
+    --skeleton-bg: rgb(var(--surface-800-rgb));
+    --skeleton-animation-bg: linear-gradient(90deg,
+            rgba(var(--surface-900-rgb), 0) 0%,
+            rgba(var(--surface-900-rgb), 0.04) 50%,
+            rgba(var(--surface-900-rgb), 0) 100%);
+
+    // Utility classes colors
+    --code-background: rgb(var(--surface-800-rgb));
+    --code-color: rgb(var(--surface-50-rgb));
+
+    // PrimeVue popup overrides
+    --p-popover-bg: rgb(var(--surface-900-rgb));
+    --p-popover-border: rgb(var(--surface-800-rgb));
+    --p-popover-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+
+    // Scrollbar colors
+    --scrollbar-thumb: rgb(var(--surface-700-rgb));
+    --scrollbar-track: rgb(var(--surface-900-rgb));
+    --scrollbar-hover: rgb(var(--surface-600-rgb));
+
+    // Notification specific variables
+    --notification-bg: rgb(var(--surface-900-rgb));
+    --notification-hover: rgba(var(--surface-800-rgb), 0.8);
+    --notification-unread: rgba(var(--primary-400-rgb), 0.2);
+    --notification-unread-hover: rgba(var(--primary-400-rgb), 0.25);
+    --notification-divider: rgb(var(--surface-800-rgb));
+    --notification-shadow: var(--p-popover-shadow);
 }

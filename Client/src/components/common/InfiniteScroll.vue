@@ -94,25 +94,34 @@ onUnmounted(() => {
 .infinite-scroll-container {
     position: relative;
     min-height: 100px;
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
 }
 
 .infinite-scroll-trigger {
     width: 100%;
-    height: 50px;
+    min-height: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0.5rem 0;
 }
 
 .loading-indicator,
 .error-message,
 .end-message {
-    padding: 1rem;
+    padding: 0.5rem 0;
     text-align: center;
     color: var(--text-color-secondary);
 }
 
 .error-message {
     color: var(--red-500);
+}
+
+.end-message {
+    font-size: 0.875rem;
+    opacity: 0.75;
 }
 </style>

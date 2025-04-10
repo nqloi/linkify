@@ -20,6 +20,8 @@
 ## Coding convention
    - Always prioritize using built-in components from PrimeVue v4.
    - Some components are already globally imported and do not need to be imported again: Button, Dialog, InputText, FloatLabel, ConfirmDialog.
+   - When creating a service, it is necessary to inherit the shared functions in baseServiceFactory.js and useAxios.js. Example is postService.js
+   - Using logger.js to handle exception. No show toast message
 
 ## Development Setup
 1. Project Structure

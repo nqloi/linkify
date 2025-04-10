@@ -9,7 +9,7 @@ using MediatR;
 
 namespace Linkify.Application.Features.Posts.Commands.CreatePost
 {
-    public class CreatePostCommandHandler : BaseCommandHandler<Post>, IRequestHandler<CreatePostCommand, GetPostDto>
+    public class CreatePostCommandHandler : BaseCommandHandler<Post, IBaseCommandRepository<Post>>, IRequestHandler<CreatePostCommand, GetPostDto>
     {
         private readonly IFileService _fileService;
         private readonly IMapper _mapper;

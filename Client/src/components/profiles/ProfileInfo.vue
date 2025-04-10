@@ -85,8 +85,9 @@
 
 <script setup>
 import defaultAvatar from '@/assets/images/avatar-default.svg'
-import useFriendShipService from '@/services/friendShips/friendShipService'
+import useFriendshipService from '@/services/friendShips/friendShipService'
 import Button from 'primevue/button'
+import { useToast } from 'primevue/usetoast'
 
 const props = defineProps({
     userProfile: {
@@ -107,22 +108,66 @@ const props = defineProps({
 const emit = defineEmits([
     'edit-profile',
     'change-avatar',
-    'friend-action',
     'message',
     'more-actions',
+    'friend-action',
 ])
 
+const toast = useToast()
+const friendshipService = useFriendshipService()
+
 const handleFriendRequest = async () => {
-    const friendShipService = useFriendShipService()
+    if (props.isFriend) {
+        return handleRemoveFriend()
+    }
+
     try {
-        await friendShipService.sendRequestAddFriend(props.userProfile.userId)
+        const response = await friendshipService.sendRequest(props.userProfile.userId)
+        if (!response) return
+
+        // Update parent component with new friend request status
+        emit('friend-action', { type: 'request', userId: props.userProfile.userId })
+
+        toast.add({
+            severity: 'success',
+            summary: 'Friend Request Sent',
+            detail: `Friend request sent to ${props.userProfile.displayName}`,
+            life: 3000,
+        })
     } catch (error) {
-        console.error('Error adding friend:', error)
+        console.error('Error sending friend request:', error)
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.response?.data?.message || 'Failed to send friend request',
+            life: 3000,
+        })
     }
 }
 
-const handleRemoveFriend = () => {
-    console.log(1)
+const handleRemoveFriend = async () => {
+    try {
+        const response = await friendshipService.removeFriend(props.userProfile.userId)
+        if (!response) return
+
+        // Update parent component with removed friend status
+        emit('friend-action', { type: 'remove', userId: props.userProfile.userId })
+
+        toast.add({
+            severity: 'info',
+            summary: 'Friend Removed',
+            detail: `${props.userProfile.displayName} has been removed from your friends`,
+            life: 3000,
+        })
+    } catch (error) {
+        console.error('Error removing friend:', error)
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.response?.data?.message || 'Failed to remove friend',
+            life: 3000,
+        })
+    }
 }
 
 const handleImageError = (e) => {

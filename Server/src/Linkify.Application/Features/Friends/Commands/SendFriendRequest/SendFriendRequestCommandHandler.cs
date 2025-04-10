@@ -10,7 +10,7 @@ using MediatR;
 
 namespace Linkify.Application.Features.Friendships.Commands.SendFriendRequest
 {
-    public class SendFriendRequestCommandHandler : BaseCommandHandler<Friendship>,
+    public class SendFriendRequestCommandHandler : BaseCommandHandler<Friendship, IBaseCommandRepository<Friendship>>,
         IRequestHandler<SendFriendRequestCommand, ErrorOr<bool>>
     {
         private readonly IBaseCommandRepository<Notification> _notificationRepository;
@@ -68,7 +68,7 @@ namespace Linkify.Application.Features.Friendships.Commands.SendFriendRequest
                 "New Friend Request",
                 $"You have received a new friend request",
                 NotificationType.FriendRequest,
-                $"/friends/requests/{friendRequest.Value?.Id}");
+                $"/profile/{request.ReceiverId}");
 
             await _notificationRepository.CreateAsync(notification, cancellationToken);
 

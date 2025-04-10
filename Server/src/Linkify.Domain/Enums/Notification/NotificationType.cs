@@ -8,7 +8,7 @@ namespace Linkify.Domain.Enums.Notification
 {
     public enum NotificationType
     {
-        FriendRequest,
+        FriendRequest = 1,
         FriendRequestAccepted,
         FriendRequestRejected,
         Other

@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Linkify.Application.Features.Posts.Commands.RemoveReaction
 {
-    public class RemoveReactionHandler : BaseCommandHandler<Post>, IRequestHandler<RemoveReactionCommand, ErrorOr<bool>>
+    public class RemoveReactionHandler : BaseCommandHandler<Post, IBaseCommandRepository<Post>>, IRequestHandler<RemoveReactionCommand, ErrorOr<bool>>
     {
         public RemoveReactionHandler(IBaseCommandRepository<Post> repository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : base(repository, unitOfWork, currentUserService)
         {
