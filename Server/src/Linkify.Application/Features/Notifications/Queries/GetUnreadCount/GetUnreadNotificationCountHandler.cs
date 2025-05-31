@@ -8,18 +8,15 @@ using MediatR;
 
 namespace Linkify.Application.Features.Notifications.Queries.GetUnreadCount
 {
-    public class GetUnreadNotificationCountHandler 
+    public class GetUnreadNotificationCountHandler
         : BaseQueryHandler<Notification>,
-        IRequestHandler<GetUnreadNotificationCountQuery, ErrorOr<int>>
+          IRequestHandler<GetUnreadNotificationCountQuery, ErrorOr<int>>
     {
         private readonly INotificationRepository _notificationRepository;
 
-        public GetUnreadNotificationCountHandler(
-            IBaseQueryRepository<Notification> repository,
-            ICurrentUserService currentUserService,
-            IMapper mapper,
-            INotificationRepository notificationRepository)
-            : base(repository, currentUserService, mapper)
+        public GetUnreadNotificationCountHandler(IBaseQueryRepository<Notification> repository, 
+            ICurrentUserService currentUserService, IMapper mapper, 
+            INotificationRepository notificationRepository) : base(repository, currentUserService, mapper)
         {
             _notificationRepository = notificationRepository;
         }
@@ -29,7 +26,9 @@ namespace Linkify.Application.Features.Notifications.Queries.GetUnreadCount
             CancellationToken cancellationToken)
         {
             var userId = _currentUserService.GetUserId();
-            return await _notificationRepository.GetUnreadCountAsync(userId, cancellationToken);
+            var count = await _notificationRepository.GetUnreadCountForUser(userId);
+            
+            return count;
         }
     }
 }

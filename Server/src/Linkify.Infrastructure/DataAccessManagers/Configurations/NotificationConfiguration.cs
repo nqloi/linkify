@@ -12,10 +12,6 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
         {
             base.Configure(builder);
 
-            // Required fields
-            builder.Property(n => n.UserId)
-                .IsRequired();
-
             builder.Property(n => n.Title)
                 .IsRequired()
                 .HasMaxLength(LengthConst.M);
@@ -27,10 +23,6 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
             builder.Property(n => n.Type)
                 .IsRequired();
 
-            builder.Property(n => n.IsRead)
-                .IsRequired()
-                .HasDefaultValue(false);
-
             builder.Property(n => n.CreatedAt)
                 .IsRequired(false);
 
@@ -40,14 +32,8 @@ namespace Linkify.Infrastructure.DataAccessManagers.Configurations
                 .IsRequired(false);
 
             // Indexes for efficient querying
-            builder.HasIndex(n => n.UserId);
             builder.HasIndex(n => n.Type);
-            builder.HasIndex(n => n.IsRead);
             builder.HasIndex(n => n.CreatedAt);
-
-            // Composite indexes for common queries
-            builder.HasIndex(n => new { n.UserId, n.IsRead, n.CreatedAt });
-            builder.HasIndex(n => new { n.UserId, n.Type, n.CreatedAt });
         }
     }
 }

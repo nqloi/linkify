@@ -7,15 +7,11 @@ using MediatR;
 
 namespace Linkify.Application.Features.Notifications.Commands.Delete
 {
-    public class DeleteNotificationHandler 
+    public class DeleteNotificationHandler
         : BaseCommandHandler<Notification, INotificationRepository>,
-        IRequestHandler<DeleteNotificationCommand, ErrorOr<Unit>>
+          IRequestHandler<DeleteNotificationCommand, ErrorOr<Unit>>
     {
-        public DeleteNotificationHandler(
-            INotificationRepository repository,
-            IUnitOfWork unitOfWork,
-            ICurrentUserService currentUserService)
-            : base(repository, unitOfWork, currentUserService)
+        public DeleteNotificationHandler(INotificationRepository repository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : base(repository, unitOfWork, currentUserService)
         {
         }
 
@@ -23,24 +19,17 @@ namespace Linkify.Application.Features.Notifications.Commands.Delete
             DeleteNotificationCommand request,
             CancellationToken cancellationToken)
         {
-            // Ensure user can only delete their own notifications
-            if (request.UserId != GetCurrentUserId())
+            var userId = _currentUserService.GetUserId();
+            
+            var recipient = await _repository.GetRecipientEntry(request.NotificationId, userId);
+
+            if (recipient is null)
             {
-                return Error.Forbidden();
+                return Error.NotFound("Notification.NotFound", "Notification not found");
             }
 
-            var notification = await _repository.GetByIdAndUserIdAsync(
-                request.NotificationId,
-                request.UserId,
-                cancellationToken);
-
-            if (notification == null)
-            {
-                return Error.NotFound("Notification not found");
-            }
-
-            _repository.Delete(notification);
-            await _unitOfWork.SaveAsync(cancellationToken);
+            
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

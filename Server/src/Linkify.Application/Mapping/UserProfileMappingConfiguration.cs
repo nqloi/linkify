@@ -16,7 +16,7 @@ namespace Linkify.Application.Mapping
     {
         public static void Configure(Profile profile)
         {
-            profile.CreateMap<UserProfile, CreatorDto>();
+            profile.CreateMap<UserProfile, UserSummaryDto>();
 
             profile.CreateMap<UserProfile, UserProfileDto>();
         }

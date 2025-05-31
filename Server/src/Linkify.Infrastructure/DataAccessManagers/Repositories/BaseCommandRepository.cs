@@ -71,6 +71,11 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
             _context.Remove(entity);
         }
 
+        public void Purge(IEnumerable<T> entities)
+        {
+            _context.Remove(entities);
+        }
+
         public Task PurgeAsync(T entity, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();

@@ -21,7 +21,7 @@ namespace Linkify.Application.Features.Posts.Commands.AddOrUpdateReaction
 
             post.AddOrUpdateReaction(_currentUserService.GetUserId(), request.Type);
 
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveChangesAsync();
             return true;
         }
     }

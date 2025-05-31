@@ -1,93 +1,108 @@
-using AutoMapper;
+using Linkify.Application.Common.DTOs.Notifications;
 using Linkify.Application.Common.Models;
 using Linkify.Application.Extensions;
-using Linkify.Application.Features.Notifications.Common;
+using Linkify.Application.Features.Common;
 using Linkify.Application.Features.Notifications.Queries.GetPaginated;
+using Linkify.Application.Features.Posts.Common;
+using Linkify.Application.Features.Posts.Queries.GetByUserId;
 using Linkify.Application.Repositories;
 using Linkify.Domain.Aggregates.NotificationAggregate;
+using Linkify.Domain.Aggregates.PostAggregate;
 using Linkify.Domain.Shared;
 using Linkify.Domain.Specifications.Notifications;
+using Linkify.Domain.Specifications.Posts;
 using Linkify.Infrastructure.DataAccessManagers.Context;
 using Linkify.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System.Text;
 
 namespace Linkify.Infrastructure.DataAccessManagers.Repositories.Notifications
 {
     public class NotificationRepository : BaseCommandRepository<Notification>, INotificationRepository
     {
-        private readonly IMapper _mapper;
+        public DbSet<NotificationRecipient> Recipients => _context.Set<NotificationRecipient>();
 
-        public NotificationRepository(ApplicationDbContext context, IMapper mapper) 
-            : base(context)
+        public NotificationRepository(ApplicationDbContext context) : base(context)
         {
-            _mapper = mapper;
         }
 
-        public async Task<CursorPaginatedResult<GetNotificationDto>> GetPagedNotificationsAsync(
-            NotificationByUserIdSpecification spec,
-            GetPagedNotificationsQuery pagingParams,
-            CancellationToken cancellationToken)
+        public async Task<NotificationRecipient?> GetRecipientEntry(Guid notificationId, Guid userId)
         {
-            var query = SpecificationEvaluator
-                .GetQuery(_dbSet.AsNoTracking().AsQueryable(), spec)
-                .OrderByDescending(n => n.CreatedAt)
-                .ThenBy(n => n.Id)
-                .Select(notification => new GetNotificationDto
-                {
-                    Id = notification.Id,
-                    Title = notification.Title,
-                    Message = notification.Message,
-                    Type = notification.Type,
-                    IsRead = notification.IsRead,
-                    CreatedAt = notification.CreatedAt,
-                    ActionUrl = notification.ActionUrl
-                })
-                .ApplyIsDeletedFilter();
+            return await Recipients
+                .Include(nr => nr.Notification)
+                    .ThenInclude(n => n.Sender)
+                .FirstOrDefaultAsync(nr =>
+                    nr.NotificationId == notificationId &&
+                    nr.RecipientId == userId);
+        }
 
-            var sortCriteriaList = new[]
+        public async Task<IEnumerable<NotificationRecipient>> GetAllUnreadByUserId(Guid userId)
+        {
+            return await Recipients
+                .Include(nr => nr.Notification)
+                    .ThenInclude(n => n.Sender)
+                .Where(nr => nr.RecipientId == userId && !nr.IsRead)
+                .OrderByDescending(nr => nr.Notification.CreatedAt)
+                .ToListAsync();
+        }
+
+        public async Task MarkAllAsRead(Guid userId)
+        {
+            var unreadRecipients = await Recipients
+                .Where(nr => nr.RecipientId == userId && !nr.IsRead)
+                .ToListAsync();
+
+            foreach (var recipient in unreadRecipients)
             {
-                new SortCriteria(nameof(GetNotificationDto.CreatedAt), true),
-                new SortCriteria(nameof(GetNotificationDto.Id))
-            };
-
-            return await query.ApplyCursorPagination(pagingParams, sortCriteriaList);
-        }
-
-        public async Task<Notification?> GetByIdAndUserIdAsync(
-            Guid notificationId,
-            Guid userId,
-            CancellationToken cancellationToken)
-        {
-            return await _dbSet
-                .FirstOrDefaultAsync(n => n.Id == notificationId && n.UserId == userId, cancellationToken);
-        }
-
-        public async Task MarkAllAsReadAsync(Guid userId, CancellationToken cancellationToken)
-        {
-            var notifications = await _dbSet
-                .Where(n => n.UserId == userId && !n.IsRead)
-                .ToListAsync(cancellationToken);
-
-            foreach (var notification in notifications)
-            {
-                notification.MarkAsRead();
+                recipient.MarkAsRead();
             }
         }
 
-        public async Task DeleteAllAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task DeleteAllForUser(Guid userId)
         {
-            var notifications = await _dbSet
-                .Where(n => n.UserId == userId)
-                .ToListAsync(cancellationToken);
+            var userRecipients = await Recipients
+                .Where(nr => nr.RecipientId == userId)
+                .ToListAsync();
 
-            _dbSet.RemoveRange(notifications);
+            Recipients.RemoveRange(userRecipients);
         }
 
-        public async Task<int> GetUnreadCountAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<CursorPaginatedResult<NotificationDto>> GetPaginatedNotificationsForUser(
+            NotificationByUserIdSpecification spec,
+            GetPagedNotificationsQuery pagingParams, CancellationToken
+            cancellationToken = default)
         {
-            return await _dbSet
-                .CountAsync(n => n.UserId == userId && !n.IsRead, 
-                    cancellationToken);
+            var sortCriteriaList = new[]
+            {
+                new SortCriteria(nameof(NotificationDto.CreatedAt), true),
+                new SortCriteria(nameof(NotificationDto.Id))
+            };
+
+            return await SpecificationEvaluator
+                .GetQuery(_dbSet.AsNoTracking().AsQueryable(), spec)
+                .Select(n => new NotificationDto
+                {
+                    Id = n.Id,
+                    CreatedAt = n.CreatedAt,
+                    Title = n.Title,
+                    Message = n.Message,
+                    Type = n.Type,
+                    SenderId = n.SenderId,
+                    ActionUrl = n.ActionUrl,
+                    SenderDisplayName = n.Recipients.First().Recipient.DisplayName,
+                    SenderAvatarUrl = n.Recipients.First().Recipient.AvatarUrl,
+                    SenderUsername = n.Recipients.First().Recipient.UserName,
+                    IsRead = n.Recipients.First().IsRead
+                })
+                .ApplyIsDeletedFilter()
+                .ApplyCursorPagination(pagingParams, sortCriteriaList, cancellationToken);
+        }
+
+        public async Task<int> GetUnreadCountForUser(Guid userId)
+        {
+            return await Recipients
+                .CountAsync(nr => nr.RecipientId == userId && !nr.IsRead);
         }
     }
 }

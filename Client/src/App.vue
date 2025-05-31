@@ -1,33 +1,29 @@
-<script setup>
-import { onMounted } from 'vue'
-import ConfirmDialog from 'primevue/confirmdialog'
-import SessionTimeoutDialog from './components/authen/dialog/SessionTimeoutDialog.vue'
-import Toast from 'primevue/toast'
-import GlobalLoading from './components/common/GlobalLoading.vue'
-import ConnectionErrorDialog from './components/common/ConnectionErrorDialog.vue'
-import { useNotificationStore } from './stores/notificationStore'
-import useNotificationHub from './composables/useNotificationHub'
-import { logger } from './utils/logger'
-
-const notificationStore = useNotificationStore()
-const { showReloadDialog } = useNotificationHub()
-
-onMounted(async () => {
-    try {
-        await notificationStore.initializeNotificationService()
-    } catch (error) {
-        logger.error('Failed to initialize notification service:', error)
-    }
-})
-</script>
-
 <template>
     <ConfirmDialog></ConfirmDialog>
     <SessionTimeoutDialog />
-    <Toast></Toast>
+    <Toast position="bottom-right"></Toast>
+
+    <!-- Notification toasts -->
+    <NotificationToast />
     <router-view />
     <GlobalLoading />
     <ConnectionErrorDialog v-model:visible="showReloadDialog" />
 </template>
+
+<script setup>
+import ConfirmDialog from 'primevue/confirmdialog'
+import Toast from 'primevue/toast'
+import SessionTimeoutDialog from './components/authen/dialog/SessionTimeoutDialog.vue'
+import ConnectionErrorDialog from './components/common/ConnectionErrorDialog.vue'
+import GlobalLoading from './components/common/GlobalLoading.vue'
+import NotificationToast from './components/notification/NotificationToast.vue'
+import useNotificationHub from './composables/useNotificationHub'
+import { APP_TITLE } from './utils/envConfig'
+
+// Set document title from environment variable
+document.title = APP_TITLE
+
+const { showReloadDialog } = useNotificationHub()
+</script>
 
 <style scoped></style>

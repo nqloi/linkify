@@ -7,15 +7,13 @@ using MediatR;
 
 namespace Linkify.Application.Features.Notifications.Commands.ClearAll
 {
-    public class ClearAllNotificationsHandler 
+    public class ClearAllNotificationsHandler
         : BaseCommandHandler<Notification, INotificationRepository>,
-        IRequestHandler<ClearAllNotificationsCommand, ErrorOr<Unit>>
+          IRequestHandler<ClearAllNotificationsCommand, ErrorOr<Unit>>
     {
-        public ClearAllNotificationsHandler(
-            INotificationRepository repository,
-            IUnitOfWork unitOfWork,
-            ICurrentUserService currentUserService)
-            : base(repository, unitOfWork, currentUserService)
+        public ClearAllNotificationsHandler(INotificationRepository repository, 
+            IUnitOfWork unitOfWork, 
+            ICurrentUserService currentUserService) : base(repository, unitOfWork, currentUserService)
         {
         }
 
@@ -23,14 +21,10 @@ namespace Linkify.Application.Features.Notifications.Commands.ClearAll
             ClearAllNotificationsCommand request,
             CancellationToken cancellationToken)
         {
-            // Ensure user can only clear their own notifications
-            if (request.UserId != GetCurrentUserId())
-            {
-                return Error.Forbidden();
-            }
-
-            await _repository.DeleteAllAsync(request.UserId, cancellationToken);
-            await _unitOfWork.SaveAsync(cancellationToken);
+            var userId = _currentUserService.GetUserId();
+            
+            await _repository.DeleteAllForUser(userId);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

@@ -31,7 +31,7 @@ namespace Linkify.Application.Features.Posts.Commands.CreatePost
             var post = new Post(_currentUserService.GetUserId(), request.Content);
 
             await _repository.CreateAsync(post, cancellationToken);
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var imageUrls = new List<string>();
 

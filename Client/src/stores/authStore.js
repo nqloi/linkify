@@ -3,6 +3,8 @@ import { CACHE_KEYS } from '@/utils/cache/cacheConstants'
 import useCache from '@/utils/cache/useCache'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useNotificationStore } from '@/stores/notificationStore'
+import { logger } from '@/utils/logger'
 
 export const useAuthStore = defineStore(
     'auth',
@@ -35,12 +37,21 @@ export const useAuthStore = defineStore(
             return true
         }
 
-        const logout = () => {
-            // await authService.logout()
-            removeCache(CACHE_KEYS.ACCESS_TOKEN)
-            removeCache(CACHE_KEYS.REFRESH_TOKEN)
-            Object.assign(user, { ...defaultUser })
-            isAuthenticated.value = false
+        const logout = async () => {
+            try {
+                // Clean up notifications before logging out
+                const notificationStore = useNotificationStore()
+                await notificationStore.resetState()
+
+                await authService.logout()
+                removeCache(CACHE_KEYS.ACCESS_TOKEN)
+                removeCache(CACHE_KEYS.REFRESH_TOKEN)
+                Object.assign(user.value, { ...defaultUser })
+                isAuthenticated.value = false
+            } catch (error) {
+                logger.error('Failed to logout', { error })
+                throw error
+            }
         }
 
         const onSessionTimeout = () => {

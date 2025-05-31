@@ -5,12 +5,12 @@ namespace Linkify.Infrastructure.DataAccessManagers.Repositories
 {
     public class UnitOfWork(ApplicationDbContext commandContext) : IUnitOfWork
     {
-        public void Save()
+        public void SaveChanges()
         {
             commandContext.SaveChanges();
         }
 
-        public async Task SaveAsync(CancellationToken cancellationToken = default)
+        public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             await commandContext.SaveChangesAsync(cancellationToken); 
         }

@@ -7,32 +7,43 @@ using MediatR;
 
 namespace Linkify.Application.Features.Notifications.Commands.MarkAllAsRead
 {
-    public class MarkAllNotificationsAsReadHandler 
+    public class MarkAllNotificationsAsReadHandler
         : BaseCommandHandler<Notification, INotificationRepository>,
-        IRequestHandler<MarkAllNotificationsAsReadCommand, ErrorOr<Unit>>
+          IRequestHandler<MarkAllNotificationsAsReadCommand, ErrorOr<Unit>>
     {
+        private readonly INotificationService _notificationService;
+
         public MarkAllNotificationsAsReadHandler(
             INotificationRepository repository,
+            ICurrentUserService currentUserService,
             IUnitOfWork unitOfWork,
-            ICurrentUserService currentUserService)
-            : base(repository, unitOfWork, currentUserService)
+            INotificationService notificationService) : base(repository, unitOfWork, currentUserService)
         {
+            _notificationService = notificationService;
         }
 
         public async Task<ErrorOr<Unit>> Handle(
             MarkAllNotificationsAsReadCommand request,
             CancellationToken cancellationToken)
         {
-            // Ensure user can only mark their own notifications as read
-            if (request.UserId != GetCurrentUserId())
+            try
             {
-                return Error.Forbidden();
+                var userId = _currentUserService.GetUserId();
+                
+                await _repository.MarkAllAsRead(userId);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+                // Send real-time update to client
+                await _notificationService.MarkAllNotificationsAsReadAsync(userId);
+
+                return Unit.Value;
             }
-
-            await _repository.MarkAllAsReadAsync(request.UserId, cancellationToken);
-            await _unitOfWork.SaveAsync(cancellationToken);
-
-            return Unit.Value;
+            catch (Exception)
+            {
+                return Error.Failure(
+                    "Notifications.MarkAllAsReadFailed",
+                    "Failed to mark all notifications as read");
+            }
         }
     }
 }

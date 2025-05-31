@@ -69,8 +69,6 @@ import { useImageViewerStore } from '@/stores/imageViewerStore'
 import { useCustomToast } from '@/utils/toast/customToast'
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 
-const emit = defineEmits(['close', 'update:visible'])
-
 const store = useImageViewerStore()
 const toast = useCustomToast()
 

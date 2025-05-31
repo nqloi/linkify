@@ -34,7 +34,7 @@ namespace Linkify.Application.Features.Comments.Commands.DeleteComment
                 return Error.Validation("Comment.Delete", result?.Error ?? "");
             }
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return true;
         }

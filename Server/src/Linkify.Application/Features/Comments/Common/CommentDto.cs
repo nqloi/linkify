@@ -32,6 +32,6 @@ namespace Linkify.Application.Features.Comments.Common
         /// <summary>
         /// The person who posted a comment
         /// </summary>
-        public required CreatorDto Creator { get; set; }
+        public required UserSummaryDto Creator { get; set; }
     }
 }

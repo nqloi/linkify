@@ -12,7 +12,8 @@ namespace Linkify.Infrastructure.Extensions
         public static async Task<CursorPaginatedResult<TEntity>> ApplyCursorPagination<TEntity>(
             this IQueryable<TEntity> query,
             CursorPaginationParameters parameters,
-            params SortCriteria[] sortCriteriaList)
+            SortCriteria[] sortCriteriaList,
+             CancellationToken cancellationToken = default)
         {
             if (sortCriteriaList.Length == 0)
                 throw new ArgumentException("At least one sort criteria is required");
@@ -28,7 +29,7 @@ namespace Linkify.Infrastructure.Extensions
             // Apply ordering
             query = ApplyOrdering(query, sortCriteriaList);
 
-            var items = await query.Take(parameters.Limit + 1).ToListAsync();
+            var items = await query.Take(parameters.Limit + 1).ToListAsync(cancellationToken);
             var hasNextPage = items.Count > parameters.Limit;
 
             return new CursorPaginatedResult<TEntity>

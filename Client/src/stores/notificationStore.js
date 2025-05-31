@@ -1,8 +1,9 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
 import useNotificationHub from '@/composables/useNotificationHub'
 import useNotificationService from '@/services/notifications/notificationService'
 import { logger } from '@/utils/logger'
+import { attempt } from 'lodash'
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const useNotificationStore = defineStore('notification', () => {
     const notifications = ref([])
@@ -114,15 +115,21 @@ export const useNotificationStore = defineStore('notification', () => {
         }
     }
 
-    const resetState = () => {
+    const resetState = async () => {
         notifications.value = []
+        unreadCount.value = 0
         cursor.value = null
         hasNextPage.value = true
         error.value = ''
         loading.value = false
+
+        // Dispose notification hub connection
+        await notificationHub.dispose()
     }
 
-    const initializeNotificationService = async () => {
+    const initializeNotificationService = async (
+        initOptions = { onNotificationReceived: null },
+    ) => {
         try {
             await Promise.all([
                 refreshUnreadCount(),
@@ -130,6 +137,7 @@ export const useNotificationStore = defineStore('notification', () => {
                 notificationHub.subscribe((notification) => {
                     addNotification(notification)
                     refreshUnreadCount()
+                    attempt(initOptions?.onNotificationReceived, notification)
                 }),
             ])
         } catch (error) {

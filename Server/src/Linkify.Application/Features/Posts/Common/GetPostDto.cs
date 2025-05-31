@@ -11,7 +11,7 @@ namespace Linkify.Application.Features.Posts.Common
 
         public DateTime CreatedAt { get; set; }
         public PostStatsDto Stats { get; set; } = new();
-        public required CreatorDto Creator { get; set; }
+        public required UserSummaryDto Creator { get; set; }
         public required UserPostActionsDto UserActions { get; set; }
     }
 }

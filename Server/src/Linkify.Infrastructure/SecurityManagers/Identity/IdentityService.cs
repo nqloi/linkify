@@ -1,4 +1,6 @@
-﻿using Linkify.Application.ExternalServices;
+﻿using ErrorOr;
+using Linkify.Application.Extensions;
+using Linkify.Application.ExternalServices;
 using Linkify.Application.Features.Authentication.Commands.Register;
 using Linkify.Application.Features.Authentication.Common;
 using Linkify.Application.Repositories;
@@ -62,7 +64,7 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
             var token = new Token(user.Id, refreshToken);
             await _tokenRepository.CreateAsync(token, cancellationToken);
             await _userManager.GenerateUserTokenAsync(user, "Default", "access_token");
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return new AuthenticationResult
             {
                 AccessToken = accessToken,
@@ -84,21 +86,22 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
 
             var result = await _userManager.CreateAsync(applicationUser, registerCommandRequest.Password);
 
-            var userProfile = new UserProfile() { 
-                DisplayName = registerCommandRequest.FirstName + " " + registerCommandRequest.LastName, 
+            var userProfile = new UserProfile()
+            {
+                DisplayName = registerCommandRequest.FirstName + " " + registerCommandRequest.LastName,
                 UserId = applicationUser.Id,
                 UserName = registerCommandRequest.UserName
             };
 
             await _userProfileRepo.CreateAsync(userProfile);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             if (!result.Succeeded)
             {
                 throw new IdentityException(string.Join(", ", result.Errors.Select(e => e.Description)));
             }
-             
+
             return true;
         }
 
@@ -126,13 +129,27 @@ namespace Linkify.Infrastructure.SecurityManagers.Identity
 
             _tokenRepository.Update(token);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new AuthenticationResult
             {
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken,
             };
+        }
+
+        public async Task<ErrorOr<bool>> LogoutAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            var tokens = await _tokenRepository.GetByUserIdAsync(userId, cancellationToken);
+
+            if (tokens.IsNullAndEmpty())
+            {
+                return false;
+            }
+
+            _tokenRepository.Purge(tokens);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return true;
         }
 
         public async Task<bool> CheckDuplicateUsername(string username)

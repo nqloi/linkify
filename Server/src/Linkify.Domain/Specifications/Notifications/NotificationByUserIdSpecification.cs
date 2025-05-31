@@ -6,7 +6,8 @@ namespace Linkify.Domain.Specifications.Notifications
     {
         public NotificationByUserIdSpecification(Guid userId)
         {
-            Criteria = p => p.UserId == userId;
+            Criteria = notification => notification.Recipients
+                .Any(recipient => recipient.RecipientId == userId);
         }
     }
 }

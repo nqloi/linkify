@@ -20,6 +20,8 @@ namespace Linkify.Application.Repositories
 
         void Purge(T entity);
 
+        void Purge(IEnumerable<T> entities);
+
         void DeleteById(Guid id);
 
         Task<T?> GetAsync(Guid id, CancellationToken cancellationToken = default);

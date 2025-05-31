@@ -5,7 +5,6 @@ namespace Linkify.Application.Features.Notifications.Commands.Delete
 {
     public class DeleteNotificationCommand : IRequest<ErrorOr<Unit>>
     {
-        public Guid NotificationId { get; set; }
-        public Guid UserId { get; set; }
+        public required Guid NotificationId { get; init; }
     }
 }

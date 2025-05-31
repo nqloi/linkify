@@ -3,9 +3,9 @@ import { ref } from 'vue'
 import { createAuthInterceptor } from './interceptors/authInterceptor'
 import { createRefreshTokenInterceptor } from './interceptors/refreshTokenInterceptor'
 import { createBaseService } from './baseServiceFactory'
+import { API_URL, API_VERSION } from '@/utils/envConfig'
 
-const API_URL = 'https://localhost:7029/api'
-const DEFAULT_VERSION = 'v1'
+const DEFAULT_VERSION = API_VERSION
 
 export const createAxiosConfig = ({
     controller,

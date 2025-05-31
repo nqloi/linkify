@@ -44,7 +44,7 @@ namespace Linkify.Application.Features.Posts.Commands.DeletePost
             {
                 await _fileService.DeleteFolderAsync($"{_folderPath.Post}/{request.PostId}");
             }
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return true;
         }
     }

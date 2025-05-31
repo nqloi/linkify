@@ -20,7 +20,7 @@ namespace Linkify.Application.Features.Posts.Commands.RemoveReaction
             if (post == null) return false;
 
             post.RemoveReaction(_currentUserService.GetUserId());
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.SaveChangesAsync();
             return true;
         }
     }

@@ -1,6 +1,9 @@
-﻿using Linkify.Api.Common.Models;
+﻿using ErrorOr;
+using Linkify.Api.Common.Models;
 using Linkify.Api.DTOs.Authentication;
+using Linkify.Application.ExternalServices;
 using Linkify.Application.Features.Authentication.Commands.Login;
+using Linkify.Application.Features.Authentication.Commands.Logout;
 using Linkify.Application.Features.Authentication.Commands.Register;
 using Linkify.Application.Features.Authentication.Commands.Token;
 using Linkify.Application.Features.Authentication.Common;
@@ -15,7 +18,7 @@ using WebAPI.Controllers;
 namespace Linkify.Api.Controllers
 {
     [Route("api/v{version:apiVersion}/auth")]
-    public class AuthenticationController(ISender sender, IConfiguration configuration) : BaseApiController(sender)
+    public class AuthenticationController(ISender sender, IConfiguration configuration, ICurrentUserService currentUserService) : BaseApiController(sender)
     {
         private readonly IConfiguration _configuration = configuration;
 
@@ -94,14 +97,40 @@ namespace Linkify.Api.Controllers
             });
         }
 
-        [AllowAnonymous]
         [HttpPost("logout")]
-        public async Task<ActionResult> Logout(LoginRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> LogoutAsync(CancellationToken cancellationToken)
         {
-            var command = new LoginCommandRequest(request.UserName, request.Password);
-            var response = await _sender.Send(command, cancellationToken);
+            var userId = currentUserService.GetUserId();
+            var command = new LogoutCommand { UserId = userId };
+            var result = await _sender.Send(command, cancellationToken);
 
-            return Ok(response);
+            if (result.IsError)
+            {
+                return HandleResult(result);
+            }
+            
+            bool useHttpOnlyCookieForToken = false;
+            if (_configuration["Jwt:UseHttpOnlyCookieForToken"] != null)
+            {
+                bool.TryParse(_configuration["Jwt:UseHttpOnlyCookieForToken"], out useHttpOnlyCookieForToken);
+            }
+
+            if (useHttpOnlyCookieForToken)
+            {
+                var accessTokenCookieName = _configuration["Jwt:accessTokenCookieName"];
+                var refreshTokenCookieName = _configuration["Jwt:refreshTokenCookieName"];
+                
+                if (accessTokenCookieName != null)
+                {
+                    HttpContext.Response.Cookies.Delete(accessTokenCookieName);
+                }
+                if (refreshTokenCookieName != null)
+                {
+                    HttpContext.Response.Cookies.Delete(refreshTokenCookieName);
+                }
+            }
+
+            return HandleResult(result);
         }
 
         [AllowAnonymous]

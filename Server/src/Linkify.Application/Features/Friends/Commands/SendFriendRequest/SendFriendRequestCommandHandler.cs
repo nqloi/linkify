@@ -68,12 +68,14 @@ namespace Linkify.Application.Features.Friendships.Commands.SendFriendRequest
                 "New Friend Request",
                 $"You have received a new friend request",
                 NotificationType.FriendRequest,
-                $"/profile/{request.ReceiverId}");
+                $"/profile/{currentUserId}");
+
+            notification.AddRecipient(request.ReceiverId);
 
             await _notificationRepository.CreateAsync(notification, cancellationToken);
 
             // Save changes
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             await _notificationService.SendNotificationAsync(notification);
 

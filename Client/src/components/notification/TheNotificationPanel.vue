@@ -1,20 +1,12 @@
 <template>
     <div class="relative">
-        <Button
-            severity="secondary"
-            variant="outlined"
-            class="p-2 rounded-full hover:bg-surface-hover overflow-visible"
-            v-tooltip.bottom="'Notifications'"
+        <OverlayBadge
+            class="notification-icon cursor-pointer bg-slate-100 hover:bg-gray-200 rounded-full dark:hover:bg-surface-hover transition-colors duration-200"
+            :value="notificationStore.unreadCount"
             @click="togglePanel"
         >
-            <i class="pi pi-bell"></i>
-            <span
-                v-if="notificationStore.unreadCount"
-                class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center shadow-sm z-10"
-            >
-                {{ notificationStore.unreadCount }}
-            </span>
-        </Button>
+            <i class="pi pi-bell p-3 text-xl" />
+        </OverlayBadge>
         <Popover
             ref="notificationPanel"
             :closeOnEscape="true"
@@ -85,7 +77,7 @@
 <script setup>
 import { useNotificationStore } from '@/stores/notificationStore'
 import { logger } from '@/utils/logger'
-import { Button } from 'primevue'
+import { Button, OverlayBadge } from 'primevue'
 import Popover from 'primevue/popover'
 import { useConfirm } from 'primevue/useconfirm'
 import { ref } from 'vue'
@@ -184,6 +176,12 @@ const handleMarkAllRead = async () => {
         &::after {
             background: var(--skeleton-animation-bg);
         }
+    }
+}
+
+.notification-icon {
+    :deep(.p-badge) {
+        transform: translate(50%, -40%) !important;
     }
 }
 </style>

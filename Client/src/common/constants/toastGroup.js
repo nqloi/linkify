@@ -1,0 +1,5 @@
+const TOAST_GROUP = {
+    NOTIFICATION: 'NOTIFICATION',
+}
+
+export default TOAST_GROUP

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Linkify.Application.Features.Common
 {
-    public record CreatorDto
+    public record UserSummaryDto
     {
         public Guid UserId { get; set; }
         public required string UserName { get; set; }

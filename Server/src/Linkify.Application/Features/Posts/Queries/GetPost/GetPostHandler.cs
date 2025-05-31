@@ -28,7 +28,7 @@ namespace Linkify.Application.Features.Posts.Queries.GetPost
                    Id = post.Id,
                    Content = post.Content,
                    CreatedAt = post.CreatedAt,
-                   Creator = _mapper.Map<CreatorDto>(post.UserProfile),
+                   Creator = _mapper.Map<UserSummaryDto>(post.UserProfile),
                    Stats = new PostStatsDto
                    {
                        ReactionCount = post.Reactions.Count(),

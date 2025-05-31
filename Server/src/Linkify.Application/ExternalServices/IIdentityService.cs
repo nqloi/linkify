@@ -1,4 +1,5 @@
-﻿using Linkify.Application.Features.Authentication.Commands.Register;
+﻿using ErrorOr;
+using Linkify.Application.Features.Authentication.Commands.Register;
 using Linkify.Application.Features.Authentication.Common;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace Linkify.Application.ExternalServices
         Task<AuthenticationResult> LoginAsync(string username, string password, CancellationToken cancellationToken = default);
         Task<AuthenticationResult> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default);
         Task<bool> RegisterAsync(RegisterCommandRequest registerCommandRequest, CancellationToken cancellationToken = default);
+        Task<ErrorOr<bool>> LogoutAsync(Guid userId, CancellationToken cancellationToken = default);
     }
 }

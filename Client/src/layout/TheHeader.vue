@@ -26,18 +26,17 @@
                     <Button
                         @click="toggleDarkMode"
                         severity="secondary"
-                        variant="outlined"
-                        class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200"
+                        class="rounded-full p-3 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors duration-200 border-0"
                         v-tooltip.left="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
                     >
-                        <i class="pi" :class="isDarkMode ? 'pi-sun' : 'pi-moon'"></i>
+                        <i class="pi text-xl" :class="isDarkMode ? 'pi-sun' : 'pi-moon'"></i>
                     </Button>
 
                     <!-- Notifications -->
                     <TheNotificationPanel />
 
                     <!-- User Menu -->
-                    <div class="relative ml-2">
+                    <div class="relative ml-2 flex items-center">
                         <Avatar
                             :image="profileStore.avatarUrl ?? defaultAvatar"
                             @click="toggleUserMenu"
@@ -55,29 +54,36 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useAuthStore } from '@/stores/authStore'
-import { useProfileStore } from '@/stores/profileStore'
-import Logo from '@/components/common/Logo.vue'
 import defaultAvatar from '@/assets/images/avatar-default.svg'
-import Menu from 'primevue/menu'
-import router from '@/router'
-import { Avatar, Button } from 'primevue'
+import Logo from '@/components/common/Logo.vue'
 import TheNotificationPanel from '@/components/notification/TheNotificationPanel.vue'
+import { useDarkMode } from '@/composables/useDarkMode'
+import useNotificationToast from '@/composables/useNotificationToast'
+import router from '@/router'
+import { useAuthStore } from '@/stores/authStore'
+import { useNotificationStore } from '@/stores/notificationStore'
+import { useProfileStore } from '@/stores/profileStore'
+import { Avatar, Button } from 'primevue'
+import Menu from 'primevue/menu'
+import { onMounted, ref } from 'vue'
 
 const authStore = useAuthStore()
 const profileStore = useProfileStore()
+const notificationStore = useNotificationStore()
+const notificationToast = useNotificationToast()
 
-const userProfile = ref(profileStore.currentUserProfile)
+// Initialize dark mode with our new composable
+const { isDarkMode, toggleDarkMode } = useDarkMode()
+
 const menu = ref()
 const searchText = ref('')
-const isDarkMode = ref(false)
+
 // Menu items for user dropdown
 const menuItems = [
     {
         label: 'Profile',
         icon: 'pi pi-user',
-        command: () => router.push(`/profile/${userProfile.value?.id}`),
+        command: () => router.push(`/profile/${authStore.user.userId}`),
     },
     {
         label: 'Settings',
@@ -87,8 +93,8 @@ const menuItems = [
     {
         label: 'Logout',
         icon: 'pi pi-power-off',
-        command: () => {
-            authStore.logout()
+        command: async () => {
+            await authStore.logout()
             router.push('/auth/login')
         },
     },
@@ -98,32 +104,12 @@ const toggleUserMenu = (event) => {
     menu.value?.toggle(event)
 }
 
-const toggleDarkMode = () => {
-    isDarkMode.value = !isDarkMode.value
-    document.documentElement.classList.toggle('dark')
-    localStorage.setItem('darkMode', isDarkMode.value ? 'true' : 'false')
-}
-
 onMounted(() => {
-    try {
-        // Initialize dark mode from localStorage or system preference
-        const savedDarkMode = localStorage.getItem('darkMode')
-        if (savedDarkMode !== null) {
-            isDarkMode.value = savedDarkMode === 'true'
-        } else {
-            isDarkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
-        }
-
-        // Apply initial dark mode state
-        if (isDarkMode.value) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    } catch (error) {
-        console.error('Error initializing dark mode:', error)
-        isDarkMode.value = false
-    }
+    notificationStore.initializeNotificationService({
+        onNotificationReceived: (notification) => {
+            notificationToast.showToast(notification)
+        },
+    })
 })
 </script>
 

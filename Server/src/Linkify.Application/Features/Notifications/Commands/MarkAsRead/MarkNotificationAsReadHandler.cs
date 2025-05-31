@@ -7,42 +7,49 @@ using MediatR;
 
 namespace Linkify.Application.Features.Notifications.Commands.MarkAsRead
 {
-    public class MarkNotificationAsReadHandler 
+    public class MarkNotificationAsReadHandler
         : BaseCommandHandler<Notification, INotificationRepository>,
-        IRequestHandler<MarkNotificationAsReadCommand, ErrorOr<Unit>>
+          IRequestHandler<MarkNotificationAsReadCommand, ErrorOr<Unit>>
     {
+        private readonly INotificationService _notificationService;
+
         public MarkNotificationAsReadHandler(
             INotificationRepository repository,
+            ICurrentUserService currentUserService,
             IUnitOfWork unitOfWork,
-            ICurrentUserService currentUserService)
-            : base(repository, unitOfWork, currentUserService)
+            INotificationService notificationService) : base(repository, unitOfWork, currentUserService)
         {
+            _notificationService = notificationService;
         }
 
         public async Task<ErrorOr<Unit>> Handle(
             MarkNotificationAsReadCommand request,
             CancellationToken cancellationToken)
         {
-            // Ensure user can only mark their own notifications as read
-            if (request.UserId != GetCurrentUserId())
+            try 
             {
-                return Error.Forbidden();
+                var userId = _currentUserService.GetUserId();
+                var recipient = await _repository.GetRecipientEntry(request.NotificationId, userId);
+
+                if (recipient is null)
+                {
+                    return Error.NotFound("Notification.NotFound", "Notification not found");
+                }
+
+                recipient.MarkAsRead();
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+                // Send real-time update to client
+                await _notificationService.MarkNotificationAsReadAsync(userId, request.NotificationId);
+
+                return Unit.Value;
             }
-
-            var notification = await _repository.GetByIdAndUserIdAsync(
-                request.NotificationId,
-                request.UserId,
-                cancellationToken);
-
-            if (notification == null)
+            catch (Exception)
             {
-                return Error.NotFound("Notification not found");
+                return Error.Failure(
+                    "Notification.MarkAsReadFailed",
+                    "Failed to mark notification as read");
             }
-
-            notification.MarkAsRead();
-            await _unitOfWork.SaveAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

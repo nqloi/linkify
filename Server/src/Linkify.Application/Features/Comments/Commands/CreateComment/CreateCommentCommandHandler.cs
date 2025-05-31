@@ -41,7 +41,7 @@ namespace Linkify.Application.Features.Comments.Commands.CreateComment
                 return Error.Validation("Comment.AddFailed", result.Error!);
             }
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return comment.Id;
         }

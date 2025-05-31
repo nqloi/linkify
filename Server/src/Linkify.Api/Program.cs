@@ -6,10 +6,7 @@ using Linkify.Infrastructure;
 using Linkify.Infrastructure.DataAccessManagers;
 using Linkify.Infrastructure.RealtimeManagers.ChatManagers;
 using Linkify.Infrastructure.RealtimeManagers.NotificationManagers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);

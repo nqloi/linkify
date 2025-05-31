@@ -24,7 +24,7 @@ namespace Linkify.Application.Features.Comments.Commands.UpdateComment
 
             post.UpdateComment(request.CommentId, request.NewContent);
 
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return true;
         }
     }

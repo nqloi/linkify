@@ -3,6 +3,7 @@ import { HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/s
 import { logger } from '@/utils/logger'
 import useCache from '@/utils/cache/useCache'
 import { CACHE_KEYS } from '@/utils/cache/cacheConstants'
+import { NOTIFICATION_HUB_URL, DEBUG_MODE } from '@/utils/envConfig'
 
 const MAX_RETRY_COUNT = 10 // Show reload dialog after this many retries
 const connectionState = {
@@ -34,11 +35,11 @@ const initConnection = async () => {
         }
 
         connectionState.instance = new HubConnectionBuilder()
-            .withUrl('https://localhost:7029/hubs/notifications', {
+            .withUrl(NOTIFICATION_HUB_URL, {
                 accessTokenFactory: () => token,
             })
             .withAutomaticReconnect([0, 2000, 5000, 10000, 20000]) // Specific retry intervals
-            .configureLogging(LogLevel.Debug) // Enable detailed logging
+            .configureLogging(DEBUG_MODE ? LogLevel.Debug : LogLevel.Error) // Only enable detailed logging in debug mode
             .build()
 
         // Connection lifecycle events
@@ -56,8 +57,7 @@ const initConnection = async () => {
             showReloadDialog.value = false
         })
 
-        connectionState.instance.onclose((error) => {
-            logger.error('Connection closed:', error)
+        connectionState.instance.onclose(() => {
             isConnected.value = false
             handleConnectionError()
         })
@@ -120,6 +120,28 @@ const removeListener = (callback) => {
     }
 }
 
+const dispose = async () => {
+    // Clear all listeners
+    connectionState.listeners.clear()
+
+    // Reset connection state
+    connectionState.refCount = 0
+    connectionState.retryCount = 0
+    showReloadDialog.value = false
+
+    // Stop and cleanup connection
+    if (connectionState.instance) {
+        try {
+            await connectionState.instance.stop()
+            connectionState.instance = null
+            isConnected.value = false
+            logger.info('SignalR Connection Disposed')
+        } catch (error) {
+            logger.error('Error disposing SignalR connection:', error)
+        }
+    }
+}
+
 export default function useNotificationHub() {
     const subscribe = async (callback) => {
         if (typeof callback !== 'function') {
@@ -145,7 +167,8 @@ export default function useNotificationHub() {
         subscribe,
         isConnected,
         connection: connectionState.instance,
-        reconnect: initConnection, // Expose reconnect functionality
-        showReloadDialog, // Expose reload dialog state
+        reconnect: initConnection,
+        showReloadDialog,
+        dispose,
     }
 }
